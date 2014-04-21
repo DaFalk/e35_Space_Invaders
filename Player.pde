@@ -34,26 +34,26 @@ class Player {
   void keyDown() {
     if(keyPressed) {
       if(key == CODED && isMultiplayer) {
-        if(keyCode == LEFT) { player2.left = 1; }
-        if(keyCode == RIGHT) { player2.right = 1; }
+        if(keyCode == LEFT) { players.get(1).left = 1; }
+        if(keyCode == RIGHT) { players.get(1).right = 1; }
         if(keyCode == CONTROL) {
-          shoot(player2.x, player2.y, player2.pWidth, -1);
+          shoot(players.get(1).x, players.get(1).y, players.get(1).pWidth, -1);
         }
       }
-      if(key == 'a' || key == 'A') { player1.left = 1; }
-      if(key == 'd' || key == 'D') { player1.right = 1; }
+      if(key == 'a' || key == 'A') { players.get(0).left = 1; }
+      if(key == 'd' || key == 'D') { players.get(0).right = 1; }
       if(key == ' ') {
-        shoot(player1.x, player1.y, player1.pWidth, -1);
+        shoot(players.get(0).x, players.get(0).y, players.get(0).pWidth, -1);
       }
     }
   }
   
   void keyUp() {
     if(key == CODED && isMultiplayer) {
-      if(keyCode == LEFT) { player2.left = 0; }
-      if(keyCode == RIGHT) { player2.right = 0; }
+      if(keyCode == LEFT) { players.get(1).left = 0; }
+      if(keyCode == RIGHT) { players.get(1).right = 0; }
     }
-    if(key == 'a' || key == 'A') { player1.left = 0; }
-    if(key == 'd' || key == 'D') { player1.right = 0; }
+    if(key == 'a' || key == 'A') { players.get(0).left = 0; }
+    if(key == 'd' || key == 'D') { players.get(0).right = 0; }
   }
 }

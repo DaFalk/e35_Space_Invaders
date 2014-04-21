@@ -1,10 +1,10 @@
 Menu menu;
-Player player1;
-Player player2;
 
 boolean gameStarted = false;
 boolean isMultiplayer = false;
 int stackSize = 50;
+
+ArrayList<Player> players = new ArrayList<Player>();
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 
@@ -21,8 +21,10 @@ void draw() {
     menu.display();
   }
   else {
-    player1.update();
-    if(isMultiplayer) { player2.update(); }
+    for(int i = players.size() - 1; i >= 0; i--) {
+      Player player = players.get(i);
+      player.update();
+    }
     
     for(int i = enemies.size() - 1; i >= 0; i--) {
       Enemy e = enemies.get(i);
@@ -36,16 +38,20 @@ void draw() {
   }
 }
   
-void shoot(float tx, float ty, int size, int dir) {
-  Shot s = new Shot(tx, ty + (size*dir), dir);
+void shoot(float posX, float posY, int size, int dir) {
+  Shot s = new Shot(posX, posY + (size*dir), dir);
   shots.add(s);
 }
 
 void keyReleased() {
-  if(key == CODED && isMultiplayer) { player2.keyUp(); }
-  else { player1.keyUp(); }
+  if(gameStarted) {
+    if(key == CODED && isMultiplayer) { players.get(1).keyUp(); }
+    else { players.get(0).keyUp(); }
+  }
 }
 void keyPressed() {
-  if(key == CODED && isMultiplayer) { player2.keyDown(); }
-  else { player1.keyDown(); }
+  if(gameStarted) {
+    if(key == CODED && isMultiplayer) { players.get(1).keyDown(); }
+    else { players.get(0).keyDown(); }
+  }
 }

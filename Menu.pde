@@ -37,11 +37,14 @@ class Menu {
   }
   
   void spawnPlayers(int numPlayers) {
-    if(numPlayers >= 1 && numPlayers <= 2) {
-      player1 = new Player(width/2);
-    }
-    if(numPlayers == 2) {
-      player2 = new Player(width/3);
+//    if(numPlayers >= 1 && numPlayers <= 2) {
+//      player1 = new Player(width/2);
+//    }
+//    if(numPlayers == 2) {
+//      player2 = new Player(width/3);
+//    }
+    for(int i = 0; i < numPlayers; i++) {
+      players.add(new Player(width/(2+i) + (width/(2+i))*i));
     }
   }
 
