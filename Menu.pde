@@ -1,15 +1,33 @@
 class Menu {
+  String title = "SPACE INVADERS";
   int textHeight = 20;
+  float btnY = height/2 + height/4;
+  int lastTick = 0;
+  int nextTick = 2000;
   
   Menu() {
   }
   
   void display() {
-    textAlign(CENTER, TOP);
+    displayTitle();
+    displayBtns();
+  }
+  
+  void displayTitle() {
     fill(0, 255, 0);
-    textSize(54);
-    text("SPACE INVADERS", width/2, 0);
-    
+    if(millis() >= lastTick + nextTick) {
+      fill(0, 255, 0, random(50, 255));
+      if(millis() >= lastTick + nextTick + 500) {
+        lastTick = millis();
+        nextTick = (int)random(3000, 10000);
+      }
+    }
+    textAlign(CENTER, TOP);
+    textSize(74);
+    text(title, width/2, width/2 - textWidth(title)/1.75);
+  }
+  
+  void displayBtns() {
     textAlign(CENTER, CENTER);
     for(int i = 0; i < 2; i++) {
       String btnText;
@@ -18,7 +36,7 @@ class Menu {
       
       fill(126, 126, 126);
       textSize(textHeight);
-      if(mouseY < height/2 + textHeight/2 + ((textHeight*2)*i) && mouseY > height/2 - textHeight/2 + ((textHeight*2)*i)) {
+      if(mouseY < btnY + textHeight/2 + ((textHeight*2)*i) && mouseY > btnY - textHeight/2 + ((textHeight*2)*i)) {
         if(mouseX < width/2 + textWidth(btnText)/2 && mouseX > width/2 - textWidth(btnText)/2) {
           fill(0, 255, 0);
           textSize(textHeight*1.1);
@@ -32,17 +50,11 @@ class Menu {
           }
         }
       }
-      text(btnText, width/2, height/2 + ((textHeight*2)*i));
+      text(btnText, width/2, btnY + (textHeight*2)*i);
     }
   }
   
   void spawnPlayers(int numPlayers) {
-//    if(numPlayers >= 1 && numPlayers <= 2) {
-//      player1 = new Player(width/2);
-//    }
-//    if(numPlayers == 2) {
-//      player2 = new Player(width/3);
-//    }
     for(int i = 0; i < numPlayers; i++) {
       players.add(new Player(width/(2+i) + (width/(2+i))*i));
     }

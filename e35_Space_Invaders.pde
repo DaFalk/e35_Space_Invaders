@@ -55,3 +55,9 @@ void keyPressed() {
     else { players.get(0).keyDown(); }
   }
 }
+
+void mousePressed() {
+  if(gameStarted) {
+    enemies.get(0).attack();
+  }
+}

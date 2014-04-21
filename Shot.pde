@@ -37,9 +37,11 @@ class Shot {
       }
     }
     else {
-      if((y > players.get(0).y - players.get(0).pWidth * 1.5 && y < players.get(0).y)) {
-        if((x > players.get(0).x - players.get(0).pWidth/2 && x < players.get(0).x + players.get(0).pWidth/2) || (x > players.get(1).x - players.get(1).pWidth/2 && x < players.get(1).x + players.get(1).pWidth/2)) {
-          return true;
+      for(int i = players.size() - 1; i > -1; i--) {
+        if((y > players.get(i).y - players.get(i).pWidth * 1.5 && y < players.get(i).y)) {
+          if((x > players.get(i).x - players.get(i).pWidth/2 && x < players.get(i).x + players.get(i).pWidth/2)) {
+            return true;
+          }
         }
       }
     }
