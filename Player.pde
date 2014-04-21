@@ -2,10 +2,10 @@ class Player {
   float x, y;
   int lastMove, lastShot, shotCooldown, left, right;
   int speed = 150;
-  int pWidth = 20;
+  int pWidth = 40;
   
   Player(int x) {
-    this.x = x;
+    this.x = x - pWidth/2;
     y = height - pWidth/2;
   }
   
@@ -17,9 +17,18 @@ class Player {
   }
   
   void display() {
+    drawPlayer();
+  }
+  
+  void drawPlayer() {
     noStroke();
     fill(0, 255, 0);
-    triangle(x - pWidth/2 , y, x, y - pWidth, x + pWidth/2, y);
+    //Body
+    rect(x, y, pWidth, pWidth/4);
+    rect(x + pWidth*0.075, y - pWidth*0.08, pWidth*0.85, pWidth*0.08);
+    //Canon
+    rect(x + pWidth*0.4, y - pWidth*0.2, pWidth*0.2, pWidth*0.2);
+    rect(x + pWidth*0.4625, y - pWidth*0.275, pWidth*0.075, pWidth*0.2);
   }
   
   void checkCollision() {
@@ -33,7 +42,7 @@ class Player {
   
   void attack(int player) {
     if(millis() >= lastShot + shotCooldown) {
-      shoot(players.get(player).x, players.get(player).y, players.get(player).pWidth, -1);
+      shoot(players.get(player).x + pWidth/2, players.get(player).y, players.get(player).pWidth, -1);
       shotCooldown = 1500;
       lastShot = millis();
     }

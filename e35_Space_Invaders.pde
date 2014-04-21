@@ -19,7 +19,6 @@ void setup() {
   minim = new Minim(this);
   audio[0] = minim.loadFile("theme.mp3");
   audio[1] = minim.loadFile("playerShot.wav");
-  audio[0].play();
 }
 
 void draw() {
@@ -47,12 +46,12 @@ void draw() {
   
   if(!audio[0].isPlaying()) {
     audio[0].rewind();
-    audio[0].play();
+//    audio[0].play();
   }
 }
   
 void shoot(float posX, float posY, int size, int dir) {
-  Shot s = new Shot(posX, posY + (size*dir), dir);
+  Shot s = new Shot(posX, posY + ((size/4)*dir), dir);
   shots.add(s);
   if(!audio[1].isPlaying()) {
     audio[1].rewind();

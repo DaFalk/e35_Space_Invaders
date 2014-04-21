@@ -20,7 +20,7 @@ class Shot {
   }
   
   void display() {
-    stroke(0, 255, 0);
+    stroke(255, 255, 255);
     strokeWeight(2);
     line(x, y, x, y + (shotSize*dir));
   }
