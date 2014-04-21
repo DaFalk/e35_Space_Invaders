@@ -29,4 +29,8 @@ class Enemy {
     fill(156, 156, 156);
     ellipse(x, y, eSize, eSize);
   }
+  
+  void attack() {
+    shoot(enemies.get(enemies.size()-1).x, enemies.get(enemies.size()-1).y, enemies.get(enemies.size()-1).eSize, 1);
+  }
 }

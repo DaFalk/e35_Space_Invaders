@@ -49,8 +49,3 @@ void keyPressed() {
   if(key == CODED && isMultiplayer) { player2.keyDown(); }
   else { player1.keyDown(); }
 }
-
-void mousePressed() {
-  //enemy attack
-//  shoot(enemies.get(enemies.size()-1).x, enemies.get(enemies.size()-1).y, enemies.get(enemies.size()-1).eSize, 1);
-}
