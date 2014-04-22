@@ -23,6 +23,7 @@ class Player {
   void drawPlayer() {
     noStroke();
     fill(0, 255, 0);
+    //Draw with points instead
     //Body
     rect(x, y, pWidth, pWidth/4);
     rect(x + pWidth*0.075, y - pWidth*0.08, pWidth*0.85, pWidth*0.08);
