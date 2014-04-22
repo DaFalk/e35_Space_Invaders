@@ -19,7 +19,6 @@ void setup() {
   minim = new Minim(this);
   audio[0] = minim.loadFile("theme.mp3");
   audio[1] = minim.loadFile("playerShot.wav");
-  audio[2] = audio[1];
 }
 
 void draw() {
@@ -29,35 +28,39 @@ void draw() {
     menu.display();
   }
   else {
-    for(int i = players.size() - 1; i >= 0; i--) {
-      Player player = players.get(i);
-      player.update();
-    }
-    
-    for(int i = enemies.size() - 1; i >= 0; i--) {
-      Enemy e = enemies.get(i);
-      e.update();
-    }
-    
-    for(int i = shots.size() - 1; i >= 0; i--) {
-      Shot s = shots.get(i);
-      s.update();
-    }
+    iterateObjects();
   }
   
+  //Play theme song
   if(!audio[0].isPlaying()) {
     audio[0].rewind();
     audio[0].play();
   }
 }
+
+void iterateObjects() {
+  //Iterate players
+  for(int i = players.size() - 1; i >= 0; i--) {
+    Player player = players.get(i);
+    player.update();
+  }
+  //Iterate enemies
+  for(int i = enemies.size() - 1; i >= 0; i--) {
+    Enemy e = enemies.get(i);
+    e.update();
+  }
+  //Iterate shots
+  for(int i = shots.size() - 1; i >= 0; i--) {
+    Shot s = shots.get(i);
+    s.update();
+  }
+}
   
 void shoot(float posX, float posY, int size, int dir) {
-  Shot s = new Shot(posX, posY + ((size/4)*dir), dir);
+  Shot s = new Shot(posX, posY + (size*dir), dir);
   shots.add(s);
-//  if(!audio[1].isPlaying()) {
-    audio[1].rewind();
-    audio[1].play();
-//  }
+  audio[1].rewind();
+  audio[1].play();
 }
 
 void keyReleased() {

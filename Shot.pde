@@ -38,15 +38,18 @@ class Shot {
     }
     else {
       for(int i = players.size() - 1; i > -1; i--) {
-        if((y > players.get(i).y - players.get(i).pWidth * 1.5 && y < players.get(i).y)) {
-          if((x > players.get(i).x - players.get(i).pWidth/2 && x < players.get(i).x + players.get(i).pWidth/2)) {
+        if((y > players.get(i).y - players.get(i).pHeight - players.get(i).pHeight/3 && y < players.get(i).y + players.get(i).pHeight)) {
+          if((x > players.get(i).x && x < players.get(i).x + players.get(i).pWidth)) {
+            players.get(i).lifes--;
+            players.get(i).isDead = true;
+            println(players.get(i).lifes);
             return true;
           }
         }
       }
     }
     
-    if(y < 0 || y > height + shotSize) {
+    if((y < 0 && dir < 0) || (y > height + shotSize && dir > 0)) {
       return true;
     }
     
