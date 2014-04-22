@@ -56,7 +56,7 @@ class Menu {
   
   void spawnPlayers(int numPlayers) {
     for(int i = 0; i < numPlayers; i++) {
-      players.add(new Player(width/(2+i) + (width/(2+i))*i));
+      players.add(new Player(width/(2+i) - ((width/2 - width/3)*(numPlayers-1))*(1-i) + (width/(2+i))*i));
     }
   }
 

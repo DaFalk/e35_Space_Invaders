@@ -23,7 +23,6 @@ void setup() {
 
 void draw() {
   background(0);
-  
   if(!gameStarted) {
     menu.display();
   }
@@ -39,11 +38,6 @@ void draw() {
 }
 
 void iterateObjects() {
-  //Iterate players
-  for(int i = players.size() - 1; i >= 0; i--) {
-    Player player = players.get(i);
-    player.update();
-  }
   //Iterate enemies
   for(int i = enemies.size() - 1; i >= 0; i--) {
     Enemy e = enemies.get(i);
@@ -53,6 +47,11 @@ void iterateObjects() {
   for(int i = shots.size() - 1; i >= 0; i--) {
     Shot s = shots.get(i);
     s.update();
+  }
+  //Iterate players
+  for(int i = players.size() - 1; i >= 0; i--) {
+    Player player = players.get(i);
+    player.update();
   }
 }
   

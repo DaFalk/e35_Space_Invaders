@@ -20,6 +20,7 @@ class Enemy {
       xStep = 0;
     }
     
+    noStroke();
     fill(156, 156, 156);
     ellipse(x, y, eSize, eSize);
   }

@@ -38,12 +38,12 @@ class Shot {
     }
     else {
       for(int i = players.size() - 1; i > -1; i--) {
-        if((y > players.get(i).y - players.get(i).pHeight - players.get(i).pHeight/3 && y < players.get(i).y + players.get(i).pHeight)) {
-          if((x > players.get(i).x && x < players.get(i).x + players.get(i).pWidth)) {
-            players.get(i).lifes--;
-            players.get(i).isDead = true;
-            println(players.get(i).lifes);
-            return true;
+        if(!players.get(i).isDead) {
+          if((y > players.get(i).y - players.get(i).pHeight - players.get(i).pHeight/3 && y < players.get(i).y + players.get(i).pHeight)) {
+            if((x > players.get(i).x && x < players.get(i).x + players.get(i).pWidth)) {
+              players.get(i).adjustLifes();
+              return true;
+            }
           }
         }
       }

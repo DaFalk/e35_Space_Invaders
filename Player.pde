@@ -1,4 +1,5 @@
 class Player {
+  String hp;
   float x, y;
   int lastMove, lastShot, shotCooldown, left, right, lifes, pHeight;
   int pWidth = 40;
@@ -6,6 +7,7 @@ class Player {
   boolean isDead = false;
   
   Player(int x) {
+    this.hp = "LIFES";
     this.x = x - pWidth/2;
     this.lifes = 3;
     y = height - pWidth/2;
@@ -13,21 +15,24 @@ class Player {
   }
   
   void update() {
-    x += (right - left) * (speed*(millis()-lastMove)*0.001);
-    lastMove = millis();
-    checkCollision();
-    drawPlayer();
+    if(!isDead) {
+      x += (right - left) * (speed*(millis()-lastMove)*0.001);
+      lastMove = millis();
+      checkCollision();
+      drawPlayer(x, y);
+    }
+    displayLifes();
   }
   
-  void drawPlayer() {
+  void drawPlayer(float px, float py) {
     noStroke();
     fill(0, 255, 0);
     //Body
-    rect(x, y, pWidth, pHeight);
-    rect(x + (pWidth - pWidth*0.85)/2, y - pHeight/3, pWidth*0.85, pHeight/3);
+    rect(px, py, pWidth, pHeight);
+    rect(px + (pWidth - pWidth*0.85)/2, py - pHeight/3, pWidth*0.85, pHeight/3);
     //Canon
-    rect(x + pWidth/2.5, y - pWidth/5, pWidth/5, pWidth/5);
-    rect(x + pWidth*(0.5 - (0.075/2)), y - pWidth/3.5, pWidth*0.075, pWidth/3.5);
+    rect(px + pWidth/2.5, py - pWidth/5, pWidth/5, pWidth/5);
+    rect(px + pWidth*(0.5 - (0.075/2)), py - pWidth/3.5, pWidth*0.075, pWidth/3.5);
   }
   
   void checkCollision() {
@@ -45,6 +50,31 @@ class Player {
       shotCooldown = 1500;
       lastShot = millis();
     }
+  }
+  
+  void displayLifes() {
+    String numPlayer = "P" + nf(players.indexOf(this), 0);
+    if(!isDead && lifes > 0) { fill(255); }
+    else { fill(255, 0, 0, 220); }
+    textAlign(LEFT, CENTER);
+    text(hp, (pWidth/2)*(1-players.indexOf(this)) + (width - pWidth/2 - textWidth(hp))*players.indexOf(this), pWidth);
+    for(int i = 0; i < lifes; i++) {
+      drawPlayer((textWidth(hp) + pWidth + (pWidth*1.5)*i)*(1-players.indexOf(this)) + (width - pWidth*2 - textWidth(hp) - (pWidth*1.5)*i)*players.indexOf(this), pWidth);
+    }
+  }
+  
+  void adjustLifes() {
+    lifes--;
+    isDead = true;
+    if(lifes > 0) {
+      respawn();
+    }
+    else {
+      hp = "DEAD";
+    }
+  }
+  
+  void respawn() {
   }
   
   void keyDown() {
