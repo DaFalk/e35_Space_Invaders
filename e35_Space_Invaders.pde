@@ -4,6 +4,7 @@ Menu menu;
 boolean gameStarted = false;
 boolean isMultiplayer = false;
 int stackSize = 50;
+int totalScore = 0;
 
 ArrayList<Player> players = new ArrayList<Player>();
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -27,39 +28,58 @@ void draw() {
     menu.display();
   }
   else {
-    iterateObjects();
+    displayEnemies();
+    displayShots();
+    displayPlayers();
+    displayTotalScore();
   }
+  playMusic();
+}
+
+void displayEnemies() {
+  for(int i = enemies.size() - 1; i >= 0; i--) {
+    Enemy e = enemies.get(i);
+    e.update();
+  }
+}
+
+void displayShots() {
+  for(int i = shots.size() - 1; i >= 0; i--) {
+    Shot s = shots.get(i);
+    s.update();
+  }
+}
+
+void displayPlayers() {
+  totalScore = 0;
+  for(int i = players.size() - 1; i >= 0; i--) {
+    Player player = players.get(i);
+    player.update();
+    totalScore += player.score;
+  }
+}
   
-  //Play theme song
+void shoot(float posX, float posY, int size, int dir, int owner) {
+  Shot s = new Shot(posX, posY + (size*dir), dir, owner);
+  shots.add(s);
+  audio[1].rewind();
+  audio[1].play();
+}
+
+void playMusic() {
   if(!audio[0].isPlaying()) {
     audio[0].rewind();
     audio[0].play();
   }
 }
 
-void iterateObjects() {
-  //Iterate enemies
-  for(int i = enemies.size() - 1; i >= 0; i--) {
-    Enemy e = enemies.get(i);
-    e.update();
-  }
-  //Iterate shots
-  for(int i = shots.size() - 1; i >= 0; i--) {
-    Shot s = shots.get(i);
-    s.update();
-  }
-  //Iterate players
-  for(int i = players.size() - 1; i >= 0; i--) {
-    Player player = players.get(i);
-    player.update();
-  }
-}
-  
-void shoot(float posX, float posY, int size, int dir) {
-  Shot s = new Shot(posX, posY + (size*dir), dir);
-  shots.add(s);
-  audio[1].rewind();
-  audio[1].play();
+void displayTotalScore() {
+  textAlign(CENTER, TOP);
+  textSize(textHeight/1.5);
+  text("TOTAL SCORE", width/2, 0);
+  textSize(42);
+  fill(255);
+  text(nf(totalScore, 0), width/2, textHeight/2);
 }
 
 void keyReleased() {

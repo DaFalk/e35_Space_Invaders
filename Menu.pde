@@ -1,6 +1,7 @@
+int textHeight = 20;
+
 class Menu {
   String title = "SPACE INVADERS";
-  int textHeight = 20;
   float btnY = height/2 + height/4;
   int lastTick = 0;
   int nextTick = 2000;

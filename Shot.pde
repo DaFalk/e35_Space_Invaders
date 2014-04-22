@@ -3,11 +3,13 @@ class Shot {
   int dir;
   int shotSize = 5;
   int speed = 5;
+  int owner;
   
-  Shot(float x, float y, int direction) {
+  Shot(float x, float y, int direction, int player) {
     this.x = x;
     this.y = y;
     this.dir = direction;
+    this.owner = player;
   }
   
   void update() {
@@ -30,6 +32,7 @@ class Shot {
       for(int i = enemies.size() - 1; i > -1; i--) {
         if(y < enemies.get(i).y + enemies.get(i).eSize/2 && y > enemies.get(i).y - enemies.get(i).eSize/2) {
           if(x < enemies.get(i).x + enemies.get(i).eSize/2 && x > enemies.get(i).x - enemies.get(i).eSize/2) {
+            players.get(owner).adjustScore();
             enemies.remove(i);
             return true;
           }
