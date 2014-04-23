@@ -1,5 +1,5 @@
 class Player {
-  String pLifes;
+  String lifesLabel;
   float x, y;
   int lastMove, lastShot, shotCooldown, left, right, lifes, pHeight;
   int pWidth = 40;
@@ -8,7 +8,7 @@ class Player {
   boolean isDead = false;
   
   Player(int xPos) {
-    this.pLifes = "LIFES";
+    this.lifesLabel = "LIFES";
     this.x = xPos - pWidth/2;
     this.lifes = 3;
     y = height - pWidth/2;
@@ -55,20 +55,16 @@ class Player {
   void adjustLifes() {
     lifes--;
     if(lifes > 0) {
-      respawn();
+      spawner.respawn(this);
     }
     else {
       isDead = true;
-      pLifes = "DEAD";
+      lifesLabel = "DEAD";
     }
   }
   
   void adjustScore() {
     score += 10;
-  }
-  
-  void respawn() {
-    x = width/(2+players.indexOf(this)) - ((width/2 - width/3)*(players.size()-1))*(1-players.indexOf(this)) + (width/(2+players.indexOf(this)))*players.indexOf(this);
   }
   
   void keyDown() {

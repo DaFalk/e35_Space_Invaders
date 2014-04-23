@@ -10,15 +10,17 @@ ArrayList<Player> players = new ArrayList<Player>();
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 
+Spawner spawner;
 MenUI menUI;
 
 void setup() {
   size(800, 600);
   smooth();
-  menUI = new MenUI();
   minim = new Minim(this);
   audio[0] = minim.loadFile("theme.mp3");
   audio[1] = minim.loadFile("playerShot.wav");
+  spawner = new Spawner();
+  menUI = new MenUI();
 }
 
 void draw() {
@@ -44,14 +46,14 @@ void displayGameObjects() {
     Shot s = shots.get(i);
     s.update();
   }
-  //Iterate players array list and updates every player
-  //and adjust the total score of all player scores.
+  //Iterate players array list and updates players
+  //and adjust the total score and lifes of players.
   menUI.totalScore = 0;
   for(int i = players.size() - 1; i >= 0; i--) {
     Player player = players.get(i);
     player.update();
+    menUI.displayUI(player);
     menUI.totalScore += player.score;
-    menUI.displayLifes(player);
   }
 }
 
