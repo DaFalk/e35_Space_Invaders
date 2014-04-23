@@ -39,7 +39,7 @@ class Enemy {
   }
 
   boolean checkCollision() {
-    if ((x+eSize/2 >= width -eSize && dirX > 0) || (x + eSize/2 <= eSize && dirX < 0)) { 
+    if ((x+eSize/2 >= width -eSize && dirX > 0) || (x + eSize/2 <= eSize && dirX < 0)) { // weird stuff
       dirX *= -1;
 
       return true;
