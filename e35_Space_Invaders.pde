@@ -6,7 +6,7 @@ boolean gameStarted = false;
 boolean isMultiplayer = false;
 
 //Each game object is stored in an array list associated to that kind of object.
-ArrayList<Player> players = new ArrayList<Player>();
+ArrayList<Player> players = new ArrayList<Player>(); //Player 1 is players.get(0) while Player 2 is players.get(1).
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 
@@ -47,7 +47,7 @@ void displayGameObjects() {
     s.update();
   }
   //Iterate players array list and updates players
-  //and adjust the total score and lifes of players.
+  //and adjust the total score and display players UI.
   menUI.totalScore = 0;
   for(int i = players.size() - 1; i >= 0; i--) {
     Player player = players.get(i);
@@ -74,7 +74,10 @@ void keyReleased() {
 }
 void keyPressed() {
   if(gameStarted) {
-    if(key == CODED && isMultiplayer) { players.get(1).keyDown(); }
+    if(key == CODED) {
+      if(isMultiplayer) { players.get(1).keyDown(); }
+//      if(key == ESC) { menUI.displayESCMenu(); }
+    }
     else { players.get(0).keyDown(); }
   }
 }

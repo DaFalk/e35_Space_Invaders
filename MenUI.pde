@@ -18,8 +18,8 @@ class MenUI {
   }
   
   void displayTitle() {
-    //Add flicker effect to title.
     fill(0, 255, 0);
+    //Add flicker effect to title.
     if(millis() >= lastTick + nextTick) {
       fill(0, 255, 0, random(50, 255));
       if(millis() >= lastTick + nextTick + 500) {
@@ -72,45 +72,50 @@ class MenUI {
     float tx = player.pHeight/2;
     textAlign(LEFT, CENTER);
     textSize(62);
-    p1IDx = tx*(1-playerIndex);
-    p2IDx = (width - tx - textWidth(numPlayer))*playerIndex, player.pWidth/2);
-    text(numPlayer, p1IDx + p2IDx;
+    float p1IDx = tx*(1-playerIndex);
+    float p2IDx = (width - tx - textWidth(numPlayer))*playerIndex;
+    text(numPlayer, p1IDx + p2IDx, player.pWidth/2);
     
     //Display labels for lifes and scores.
     tx += textWidth(numPlayer);
     textSize(labelHeight);
     float p1LabelX = tx*(1-playerIndex);
-    float p2LifesLabelX = (width - tx - textWidth(lifesLabel))*playerIndex, player.pWidth);
-    text(lifesLabel, p1LabelX + p2LifesLabelX;
+    float p2LifesLabelX = (width - tx - textWidth(lifesLabel))*playerIndex;
+    text(lifesLabel, p1LabelX + p2LifesLabelX, player.pWidth);
     if(isMultiplayer) {
       float p2ScoreLabelX = (width - tx - textWidth(scoreLabel))*playerIndex;
-      text(scoreLabel, p1LabelX + p2ScoreLabelX, player.pWidth - labelHeight*1.25)
+      text(scoreLabel, p1LabelX + p2ScoreLabelX, player.pWidth - labelHeight*1.25);
     }
     
-    //Display lifes and scores.
+    //Display scores.
     tx += textWidth(lifesLabel) + player.pWidth/4;
     if(isMultiplayer) {
+      //Display individual scores.
       float p1ScoreX = (tx + player.pWidth*1.75 - textWidth(score)/2)*(1-playerIndex);
       float p2ScoreX = (width - tx - textWidth(score)/2 - player.pWidth*2)*playerIndex;
       text(score, p1ScoreX + p2ScoreX, player.pWidth - labelHeight*1.25);
     }
+    else {
+      totalScoreLabel = scoreLabel;
+    }
+    
+    //Display lifes.
     for(int i = 0; i < player.lifes; i++) {
       float p1LifesX = (tx + (player.pWidth*1.25)*i)*(1-playerIndex);
       float p2LifesX = (width - tx - player.pWidth - (player.pWidth*1.5)*i)*playerIndex;
       player.drawPlayer(p1LifesX + p2LifesX, player.pWidth);
     }
-  }
-
-  void displayTotalScore() {
-    if(!isMultiplayer) {
-      totalScoreLabel = scoreLabel;
-    }
+    
+    //Display total score.
     fill(255);
     textAlign(CENTER, TOP);
     textSize(labelHeight/1.5);
     text(totalScoreLabel, width/2, 0);
     textSize(42);
     text(nf(totalScore, 0), width/2, labelHeight/2);
+  }
+
+  void displayTotalScore() {
   }
 
   void playThemeSong() {
