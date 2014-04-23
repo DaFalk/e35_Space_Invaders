@@ -23,6 +23,7 @@ void setup() {
 }
 
 void draw() {
+  frameRate(15);
   background(0);
   if(!gameStarted) {
     menu.display();
@@ -40,6 +41,8 @@ void displayEnemies() {
   for(int i = enemies.size() - 1; i >= 0; i--) {
     Enemy e = enemies.get(i);
     e.update();
+    e.display();
+  
   }
 }
 

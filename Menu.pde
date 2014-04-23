@@ -46,7 +46,7 @@ class Menu {
             if(i == 1) {
               isMultiplayer = true;
             }
-            spawnEnemies();
+            spawnEnemies(20);
             gameStarted = true;
           }
         }
@@ -61,10 +61,12 @@ class Menu {
     }
   }
 
-  void spawnEnemies() {
-    for(int i = 0; i < stackSize / 5; i++) {
-      for(int j = 0; j < stackSize / 10; j++) {
-        enemies.add(new Enemy(i, j));
+  void spawnEnemies(int eSize) {
+    int enemyRows = 9;
+    int enemyCols = 5;
+    for(int i = 0; i < enemyCols; i++) {
+      for(int j = 0; j < enemyRows; j++) {
+        enemies.add(new Enemy(j, i));
       }
     }
   }
