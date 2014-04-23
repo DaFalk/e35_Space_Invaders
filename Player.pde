@@ -1,5 +1,4 @@
 class Player {
-  String scoreText = "SCORE";
   String pLifes;
   float x, y;
   int lastMove, lastShot, shotCooldown, left, right, lifes, pHeight;
@@ -23,7 +22,6 @@ class Player {
       checkCollision();
       drawPlayer(x, y);
     }
-    displayLifes();
   }
   
   void drawPlayer(float px, float py) {
@@ -51,26 +49,6 @@ class Player {
       shoot(players.get(player).x + pWidth/2, players.get(player).y, players.get(player).pHeight, -1, players.indexOf(this));
       shotCooldown = 1500;
       lastShot = millis();
-    }
-  }
-  
-  void displayLifes() {
-    String numPlayer = "P" + nf(players.indexOf(this)+1, 0);
-    String pts = nf(score, 0);
-    if(lifes > 0) { fill(255); }
-    else { fill(255, 0, 0, 220); }
-    textAlign(LEFT, CENTER);
-    textSize(62);
-    float tx = pHeight/2;
-    text(numPlayer, tx*(1-players.indexOf(this)) + (width - tx - textWidth(numPlayer))*players.indexOf(this), pWidth/2);
-    tx += textWidth(numPlayer);
-    textSize(textHeight);
-    text(pLifes, tx*(1-players.indexOf(this)) + (width - tx - textWidth(pLifes))*players.indexOf(this), pWidth);
-    text(scoreText, tx*(1-players.indexOf(this)) + (width - tx - textWidth(scoreText))*players.indexOf(this), pWidth - textHeight*1.25);
-    tx += textWidth(pLifes) + pWidth/4;
-    text(pts, (tx + pWidth*1.75 - textWidth(pts)/2)*(1-players.indexOf(this)) + (width - tx - textWidth(pts)/2 - pWidth*2)*players.indexOf(this), pWidth - textHeight*1.25);
-    for(int i = 0; i < lifes; i++) {
-      drawPlayer((tx + (pWidth*1.25)*i)*(1-players.indexOf(this)) + (width - tx - pWidth - (pWidth*1.5)*i)*players.indexOf(this), pWidth);
     }
   }
   

@@ -1,88 +1,64 @@
 import ddf.minim.*; //Import audio library
+Minim minim;
+AudioPlayer[] audio = new AudioPlayer[2];
 
-Menu menu;
 boolean gameStarted = false;
 boolean isMultiplayer = false;
-int stackSize = 50;
-int totalScore = 0;
 
+//Each game object is stored in an array list associated to that kind of object.
 ArrayList<Player> players = new ArrayList<Player>();
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 
-AudioPlayer[] audio = new AudioPlayer[5];
-Minim minim;
+MenUI menUI;
 
 void setup() {
   size(800, 600);
   smooth();
-  menu = new Menu();
+  menUI = new MenUI();
   minim = new Minim(this);
   audio[0] = minim.loadFile("theme.mp3");
   audio[1] = minim.loadFile("playerShot.wav");
 }
 
 void draw() {
-  frameRate(15);
   background(0);
   if(!gameStarted) {
-    menu.display();
+    menUI.displayStartMenu();
   }
   else {
-    displayEnemies();
-    displayShots();
-    displayPlayers();
-    displayTotalScore();
+    displayGameObjects();
+    menUI.displayTotalScore();
   }
-  playMusic();
+  menUI.playThemeSong();
 }
 
-void displayEnemies() {
+void displayGameObjects() {
+  //Iterate enemies array list and updates every enemy. 
   for(int i = enemies.size() - 1; i >= 0; i--) {
     Enemy e = enemies.get(i);
     e.update();
-    e.display();
-  
   }
-}
-
-void displayShots() {
+  //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
     Shot s = shots.get(i);
     s.update();
   }
-}
-
-void displayPlayers() {
-  totalScore = 0;
+  //Iterate players array list and updates every player
+  //and adjust the total score of all player scores.
+  menUI.totalScore = 0;
   for(int i = players.size() - 1; i >= 0; i--) {
     Player player = players.get(i);
     player.update();
-    totalScore += player.score;
+    menUI.totalScore += player.score;
+    menUI.displayLifes(player);
   }
 }
-  
+
+//Shoot function handles both player and enemy shots.
 void shoot(float posX, float posY, int size, int dir, int owner) {
   Shot s = new Shot(posX, posY + (size*dir), dir, owner);
   shots.add(s);
-  audio[1].rewind();
-  audio[1].play();
-}
-
-void playMusic() {
-  if(!audio[0].isPlaying()) {
-    audio[0].rewind();
-    audio[0].play();
-  }
-}
-
-void displayTotalScore() {
-  textAlign(CENTER, TOP);
-  textSize(textHeight/1.5);
-  text("TOTAL SCORE", width/2, 0);
-  textSize(42);
-  fill(255);
-  text(nf(totalScore, 0), width/2, textHeight/2);
 }
 
 void keyReleased() {
@@ -98,6 +74,7 @@ void keyPressed() {
   }
 }
 
+//enemy shoot for testing only
 void mousePressed() {
   if(gameStarted) {
     enemies.get(0).attack();

@@ -1,16 +1,5 @@
 class Enemy {
-
-  //size of enemies
   int eSize = 20;
-
-  //  int enemyWidth = eSize;
-  //  int enemyHeight = eSize;
-
-  //  //spacing between enemies
-  //  int enemyHorisontal =enemyWidth + 10;
-  //  int enemyVertical=enemyHeight + 10;
-
-  //movement and positioning of enemies 
   float x, y;
 
   int enemyRows = 9;
@@ -22,9 +11,7 @@ class Enemy {
   float moveY;
   //  int lastMove;
 
-
   int totalEnemies = enemyRows*enemyCols;
-
 
   Enemy(float _x, float _y) {
     this.x = _x*stepX;
@@ -32,17 +19,16 @@ class Enemy {
   }
 
   void update() {
-    x += (stepX*dirX); 
-    
-    
+    //Move enemy
+    x += (stepX*dirX);
     checkCollision();
+    display();
   }
 
   boolean checkCollision() {
     if ((x+eSize/2 >= width -eSize && dirX > 0) || (x + eSize/2 <= eSize && dirX < 0)) { // weird stuff
       dirX *= -1;
       moveY += stepY;
-
       return true;
     }
     return false;
@@ -52,10 +38,7 @@ class Enemy {
     noStroke();
     fill(156, 156, 156);
     ellipse(x , y + moveY, eSize, eSize);
-
-    println(enemies.get(enemyRows-1).x, enemies.get(enemyRows-1).y, enemies.get(0).x, enemies.get(0).y);
   }
-
 
   void attack() {
     shoot(enemies.get(enemies.size()-1).x, enemies.get(enemies.size()-1).y, enemies.get(enemies.size()-1).eSize, 1, 100);

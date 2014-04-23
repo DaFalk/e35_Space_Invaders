@@ -1,15 +1,17 @@
 int textHeight = 20;
 
-class Menu {
+class MenUI {
   String title = "SPACE INVADERS";
+  String scoreText = "SCORE";
+  int totalScore = 0;
   float btnY = height/2 + height/4;
   int lastTick = 0;
   int nextTick = 2000;
   
-  Menu() {
+  MenUI() {
   }
   
-  void display() {
+  void displayStartMenu() {
     displayTitle();
     displayBtns();
   }
@@ -52,6 +54,45 @@ class Menu {
         }
       }
       text(btnText, width/2, btnY + (textHeight*2)*i);
+    }
+  }
+  
+  void displayLifes(Player player) {
+    int playerIndex = players.indexOf(player);
+    String numPlayer = "P" + nf(playerIndex+1, 0);
+    String pts = nf(player.score, 0);
+    
+    if(player.lifes > 0) { fill(255); }
+    else { fill(255, 0, 0, 220); }
+    
+    float tx = player.pHeight/2;
+    textAlign(LEFT, CENTER);
+    textSize(62);
+    text(numPlayer, tx*(1-playerIndex) + (width - tx - textWidth(numPlayer))*playerIndex, player.pWidth/2);
+    tx += textWidth(numPlayer);
+    textSize(textHeight);
+    text(player.pLifes, tx*(1-playerIndex) + (width - tx - textWidth(player.pLifes))*playerIndex, player.pWidth);
+    text(scoreText, tx*(1-playerIndex) + (width - tx - textWidth(scoreText))*playerIndex, player.pWidth - textHeight*1.25);
+    tx += textWidth(player.pLifes) + player.pWidth/4;
+    text(pts, (tx + player.pWidth*1.75 - textWidth(pts)/2)*(1-playerIndex) + (width - tx - textWidth(pts)/2 - player.pWidth*2)*playerIndex, player.pWidth - textHeight*1.25);
+    for(int i = 0; i < player.lifes; i++) {
+      player.drawPlayer((tx + (player.pWidth*1.25)*i)*(1-playerIndex) + (width - tx - player.pWidth - (player.pWidth*1.5)*i)*playerIndex, player.pWidth);
+    }
+  }
+
+  void displayTotalScore() {
+    textAlign(CENTER, TOP);
+    textSize(textHeight/1.5);
+    text("TOTAL SCORE", width/2, 0);
+    textSize(42);
+    fill(255);
+    text(nf(totalScore, 0), width/2, textHeight/2);
+  }
+
+  void playThemeSong() {
+    if(!audio[0].isPlaying()) {
+      audio[0].rewind();
+      audio[0].play();
     }
   }
   
