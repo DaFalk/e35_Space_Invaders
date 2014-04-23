@@ -11,6 +11,7 @@ class Player {
     this.lifesLabel = "LIFES";
     this.x = xPos - pWidth/2;
     this.lifes = 3;
+    this.shotCooldown = 1500; //If we want to add upgrades, boosts or other weapon affectors
     y = height - pWidth/2;
     pHeight = pWidth/4;
   }
@@ -47,7 +48,6 @@ class Player {
   void attack(int player) {
     if(millis() >= lastShot + shotCooldown) {
       shoot(players.get(player).x + pWidth/2, players.get(player).y, players.get(player).pHeight, -1, players.indexOf(this));
-      shotCooldown = 1500;
       lastShot = millis();
     }
   }

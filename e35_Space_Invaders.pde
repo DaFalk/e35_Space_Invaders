@@ -63,6 +63,9 @@ void shoot(float posX, float posY, int size, int dir, int owner) {
   shots.add(s);
 }
 
+//keyReleased and keyPressed checks if keys are coded or not.
+//player 1 controls A, D and SPACE are not coded while
+//player 2 controls LEFT, RIGHT and CONTROL are coded.
 void keyReleased() {
   if(gameStarted) {
     if(key == CODED && isMultiplayer) { players.get(1).keyUp(); }
@@ -76,7 +79,7 @@ void keyPressed() {
   }
 }
 
-//enemy shoot for testing only
+//enemy shoot (for testing only).
 void mousePressed() {
   if(gameStarted) {
     enemies.get(0).attack();

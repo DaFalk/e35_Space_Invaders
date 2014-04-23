@@ -36,13 +36,13 @@ class MenUI {
     textAlign(CENTER, CENTER);
     for(int i = 0; i < 2; i++) {
       String btnLabel;
-      float btnLabelY = btnY + (labelHeight*2)*i;
       
       if(i == 0) { btnLabel = "Singleplayer"; }
       else { btnLabel = "Multiplayer"; }
       
       fill(126, 126, 126);
       textSize(labelHeight);
+      float btnLabelY = btnY + (labelHeight*2)*i;
       if(mouseY < btnLabelY + labelHeight/2 && mouseY > btnLabelY - labelHeight/2) {
         if(mouseX < width/2 + textWidth(btnLabel)/2 && mouseX > width/2 - textWidth(btnLabel)/2) {
           fill(0, 255, 0);
@@ -64,28 +64,40 @@ class MenUI {
     String numPlayer = "P" + nf(playerIndex+1, 0);
     String score = nf(player.score, 0);
     String lifesLabel = player.lifesLabel;
-    float labelWidth;
     
     if(player.lifes > 0) { fill(255); }
     else { fill(255, 0, 0, 220); }
     
-    //Display player id.
+    //Display player ID.
     float tx = player.pHeight/2;
     textAlign(LEFT, CENTER);
     textSize(62);
-    text(numPlayer, tx*(1-playerIndex) + (width - tx - textWidth(numPlayer))*playerIndex, player.pWidth/2);
+    p1IDx = tx*(1-playerIndex);
+    p2IDx = (width - tx - textWidth(numPlayer))*playerIndex, player.pWidth/2);
+    text(numPlayer, p1IDx + p2IDx;
     
     //Display labels for lifes and scores.
     tx += textWidth(numPlayer);
     textSize(labelHeight);
-    text(lifesLabel, tx*(1-playerIndex) + (width - tx - textWidth(lifesLabel))*playerIndex, player.pWidth);
-    text(scoreLabel, tx*(1-playerIndex) + (width - tx - textWidth(scoreLabel))*playerIndex, player.pWidth - labelHeight*1.25);
+    float p1LabelX = tx*(1-playerIndex);
+    float p2LifesLabelX = (width - tx - textWidth(lifesLabel))*playerIndex, player.pWidth);
+    text(lifesLabel, p1LabelX + p2LifesLabelX;
+    if(isMultiplayer) {
+      float p2ScoreLabelX = (width - tx - textWidth(scoreLabel))*playerIndex;
+      text(scoreLabel, p1LabelX + p2ScoreLabelX, player.pWidth - labelHeight*1.25)
+    }
     
     //Display lifes and scores.
     tx += textWidth(lifesLabel) + player.pWidth/4;
-    text(score, (tx + player.pWidth*1.75 - textWidth(score)/2)*(1-playerIndex) + (width - tx - textWidth(score)/2 - player.pWidth*2)*playerIndex, player.pWidth - labelHeight*1.25);
+    if(isMultiplayer) {
+      float p1ScoreX = (tx + player.pWidth*1.75 - textWidth(score)/2)*(1-playerIndex);
+      float p2ScoreX = (width - tx - textWidth(score)/2 - player.pWidth*2)*playerIndex;
+      text(score, p1ScoreX + p2ScoreX, player.pWidth - labelHeight*1.25);
+    }
     for(int i = 0; i < player.lifes; i++) {
-      player.drawPlayer((tx + (player.pWidth*1.25)*i)*(1-playerIndex) + (width - tx - player.pWidth - (player.pWidth*1.5)*i)*playerIndex, player.pWidth);
+      float p1LifesX = (tx + (player.pWidth*1.25)*i)*(1-playerIndex);
+      float p2LifesX = (width - tx - player.pWidth - (player.pWidth*1.5)*i)*playerIndex;
+      player.drawPlayer(p1LifesX + p2LifesX, player.pWidth);
     }
   }
 
