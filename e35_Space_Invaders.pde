@@ -78,22 +78,18 @@ void resetGame() {
 //player 1 controls A, D and SPACE are not coded while
 //player 2 controls LEFT, RIGHT and CONTROL are coded.
 void keyReleased() {
-  if(gameStarted && !gamePaused) {
-    if(key == CODED && isMultiplayer) { players.get(1).keyUp(); }
+  if(gameStarted) {
+    if(key == CODED) { players.get(players.size()-1).keyUp(); }
     else { players.get(0).keyUp(); }
   }
 }
 void keyPressed() {
-  //if ESC
-  if(key == 27) {
-    //cancel other ESC events
-    key = 0;
+  if(key == 27) {  //if ESC
+    key = 0;  //cancel other ESC events
     gamePaused = !gamePaused;
   }
-  if(gameStarted && !gamePaused) {
-    if(key == CODED) {
-      if(isMultiplayer) { players.get(1).keyDown(); }
-    }
+  if(gameStarted) {
+    if(key == CODED) { players.get(players.size()-1).keyDown(); }
     else { players.get(0).keyDown(); }
   }
 }

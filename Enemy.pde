@@ -3,6 +3,7 @@ class Enemy {
   float x, y;
   int lastShot;
   int shotCooldown = 4000;
+  int weaponType = 0;
   
   int enemyRows = 9;
   int enemyCols = 5;
@@ -49,7 +50,7 @@ class Enemy {
   void shoot() {
     if(millis() >= lastShot + shotCooldown) {
       int e = floor(random(0, enemies.size()));
-      Shot s = new Shot(enemies.get(e).x, enemies.get(e).y + eSize, 1, 10);
+      Shot s = new Shot(enemies.get(e).x, enemies.get(e).y + eSize, 1, weaponType, 10);
       shots.add(s);
       lastShot = millis();
       shotCooldown = ceil(random(3, 6))*1000;

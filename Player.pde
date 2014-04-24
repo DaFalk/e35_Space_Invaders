@@ -5,6 +5,9 @@ class Player {
   int pWidth = 40;
   int speed = 150;
   int score = 0;
+  int weaponType;
+  int powerUpStartTime;
+  int powerUpDuration = 4000;
   boolean isDead = false;
   
   Player(int xPos) {
@@ -12,15 +15,17 @@ class Player {
     this.x = xPos - pWidth/2;
     this.lifes = 3;
     this.shotCooldown = 1500; //If we want to add upgrades, boosts or other weapon affectors
+    this.weaponType = 0;
     y = height - pWidth/2;
     pHeight = pWidth/4;
   }
   
   void update() {
-    if(!isDead) {
+    if(!isDead && !gamePaused) {
       x += (right - left) * (speed*(millis()-lastMove)*0.001);
       lastMove = millis();
       checkCollision();
+      handlePowerUp();
       drawPlayer(x, y);
     }
   }
@@ -48,7 +53,7 @@ class Player {
   
   void attack() {
     if(millis() >= lastShot + shotCooldown) {
-      Shot s = new Shot(x + pWidth/2, y - pHeight, -1, players.indexOf(this));
+      Shot s = new Shot(x + pWidth/2, y - pHeight, -1, weaponType, players.indexOf(this));
       shots.add(s);
       lastShot = millis();
     }
@@ -69,25 +74,29 @@ class Player {
     score += 10;
   }
   
+  void handlePowerUp() {
+    if(weaponType != 0) {
+      if(millis() >= powerUpStartTime + powerUpDuration) {
+        weaponType = 0;
+      }
+    }
+  }
+  
   void keyDown() {
     if(keyPressed) {
-      if(key == CODED && isMultiplayer) {
-        if(keyCode == LEFT) { players.get(1).left = 1; }
-        if(keyCode == RIGHT) { players.get(1).right = 1; }
-        if(keyCode == CONTROL) { attack(); }
-      }
-      if(key == 'a' || key == 'A') { players.get(0).left = 1; }
-      if(key == 'd' || key == 'D') { players.get(0).right = 1; }
+      if(keyCode == LEFT) { left = 1; }
+      if(keyCode == RIGHT) { right = 1; }
+      if(keyCode == CONTROL) { attack(); }
+      if(key == 'a' || key == 'A') { left = 1; }
+      if(key == 'd' || key == 'D') { right = 1; }
       if(key == ' ') { attack(); }
     }
   }
   
   void keyUp() {
-    if(key == CODED && isMultiplayer) {
-      if(keyCode == LEFT) { players.get(1).left = 0; }
-      if(keyCode == RIGHT) { players.get(1).right = 0; }
-    }
-    if(key == 'a' || key == 'A') { players.get(0).left = 0; }
-    if(key == 'd' || key == 'D') { players.get(0).right = 0; }
+    if(keyCode == LEFT) { left = 0; }
+    if(keyCode == RIGHT) { right = 0; }
+    if(key == 'a' || key == 'A') { left = 0; }
+    if(key == 'd' || key == 'D') { right = 0; }
   }
 }

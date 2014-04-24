@@ -40,7 +40,6 @@ class MenUI {
   void displayBtns(float offsetY) {
     textAlign(CENTER, CENTER);
     for(int i = 0; i < 2; i++) {
-      
       if(!gameStarted) {
         if(!gamePaused) {
           if(i == 0) { btnLabel = "Singleplayer"; }

@@ -43,7 +43,8 @@ class PowerUp {
       if(!players.get(i).isDead) {
         if((y > players.get(i).y - players.get(i).pHeight - players.get(i).pHeight/3 && y < players.get(i).y + players.get(i).pHeight)) {
           if((x > players.get(i).x && x < players.get(i).x + players.get(i).pWidth)) {
-            //players.get(i).activatePowerUp();
+            players.get(i).weaponType = type;
+            players.get(i).powerUpStartTime = millis();
             return true;
           }
         }

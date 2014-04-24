@@ -1,16 +1,16 @@
 class Shot {
   float x, y;
-  int dir, lastMove, owner;
+  int dir, lastMove, type, owner;
   int shotSize = 15;
   int speed = 250;
   
-  Shot(float _x, float _y, int direction, int player) {
+  Shot(float _x, float _y, int _direction, int _type, int _owner) {
     this.x = _x;
     this.y = _y;
-    this.dir = direction;
-    shotSize *= dir;
+    this.dir = _direction;
     this.lastMove = millis();
-    this.owner = player;
+    this.type = _type;
+    this.owner = _owner;
     audioHandler.playSFX(1);
   }
   
@@ -22,23 +22,35 @@ class Shot {
         shots.remove(this);
       }
     }
-    drawShot();
-  }
-  
-  void drawShot() {
-    stroke(255, 255, 255);
-    strokeWeight(2);
-    if(dir < 0) {
-      line(x, y, x, y + shotSize);
+    if(owner <= 1) {
+      drawPlayerShot();
     }
     else {
-      float offset = shotSize/5;
-      int flip;
-      for (int i = 0; i < 5; i++) {
-        if(i%2 == 0) { flip = 1; }
-        else { flip = -1; }
-        line(x - offset*flip, y - offset*i, x + offset*flip, y - offset - offset*i);
-      }
+      drawEnemyShot();
+    }
+  }
+  
+  void drawPlayerShot() {
+    if(type == 0) {
+      stroke(255, 255, 255);
+      strokeWeight(2);
+      line(x, y, x, y + shotSize);
+    }
+    if(type > 0) {
+      noStroke();
+      fill(0, 0, 255);
+      triangle(x - shotSize/2, y, x + shotSize/2, y, x, y + shotSize);
+    }
+  }
+  
+  void drawEnemyShot() {
+    stroke(255, 255, 255);
+    float offset = shotSize/5;
+    int flip;
+    for (int i = 0; i < 5; i++) {
+      if(i%2 == 0) { flip = 1; }
+      else { flip = -1; }
+      line(x - offset*flip, y + offset*i, x + offset*flip, y + offset + offset*i);
     }
   }
   
@@ -58,7 +70,9 @@ class Shot {
             if(enemies.size() == 0) {
               spawner.respawnEnemies();
             }
-            return true;
+            if(type == 0) {
+              return true;
+            }
           }
         }
       }
