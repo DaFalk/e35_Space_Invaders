@@ -5,7 +5,7 @@ class AudioHandler {
   void manage() {
     if(gamePaused) { audioPlayer[0].setGain(-10); }
     else { audioPlayer[0].setGain(0); }
-//    playThemeSong();
+    playThemeSong();
   }
   
   void playThemeSong() {

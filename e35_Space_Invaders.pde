@@ -43,6 +43,7 @@ void displayGameObjects() {
     Enemy e = enemies.get(i);
     e.update();
   }
+  enemies.get(0).shoot();
   //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
     Shot s = shots.get(i);
@@ -63,12 +64,6 @@ void displayGameObjects() {
     PowerUp powerUp = powerUps.get(i);
     powerUp.update();
   }
-}
-
-//Shoot function handles both player and enemy shots.
-void shoot(float posX, float posY, int size, int dir, int owner) {
-  Shot s = new Shot(posX, posY + (size*dir), dir, owner);
-  shots.add(s);
 }
 
 void resetGame() {
@@ -104,8 +99,4 @@ void keyPressed() {
 }
 void mousePressed() {
   mouseClicked = true;
-  //enemy shoot (for testing only).
-  if(gameStarted && !gamePaused) {
-    enemies.get(0).attack();
-  }
 }

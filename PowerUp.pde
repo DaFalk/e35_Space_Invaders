@@ -1,12 +1,15 @@
 class PowerUp {
   float x, y;
+  int size = 10;
   int speed = 50;
-  int lastMove;
+  int lastMove, type;
   
-  PowerUp(float _x, float _y) {
+  PowerUp(float _x, float _y, int _size) {
     this.x = _x;
     this.y = _y;
+    this.size = _size/2;
     this.lastMove = millis();
+    this.type = ceil(random(0,4));
   }
   
   void update() {
@@ -19,7 +22,18 @@ class PowerUp {
   }
   
   void drawPowerUp() {
-    ellipse(x, y, 10, 10);
+    if(type == 1) {
+      ellipse(x, y, size, size);
+    }
+    if(type == 2) {
+      rect(x - 5, y - 5, size, size);
+    }
+    if(type == 3) {
+      triangle(x - size/2, y + size/2, x + size/2, y + size/2, x, y - size/2);
+    }
+    if(type == 4) {
+      rect(x - 5, y - 5, 10, 10);
+    }
   }
   
   boolean checkCollision() {

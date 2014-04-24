@@ -18,8 +18,8 @@ class Spawner {
     }
   }
   
-  void spawnPowerUp(float _x, float _y) {
-    powerUps.add(new PowerUp(_x, _y));
+  void spawnPowerUp(float _x, float _y, int _size) {
+    powerUps.add(new PowerUp(_x, _y, _size));
   }
   
   void respawnPlayer(Player player) {

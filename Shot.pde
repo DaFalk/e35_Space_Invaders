@@ -1,13 +1,14 @@
 class Shot {
   float x, y;
   int dir, lastMove, owner;
-  int shotSize = 10;
+  int shotSize = 15;
   int speed = 250;
   
   Shot(float _x, float _y, int direction, int player) {
     this.x = _x;
     this.y = _y;
     this.dir = direction;
+    shotSize *= dir;
     this.lastMove = millis();
     this.owner = player;
     audioHandler.playSFX(1);
@@ -25,7 +26,18 @@ class Shot {
   void drawShot() {
     stroke(255, 255, 255);
     strokeWeight(2);
-    line(x, y, x, y + (shotSize*dir));
+    if(dir < 0) {
+      line(x, y, x, y + shotSize);
+    }
+    else {
+      float offset = shotSize/5;
+      int flip;
+      for (int i = 0; i < 5; i++) {
+        if(i%2 == 0) { flip = 1; }
+        else { flip = -1; }
+        line(x - offset*flip, y - offset*i, x + offset*flip, y - offset - offset*i);
+      }
+    }
   }
   
   boolean checkCollision() {
@@ -38,7 +50,7 @@ class Shot {
           if(x < enemies.get(i).x + enemies.get(i).eSize/2 && x > enemies.get(i).x - enemies.get(i).eSize/2) {
             players.get(owner).adjustScore();
             if(enemies.size() >= 1) {
-              spawner.spawnPowerUp(enemies.get(i).x, enemies.get(i).y);
+              spawner.spawnPowerUp(enemies.get(i).x, enemies.get(i).y, enemies.get(i).eSize);
             }
             enemies.remove(i);
             if(enemies.size() == 0) {

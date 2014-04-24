@@ -1,6 +1,8 @@
 class Enemy {
   int eSize = 20;
   float x, y;
+  int lastShot;
+  int shotCooldown = 4000;
   
   int enemyRows = 9;
   int enemyCols = 5;
@@ -26,7 +28,7 @@ class Enemy {
         lastMove = millis();
       }
     }
-    display();
+    drawEnemy();
   }
 
   boolean checkCollision() {
@@ -38,14 +40,20 @@ class Enemy {
     return false;
   }
 
-  void display() {
+  void drawEnemy() {
     noStroke();
     fill(156, 156, 156);
     ellipse(x , y, eSize, eSize);
   }
 
-  void attack() {
-    shoot(enemies.get(enemies.size()-1).x, enemies.get(enemies.size()-1).y, enemies.get(enemies.size()-1).eSize, 1, 100);
+  void shoot() {
+    if(millis() >= lastShot + shotCooldown) {
+      int e = floor(random(0, enemies.size()));
+      Shot s = new Shot(enemies.get(e).x, enemies.get(e).y + eSize, 1, 10);
+      shots.add(s);
+      lastShot = millis();
+      shotCooldown = ceil(random(3, 6))*1000;
+    }
   }
 }
 

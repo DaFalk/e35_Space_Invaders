@@ -46,9 +46,10 @@ class Player {
     }
   }
   
-  void attack(int player) {
+  void attack() {
     if(millis() >= lastShot + shotCooldown) {
-      shoot(players.get(player).x + pWidth/2, players.get(player).y, players.get(player).pHeight, -1, players.indexOf(this));
+      Shot s = new Shot(x + pWidth/2, y - pHeight, -1, players.indexOf(this));
+      shots.add(s);
       lastShot = millis();
     }
   }
@@ -73,11 +74,11 @@ class Player {
       if(key == CODED && isMultiplayer) {
         if(keyCode == LEFT) { players.get(1).left = 1; }
         if(keyCode == RIGHT) { players.get(1).right = 1; }
-        if(keyCode == CONTROL) { attack(1); }
+        if(keyCode == CONTROL) { attack(); }
       }
       if(key == 'a' || key == 'A') { players.get(0).left = 1; }
       if(key == 'd' || key == 'D') { players.get(0).right = 1; }
-      if(key == ' ') { attack(0); }
+      if(key == ' ') { attack(); }
     }
   }
   
