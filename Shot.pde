@@ -10,8 +10,7 @@ class Shot {
     this.y = y;
     this.dir = direction;
     this.owner = player;
-    audio[1].rewind();
-    audio[1].play();
+    audioController.playSFX(1);
   }
   
   void update() {

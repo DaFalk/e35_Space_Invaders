@@ -1,9 +1,12 @@
 import ddf.minim.*; //Import audio library
 Minim minim;
-AudioPlayer[] audio = new AudioPlayer[2];
+AudioController audioController;
+AudioPlayer[] audioPlayer = new AudioPlayer[3];
 
 boolean gameStarted = false;
+boolean gamePaused = false;
 boolean isMultiplayer = false;
+boolean mouseClicked = false;
 
 //Each game object is stored in an array list associated to that kind of object.
 ArrayList<Player> players = new ArrayList<Player>(); //Player 1 is players.get(0) while Player 2 is players.get(1).
@@ -17,22 +20,20 @@ void setup() {
   size(800, 600);
   smooth();
   minim = new Minim(this);
-  audio[0] = minim.loadFile("theme.mp3");
-  audio[1] = minim.loadFile("playerShot.wav");
+  audioController = new AudioController();
+  audioPlayer[0] = minim.loadFile("theme.mp3");
+  audioPlayer[1] = minim.loadFile("playerShot.wav");
+  audioPlayer[2] = minim.loadFile("button.mp3");
   spawner = new Spawner();
   menUI = new MenUI();
 }
 
 void draw() {
   background(0);
-  if(!gameStarted) {
-    menUI.displayStartMenu();
-  }
-  else {
-    displayGameObjects();
-    menUI.displayTotalScore();
-  }
-  menUI.playThemeSong();
+  audioController.manage();
+  if(gameStarted) { displayGameObjects(); }
+  menUI.display();
+  mouseClicked = false;
 }
 
 void displayGameObjects() {
@@ -47,14 +48,15 @@ void displayGameObjects() {
     s.update();
   }
   //Iterate players array list and updates players
-  //and adjust the total score and display players UI.
+  //and adjust total score and display players UI.
   menUI.totalScore = 0;
   for(int i = players.size() - 1; i >= 0; i--) {
     Player player = players.get(i);
     player.update();
-    menUI.displayUI(player);
-    menUI.totalScore += player.score;
+    menUI.displayPlayerUI(player);
+    menUI.totalScore += players.get(i).score;
   }
+  menUI.displayTotalScore();
 }
 
 //Shoot function handles both player and enemy shots.
@@ -63,28 +65,41 @@ void shoot(float posX, float posY, int size, int dir, int owner) {
   shots.add(s);
 }
 
+void resetGame() {
+  gamePaused = false;
+  gameStarted = false;
+  players.clear();
+  enemies.clear();
+  shots.clear();
+}
+
 //keyReleased and keyPressed checks if keys are coded or not.
 //player 1 controls A, D and SPACE are not coded while
 //player 2 controls LEFT, RIGHT and CONTROL are coded.
 void keyReleased() {
-  if(gameStarted) {
+  if(gameStarted && !gamePaused) {
     if(key == CODED && isMultiplayer) { players.get(1).keyUp(); }
     else { players.get(0).keyUp(); }
   }
 }
 void keyPressed() {
-  if(gameStarted) {
+  //if ESC
+  if(key == 27) {
+    //cancel other ESC events
+    key = 0;
+    gamePaused = !gamePaused;
+  }
+  if(gameStarted && !gamePaused) {
     if(key == CODED) {
       if(isMultiplayer) { players.get(1).keyDown(); }
-//      if(key == ESC) { menUI.displayESCMenu(); }
     }
     else { players.get(0).keyDown(); }
   }
 }
-
-//enemy shoot (for testing only).
 void mousePressed() {
-  if(gameStarted) {
+  mouseClicked = true;
+  //enemy shoot (for testing only).
+  if(gameStarted && !gamePaused) {
     enemies.get(0).attack();
   }
 }

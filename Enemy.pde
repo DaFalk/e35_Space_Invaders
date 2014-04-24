@@ -1,7 +1,7 @@
 class Enemy {
   int eSize = 20;
   float x, y;
-
+  
   int enemyRows = 9;
   int enemyCols = 5;
 
@@ -19,9 +19,10 @@ class Enemy {
   }
 
   void update() {
-    //Move enemy
-    x += (stepX*dirX);
-    checkCollision();
+    if(!gamePaused) {
+      x += (stepX*dirX);
+      checkCollision();
+    }
     display();
   }
 

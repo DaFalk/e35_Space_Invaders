@@ -26,6 +26,7 @@ class Player {
   }
   
   void drawPlayer(float px, float py) {
+    rectMode(CORNER);
     noStroke();
     fill(0, 255, 0);
     //Body
