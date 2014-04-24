@@ -15,7 +15,7 @@ class Enemy {
 
   Enemy(float _x, float _y) {
     this.x = _x*stepX;
-    this.y = _y*stepY;
+    this.y = _y*stepY + 100;
   }
 
   void update() {

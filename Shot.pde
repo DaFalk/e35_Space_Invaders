@@ -1,8 +1,8 @@
 class Shot {
   float x, y;
   int dir, lastMove, owner;
-  int shotSize = 5;
-  int speed = 150;
+  int shotSize = 10;
+  int speed = 250;
   
   Shot(float _x, float _y, int direction, int player) {
     this.x = _x;
