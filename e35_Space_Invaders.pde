@@ -1,6 +1,6 @@
 import ddf.minim.*; //Import audio library
 Minim minim;
-AudioController audioController;
+AudioHandler audioHandler;
 AudioPlayer[] audioPlayer = new AudioPlayer[3];
 
 boolean gameStarted = false;
@@ -20,7 +20,7 @@ void setup() {
   size(800, 600);
   smooth();
   minim = new Minim(this);
-  audioController = new AudioController();
+  audioHandler = new AudioHandler();
   audioPlayer[0] = minim.loadFile("theme.mp3");
   audioPlayer[1] = minim.loadFile("playerShot.wav");
   audioPlayer[2] = minim.loadFile("button.mp3");
@@ -30,7 +30,7 @@ void setup() {
 
 void draw() {
   background(0);
-  audioController.manage();
+  audioHandler.manage();
   if(gameStarted) { displayGameObjects(); }
   menUI.display();
   mouseClicked = false;
