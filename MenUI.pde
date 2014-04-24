@@ -69,7 +69,7 @@ class MenUI {
                 //Start menu button actions.
                 if(i == 1) { isMultiplayer = true; }
                 spawner.spawnPlayers(i + 1);
-                spawner.spawnEnemies(20);
+                spawner.spawnEnemies();
                 gameStarted = true;
               }
               else {

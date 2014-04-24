@@ -19,10 +19,10 @@ class Shot {
     if(checkCollision()) {
       shots.remove(this);
     }
-    display();
+    drawShot();
   }
   
-  void display() {
+  void drawShot() {
     stroke(255, 255, 255);
     strokeWeight(2);
     line(x, y, x, y + (shotSize*dir));
@@ -37,7 +37,13 @@ class Shot {
         if(y < enemies.get(i).y + enemies.get(i).eSize/2 && y > enemies.get(i).y - enemies.get(i).eSize/2) {
           if(x < enemies.get(i).x + enemies.get(i).eSize/2 && x > enemies.get(i).x - enemies.get(i).eSize/2) {
             players.get(owner).adjustScore();
+            if(enemies.size() >= 1) {
+              spawner.spawnPowerUp(enemies.get(i).x, enemies.get(i).y);
+            }
             enemies.remove(i);
+            if(enemies.size() == 0) {
+              spawner.respawnEnemies();
+            }
             return true;
           }
         }

@@ -1,5 +1,5 @@
-class Cover {
-  Cover() {
+class Ground {
+  Ground() {
   }
   
   void display() {

@@ -8,7 +8,7 @@ class Spawner {
     }
   }
 
-  void spawnEnemies(int eSize) {
+  void spawnEnemies() {
     int enemyRows = 9;
     int enemyCols = 5;
     for(int col = 0; col < enemyCols; col++) {
@@ -18,7 +18,16 @@ class Spawner {
     }
   }
   
-  void respawn(Player player) {
+  void spawnPowerUp(float _x, float _y) {
+    powerUps.add(new PowerUp(_x, _y));
+  }
+  
+  void respawnPlayer(Player player) {
     player.x = width/(2+players.indexOf(player)) - ((width/2 - width/3)*(players.size()-1))*(1-players.indexOf(player)) + (width/(2+players.indexOf(player)))*players.indexOf(player);
+  }
+  
+  void respawnEnemies() {
+    enemies.clear();
+    spawnEnemies();
   }
 }

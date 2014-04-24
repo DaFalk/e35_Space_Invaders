@@ -56,7 +56,7 @@ class Player {
   void adjustLifes() {
     lifes--;
     if(lifes > 0) {
-      spawner.respawn(this);
+      spawner.respawnPlayer(this);
     }
     else {
       isDead = true;

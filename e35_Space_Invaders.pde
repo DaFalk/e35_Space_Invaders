@@ -12,6 +12,7 @@ boolean mouseClicked = false;
 ArrayList<Player> players = new ArrayList<Player>(); //Player 1 is players.get(0) while Player 2 is players.get(1).
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
+ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 
 Spawner spawner;
 MenUI menUI;
@@ -37,7 +38,7 @@ void draw() {
 }
 
 void displayGameObjects() {
-  //Iterate enemies array list and updates every enemy. 
+  //Iterates enemies array list and updates every enemy. 
   for(int i = enemies.size() - 1; i >= 0; i--) {
     Enemy e = enemies.get(i);
     e.update();
@@ -47,8 +48,8 @@ void displayGameObjects() {
     Shot s = shots.get(i);
     s.update();
   }
-  //Iterate players array list and updates players
-  //and adjust total score and display players UI.
+  //Iterates players array list and updates every player.
+  //and adjusts total score and displays players UI.
   menUI.totalScore = 0;
   for(int i = players.size() - 1; i >= 0; i--) {
     Player player = players.get(i);
@@ -57,6 +58,11 @@ void displayGameObjects() {
     menUI.totalScore += players.get(i).score;
   }
   menUI.displayTotalScore();
+  //Iterates powerUps array list and updates every powerup. 
+  for(int i = powerUps.size() - 1; i >= 0; i--) {
+    PowerUp powerUp = powerUps.get(i);
+    powerUp.update();
+  }
 }
 
 //Shoot function handles both player and enemy shots.
