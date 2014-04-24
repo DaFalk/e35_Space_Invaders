@@ -8,8 +8,8 @@ class Enemy {
   float stepX = eSize*1.5;
   float stepY = eSize*1.5;
   float dirX = 1;
-  float moveY;
-  //  int lastMove;
+  int moveInterval = 2000; 
+  int lastMove;
 
   int totalEnemies = enemyRows*enemyCols;
 
@@ -20,16 +20,19 @@ class Enemy {
 
   void update() {
     if(!gamePaused) {
-      x += (stepX*dirX);
-      checkCollision();
+      if(millis() - lastMove >= moveInterval) {
+        x += stepX*dirX;
+        checkCollision();
+        lastMove = millis();
+      }
     }
     display();
   }
 
   boolean checkCollision() {
-    if ((x+eSize/2 >= width-eSize && dirX > 0) || (x + eSize/2 <= eSize && dirX < 0)) { // weird stuff
+    if ((x+eSize/2 > width-eSize && dirX > 0) || (x + eSize/2 < eSize && dirX < 0)) { // weird stuff
       dirX *= -1;
-      moveY += stepY;
+      y += stepY;
       return true;
     }
     return false;
@@ -38,7 +41,7 @@ class Enemy {
   void display() {
     noStroke();
     fill(156, 156, 156);
-    ellipse(x , y + moveY, eSize, eSize);
+    ellipse(x , y, eSize, eSize);
   }
 
   void attack() {
