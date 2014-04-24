@@ -15,10 +15,12 @@ class Shot {
   }
   
   void update() {
-    y += (speed*dir)*((millis()-lastMove)*0.001);
-    lastMove = millis();
-    if(checkCollision()) {
-      shots.remove(this);
+    if(!gamePaused) {
+      y += (speed*dir)*((millis()-lastMove)*0.001);
+      lastMove = millis();
+      if(checkCollision()) {
+        shots.remove(this);
+      }
     }
     drawShot();
   }

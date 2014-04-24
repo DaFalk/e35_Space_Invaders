@@ -13,10 +13,12 @@ class PowerUp {
   }
   
   void update() {
-    y += speed*((millis()-lastMove)*0.001);
-    lastMove = millis();
-    if(checkCollision()) {
-      powerUps.remove(this);
+    if(!gamePaused) {
+      y += speed*((millis()-lastMove)*0.001);
+      lastMove = millis();
+      if(checkCollision()) {
+        powerUps.remove(this);
+      }
     }
     drawPowerUp();
   }
