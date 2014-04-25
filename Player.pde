@@ -14,7 +14,7 @@ class Player {
     this.lifesLabel = "LIFES";
     this.x = xPos - pWidth/2;
     this.lifes = 3;
-    this.shotCooldown = 1500; //If we want to add upgrades, boosts or other weapon affectors
+    this.shotCooldown = 1500;
     this.weaponType = 0;
     y = height - pWidth/2;
     pHeight = pWidth/4;
@@ -78,6 +78,7 @@ class Player {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
         weaponType = 0;
+        shotCooldown = 1500;
       }
     }
   }

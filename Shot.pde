@@ -3,6 +3,7 @@ class Shot {
   int dir, lastMove, type, owner;
   int shotSize = 15;
   int speed = 250;
+  Enemy target;
   
   Shot(float _x, float _y, int _direction, int _type, int _owner) {
     this.x = _x;
@@ -11,6 +12,7 @@ class Shot {
     this.lastMove = millis();
     this.type = _type;
     this.owner = _owner;
+    this.target = target;
     audioHandler.playSFX(1);
   }
   
@@ -36,11 +38,31 @@ class Shot {
       strokeWeight(2);
       line(x, y, x, y + shotSize);
     }
-    if(type > 0) {
+    if(type == 1) {
       noStroke();
       fill(0, 0, 255);
       triangle(x - shotSize/2, y, x + shotSize/2, y, x, y + shotSize);
     }
+    if(type == 2) {
+      drawCurveLaser();
+    }
+  }
+  
+  
+  void drawCurveLaser() {
+    noFill();
+    stroke(0, 220, 0, 150);
+    float _x = players.get(owner).x + players.get(owner).pWidth/2;
+    float _y = players.get(owner).y;
+    for(int i = enemies.size()-1; i > -1; i--) {
+      if(i == enemies.size()-1) {
+        target = enemies.get(i);
+      }
+      if(dist(_x, _y, enemies.get(i).x, enemies.get(i).y) < dist(_x, _y, target.x, target.y) ) {
+        target = enemies.get(i);
+      }
+    }
+    bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
   }
   
   void drawEnemyShot() {
@@ -56,6 +78,10 @@ class Shot {
   
   boolean checkCollision() {
     if((y < 0 && dir < 0) || (y > height + shotSize && dir > 0)) {
+      if(type >= 2) {
+        enemies.remove(target);
+        players.get(owner).adjustScore();
+      }
       return true;
     }
     if(dir < 0) {
@@ -70,7 +96,7 @@ class Shot {
             if(enemies.size() == 0) {
               spawner.respawnEnemies();
             }
-            if(type == 0) {
+            if(type != 1) {
               return true;
             }
           }

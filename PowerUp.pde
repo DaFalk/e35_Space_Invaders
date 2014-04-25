@@ -30,12 +30,12 @@ class PowerUp {
     if(type == 2) {
       rect(x - 5, y - 5, size, size);
     }
-    if(type == 3) {
-      triangle(x - size/2, y + size/2, x + size/2, y + size/2, x, y - size/2);
-    }
-    if(type == 4) {
-      rect(x - 5, y - 5, 10, 10);
-    }
+//    if(type == 3) {
+//      triangle(x - size/2, y + size/2, x + size/2, y + size/2, x, y - size/2);
+//    }
+//    if(type == 4) {
+//      rect(x - 5, y - 5, 10, 10);
+//    }
   }
   
   boolean checkCollision() {
