@@ -2,6 +2,7 @@ class PowerUp {
   float x, y;
   int size = 10;
   int speed = 50;
+  int duration;
   int lastMove, type;
   
   PowerUp(float _x, float _y, int _size) {
@@ -10,6 +11,7 @@ class PowerUp {
     this.size = _size/2;
     this.lastMove = millis();
     this.type = ceil(random(0, 2));
+    this.duration = duration;
   }
   
   void update() {
@@ -27,11 +29,13 @@ class PowerUp {
     if(type == 1) {
       fill(0, 0, 255);
       triangle(x - size/2, y - size/2, x + size/2, y - size/2, x, y + size/2);
+      duration = 4000;
     }
     if(type == 2) {
       noFill();
-      stroke(0, 0, 255);
-      bezier(x - size/2, y - size/2, x - size/2, y - size/4, x + size/2, y + size/4, x + size/2, y + size/2);
+      stroke(0, 255, 0);
+      bezier(x - size/4, y - size/2, x - size/4, y + size/2, x + size/4, y - size/2, x + size/4, y + size/2);
+      duration = 10000;
     }
   }
   
@@ -43,6 +47,7 @@ class PowerUp {
           if((x > _player.x && x < _player.x + _player.pWidth)) {
             _player.weaponType = type;
             _player.powerUpStartTime = millis();
+            _player.powerUpDuration = duration;
             return true;
           }
         }
