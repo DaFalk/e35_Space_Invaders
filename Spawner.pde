@@ -1,5 +1,15 @@
 class Spawner {
+  int enemyCols = 9;
+  int enemyRows = 5;
+  int baseScore = 50;
+  
   Spawner() {
+  }
+  
+  void startGame(int _numPlayers) {
+    spawnPlayers(_numPlayers);
+    spawnEnemies();
+    gameStarted = true;
   }
   
   void spawnPlayers(int numPlayers) {
@@ -9,11 +19,9 @@ class Spawner {
   }
 
   void spawnEnemies() {
-    int enemyRows = 9;
-    int enemyCols = 5;
-    for(int col = 0; col < enemyCols; col++) {
-      for(int row = 0; row < enemyRows; row++) {
-        enemies.add(new Enemy(row, col));
+    for(int row = 0; row < enemyRows; row++) {
+      for(int col = 0; col < enemyCols; col++) {
+        enemies.add(new Enemy(col, row, baseScore - (baseScore/5)*row));
       }
     }
   }

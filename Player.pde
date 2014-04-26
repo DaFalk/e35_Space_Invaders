@@ -73,8 +73,8 @@ class Player {
     }
   }
   
-  void adjustScore() {
-    score += 10;
+  void adjustScore(int _score) {
+    score += _score;
   }
   
   void handlePowerUp() {

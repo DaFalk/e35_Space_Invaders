@@ -5,7 +5,7 @@ class MenUI {
   int nextTick = 2000;
   
   int totalScore;
-  
+  ArrayList<ScoreText> scoreTexts = new ArrayList<ScoreText>();
   String scoreLabel = "SCORE";
   String totalScoreLabel = "TOTAL SCORE";
   int labelHeight = 20;
@@ -15,7 +15,7 @@ class MenUI {
   int numBtns = 2;
   
   MenUI() {
-    this.btnLabelY = btnLabelY;
+    btnLabelY = btnLabelY;
   }
   
   void display() {
@@ -23,6 +23,7 @@ class MenUI {
     else {
       displayPlayerUI();
       displayTotalScore();
+      displayFloatingScores();
     }
     if(gamePaused) { displayESCMenu(); }
   }
@@ -77,9 +78,7 @@ class MenUI {
               //Start menu button actions.
               if(!gamePaused) {
                 if(i == 1) { isMultiplayer = true; }
-                spawner.spawnPlayers(i + 1);
-                spawner.spawnEnemies();
-                gameStarted = true;
+                spawner.startGame(i + 1);
               }
               //Start menu pause button actions.
               else {
@@ -159,6 +158,13 @@ class MenUI {
     text(totalScoreLabel, width/2, 0);
     textSize(42);
     text(totalScore, width/2, labelHeight/2);
+  }
+  
+  void displayFloatingScores() {
+    for(int i = scoreTexts.size()-1; i > -1; i--) {
+      ScoreText scoreText = scoreTexts.get(i);
+      scoreText.update();
+    }
   }
   
   void displayESCMenu() {

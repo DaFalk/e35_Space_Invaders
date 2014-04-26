@@ -1,12 +1,10 @@
 class Enemy {
   int eSize = 20;
   float x, y;
+  int score;
   int lastShot;
   int shotCooldown = 4000;
   int weaponType = 0;
-  
-  int enemyRows = 9;
-  int enemyCols = 5;
 
   float stepX = eSize*1.5;
   float stepY = eSize*1.5;
@@ -14,9 +12,10 @@ class Enemy {
   int moveInterval = 2000; 
   int lastMove;
 
-  Enemy(float _x, float _y) {
+  Enemy(float _x, float _y, int _score) {
     this.x = _x*stepX;
     this.y = _y*stepY + 100;
+    this.score = _score;
   }
 
   void update() {
@@ -57,13 +56,13 @@ class Enemy {
   }
   
   void damageEnemy() {
-    if(enemies.size() > 0) {
-      spawner.spawnPowerUp(x, y, eSize);
-    }
+    spawner.spawnPowerUp(x, y, eSize);
     if(enemies.size() > 1) {
       enemies.remove(this);
+      menUI.scoreTexts.add(new ScoreText(x, y, score));
     }
     else {
+      menUI.scoreTexts.add(new ScoreText(enemies.get(0).x, enemies.get(0).y, enemies.get(0).score));
       spawner.respawnEnemies();
     }
   }

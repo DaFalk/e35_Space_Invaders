@@ -80,8 +80,8 @@ class Shot {
   boolean checkCollision() {
     if((y < 0 && dir < 0) || (y > height + shotSize && dir > 0)) {
       if(type >= 2) {
-        enemies.remove(target);
-        players.get(owner).adjustScore();
+        target.damageEnemy();
+        players.get(owner).adjustScore(target.score);
       }
       return true;
     }
@@ -91,7 +91,7 @@ class Shot {
         if(y < _enemy.y + _enemy.eSize/2 && y > _enemy.y - _enemy.eSize/2) {
           if(x < _enemy.x + _enemy.eSize/2 && x > _enemy.x - _enemy.eSize/2) {
             enemies.get(i).damageEnemy();
-            players.get(owner).adjustScore();
+            players.get(owner).adjustScore(enemies.get(i).score);
             if(type != 1) {
               return true;
             }
