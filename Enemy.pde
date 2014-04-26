@@ -14,8 +14,6 @@ class Enemy {
   int moveInterval = 2000; 
   int lastMove;
 
-  int totalEnemies = enemyRows*enemyCols;
-
   Enemy(float _x, float _y) {
     this.x = _x*stepX;
     this.y = _y*stepY + 100;
@@ -33,7 +31,7 @@ class Enemy {
   }
 
   boolean checkCollision() {
-    if ((x+eSize/2 > width-eSize && dirX > 0) || (x + eSize/2 < eSize && dirX < 0)) { // weird stuff
+    if ((x+eSize/2 > width-eSize && dirX > 0) || (x + eSize/2 < eSize && dirX < 0)) {
       dirX *= -1;
       y += stepY;
       return true;
@@ -49,8 +47,9 @@ class Enemy {
 
   void shoot() {
     if(millis() >= lastShot + shotCooldown) {
-      int e = floor(random(0, enemies.size()));
-      Shot s = new Shot(enemies.get(e).x, enemies.get(e).y + eSize, 1, weaponType, 10);
+      int _i = floor(random(0, enemies.size()));
+      Enemy _enemy = enemies.get(_i);
+      Shot s = new Shot(_enemy.x, _enemy.y + _enemy.eSize, weaponType, 10);
       shots.add(s);
       lastShot = millis();
       shotCooldown = ceil(random(3, 6))*1000;

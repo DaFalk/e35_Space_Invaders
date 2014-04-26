@@ -34,35 +34,31 @@ void draw() {
   audioHandler.manage();
   if(gameStarted) { displayGameObjects(); }
   menUI.display();
+  //mouseClicked is set to false at end of draw() to allow only 1 input when mouseClicked is true.
   mouseClicked = false;
 }
 
 void displayGameObjects() {
   //Iterates enemies array list and updates every enemy. 
   for(int i = enemies.size() - 1; i >= 0; i--) {
-    Enemy e = enemies.get(i);
-    e.update();
+    Enemy _enemy = enemies.get(i);
+    _enemy.update();
   }
   enemies.get(0).shoot();
   //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
-    Shot s = shots.get(i);
-    s.update();
+    Shot _shot = shots.get(i);
+    _shot.update();
   }
   //Iterates players array list and updates every player.
-  //and adjusts total score and displays players UI.
-  menUI.totalScore = 0;
   for(int i = players.size() - 1; i >= 0; i--) {
-    Player player = players.get(i);
-    player.update();
-    menUI.displayPlayerUI(player);
-    menUI.totalScore += players.get(i).score;
+    Player _player = players.get(i);
+    _player.update();
   }
-  menUI.displayTotalScore();
   //Iterates powerUps array list and updates every powerup. 
   for(int i = powerUps.size() - 1; i >= 0; i--) {
-    PowerUp powerUp = powerUps.get(i);
-    powerUp.update();
+    PowerUp _powerUp = powerUps.get(i);
+    _powerUp.update();
   }
 }
 
@@ -72,11 +68,10 @@ void resetGame() {
   players.clear();
   enemies.clear();
   shots.clear();
+  powerUps.clear();
 }
 
-//keyReleased and keyPressed checks if keys are coded or not.
-//player 1 controls A, D and SPACE are not coded while
-//player 2 controls LEFT, RIGHT and CONTROL are coded.
+//keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
 void keyReleased() {
   if(gameStarted) {
     if(key == CODED) { players.get(players.size()-1).keyUp(); }
@@ -84,8 +79,9 @@ void keyReleased() {
   }
 }
 void keyPressed() {
-  if(key == 27) {  //if ESC
-    key = 0;  //cancel other ESC events
+  //If ESC cancel other ESC events (e.g. quiting the program) and pause game.
+  if(key == 27) {
+    key = 0;
     gamePaused = !gamePaused;
   }
   if(gameStarted) {
@@ -95,4 +91,7 @@ void keyPressed() {
 }
 void mousePressed() {
   mouseClicked = true;
+}
+
+void mouseClicked() {
 }

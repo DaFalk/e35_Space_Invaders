@@ -14,7 +14,7 @@ class Player {
     this.lifesLabel = "LIFES";
     this.x = xPos - pWidth/2;
     this.lifes = 3;
-    this.shotCooldown = 1500; //If we want to add upgrades, boosts or other weapon affectors
+    this.shotCooldown = 1500;
     this.weaponType = 0;
     y = height - pWidth/2;
     pHeight = pWidth/4;
@@ -30,16 +30,16 @@ class Player {
     }
   }
   
-  void drawPlayer(float px, float py) {
+  void drawPlayer(float _x, float _y) {
     rectMode(CORNER);
     noStroke();
     fill(0, 255, 0);
     //Body
-    rect(px, py, pWidth, pHeight);
-    rect(px + (pWidth - pWidth*0.85)/2, py - pHeight/3, pWidth*0.85, pHeight/3);
+    rect(_x, _y, pWidth, pHeight);
+    rect(_x + (pWidth - pWidth*0.85)/2, _y - pHeight/3, pWidth*0.85, pHeight/3);
     //Canon
-    rect(px + pWidth/2.5, py - pWidth/5, pWidth/5, pWidth/5);
-    rect(px + pWidth*(0.5 - (0.075/2)), py - pWidth/3.5, pWidth*0.075, pWidth/3.5);
+    rect(_x + pWidth/2.5, _y - pWidth/5, pWidth/5, pWidth/5);
+    rect(_x + pWidth*(0.5 - (0.075/2)), _y - pWidth/3.5, pWidth*0.075, pWidth/3.5);
   }
   
   void checkCollision() {
@@ -53,7 +53,7 @@ class Player {
   
   void attack() {
     if(millis() >= lastShot + shotCooldown) {
-      Shot s = new Shot(x + pWidth/2, y - pHeight, -1, weaponType, players.indexOf(this));
+      Shot s = new Shot(x + pWidth/2, y - pHeight, weaponType, players.indexOf(this));
       shots.add(s);
       lastShot = millis();
     }

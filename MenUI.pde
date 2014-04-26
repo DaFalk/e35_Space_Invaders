@@ -1,19 +1,29 @@
 class MenUI {
   String title = "SPACE INVADERS";
   int titleSize = 74;
-  String scoreLabel = "SCORE";
-  String totalScoreLabel = "TOTAL SCORE";
-  String btnLabel;
-  int labelHeight = 20;
-  int totalScore = 0;
   int lastTick = 0;
   int nextTick = 2000;
   
+  int totalScore;
+  
+  String scoreLabel = "SCORE";
+  String totalScoreLabel = "TOTAL SCORE";
+  int labelHeight = 20;
+  
+  String btnLabel;
+  float btnLabelY;
+  int numBtns = 2;
+  
   MenUI() {
+    this.btnLabelY = btnLabelY;
   }
   
   void display() {
     if(!gameStarted) { displayStartMenu(); }
+    else {
+      displayPlayerUI();
+      displayTotalScore();
+    }
     if(gamePaused) { displayESCMenu(); }
   }
   
@@ -39,7 +49,7 @@ class MenUI {
   
   void displayBtns(float offsetY) {
     textAlign(CENTER, CENTER);
-    for(int i = 0; i < 2; i++) {
+    for(int i = 0; i < numBtns; i++) {
       if(!gameStarted) {
         if(!gamePaused) {
           if(i == 0) { btnLabel = "Singleplayer"; }
@@ -57,28 +67,28 @@ class MenUI {
       
       fill(126, 126, 126);
       textSize(labelHeight);
-      float btnLabelY = height/2 + offsetY + (labelHeight*2)*i;
+      btnLabelY = height/2 + offsetY + (labelHeight*2)*i;
       if(mouseY < btnLabelY + labelHeight/2 && mouseY > btnLabelY - labelHeight/2) {
         if(mouseX < width/2 + textWidth(btnLabel)/2 && mouseX > width/2 - textWidth(btnLabel)/2) {
           fill(0, 255, 0);
           textSize(labelHeight*1.1);
           if(mouseClicked && mouseButton == LEFT) {
             if(!gameStarted) {
+              //Start menu button actions.
               if(!gamePaused) {
-                //Start menu button actions.
                 if(i == 1) { isMultiplayer = true; }
                 spawner.spawnPlayers(i + 1);
                 spawner.spawnEnemies();
                 gameStarted = true;
               }
+              //Start menu pause button actions.
               else {
-                //Start menu pause button actions.
                 if(i == 0) { exit(); }
                 else if(i == 1) { resetGame(); }
               }
             }
+            //In-game pause button actions.
             else {
-              //In-game pause button actions.
               if(i == 0) { gamePaused = false; }
               else if(i == 1) { resetGame(); }
             }
@@ -90,51 +100,55 @@ class MenUI {
     }
   }
   
-  void displayPlayerUI(Player player) {
-    int playerIndex = players.indexOf(player);
-    String numPlayer = "P" + nf(playerIndex+1, 0);
-    String score = nf(player.score, 0);
-    String lifesLabel = player.lifesLabel;
-    
-    if(player.lifes > 0) { fill(255); }
-    else { fill(255, 0, 0, 220); }
-    
-    //Display player ID.
-    float tx = player.pHeight/2;
-    textAlign(LEFT, CENTER);
-    textSize(62);
-    float p1IDx = tx*(1-playerIndex);
-    float p2IDx = (width - tx - textWidth(numPlayer))*playerIndex;
-    text(numPlayer, p1IDx + p2IDx, player.pWidth/2);
-    
-    //Display labels for lifes and scores.
-    tx += textWidth(numPlayer);
-    textSize(labelHeight);
-    float p1LabelX = tx*(1-playerIndex);
-    float p2LifesLabelX = (width - tx - textWidth(lifesLabel))*playerIndex;
-    text(lifesLabel, p1LabelX + p2LifesLabelX, player.pWidth);
-    if(isMultiplayer) {
-      float p2ScoreLabelX = (width - tx - textWidth(scoreLabel))*playerIndex;
-      text(scoreLabel, p1LabelX + p2ScoreLabelX, player.pWidth - labelHeight*1.25);
-    }
-    
-    //Display scores.
-    tx += textWidth(lifesLabel) + player.pWidth/4;
-    if(isMultiplayer) {
-      //Display individual scores.
-      float p1ScoreX = (tx + player.pWidth*1.75 - textWidth(score)/2)*(1-playerIndex);
-      float p2ScoreX = (width - tx - textWidth(score)/2 - player.pWidth*2)*playerIndex;
-      text(score, p1ScoreX + p2ScoreX, player.pWidth - labelHeight*1.25);
-    }
-    else {
-      totalScoreLabel = scoreLabel;
-    }
-    
-    //Display lifes.
-    for(int i = 0; i < player.lifes; i++) {
-      float p1LifesX = (tx + (player.pWidth*1.25)*i)*(1-playerIndex);
-      float p2LifesX = (width - tx - player.pWidth - (player.pWidth*1.5)*i)*playerIndex;
-      player.drawPlayer(p1LifesX + p2LifesX, player.pWidth);
+  void displayPlayerUI() {
+    totalScore = 0;
+    for(int p = players.size()-1; p > -1; p--) {
+      Player _player = players.get(p);
+      String numPlayer = "P" + nf(p+1, 0);
+      String score = nf(_player.score, 0);
+      String lifesLabel = _player.lifesLabel;
+      
+      if(_player.lifes > 0) { fill(255); }
+      else { fill(255, 0, 0, 220); }
+      
+      //Display player ID.
+      float tx = _player.pHeight/2;
+      textAlign(LEFT, CENTER);
+      textSize(62);
+      float p1IDx = tx*(1-p);
+      float p2IDx = (width - tx - textWidth(numPlayer))*p;
+      text(numPlayer, p1IDx + p2IDx, _player.pWidth/2);
+      
+      //Display labels for lifes and scores.
+      tx += textWidth(numPlayer);
+      textSize(labelHeight);
+      float p1LabelX = tx*(1-p);
+      float p2LifesLabelX = (width - tx - textWidth(lifesLabel))*p;
+      text(lifesLabel, p1LabelX + p2LifesLabelX, _player.pWidth);
+      if(isMultiplayer) {
+        float p2ScoreLabelX = (width - tx - textWidth(scoreLabel))*p;
+        text(scoreLabel, p1LabelX + p2ScoreLabelX, _player.pWidth - labelHeight*1.25);
+      }
+      
+      //Display scores.
+      tx += textWidth(lifesLabel) + _player.pWidth/4;
+      if(isMultiplayer) {
+        //Display individual scores.
+        float p1ScoreX = (tx + _player.pWidth*1.75 - textWidth(score)/2)*(1-p);
+        float p2ScoreX = (width - tx - textWidth(score)/2 - _player.pWidth*2)*p;
+        text(score, p1ScoreX + p2ScoreX, _player.pWidth - labelHeight*1.25);
+      }
+      else {
+        totalScoreLabel = scoreLabel;
+      }
+      
+      //Display lifes.
+      for(int i = 0; i < _player.lifes; i++) {
+        float p1LifesX = (tx + (_player.pWidth*1.25)*i)*(1-p);
+        float p2LifesX = (width - tx - _player.pWidth - (_player.pWidth*1.5)*i)*p;
+        _player.drawPlayer(p1LifesX + p2LifesX, _player.pWidth);
+      }
+      totalScore += _player.score;
     }
   }
   

@@ -1,16 +1,17 @@
 class Shot {
-  float x, y;
+  float x, y, startY;
   int dir, lastMove, type, owner;
   int shotSize = 15;
   int speed = 250;
   
-  Shot(float _x, float _y, int _direction, int _type, int _owner) {
+  Shot(float _x, float _y, int _type, int _owner) {
+    this.owner = _owner;
     this.x = _x;
     this.y = _y;
-    this.dir = _direction;
+    if(owner < players.size()) { this.dir = -1; }
+    else { this.dir = 1; }
     this.lastMove = millis();
     this.type = _type;
-    this.owner = _owner;
     audioHandler.playSFX(1);
   }
   
@@ -22,21 +23,17 @@ class Shot {
         shots.remove(this);
       }
     }
-    if(owner <= 1) {
-      drawPlayerShot();
-    }
-    else {
-      drawEnemyShot();
-    }
+    if(owner <= 1) { drawPlayerShot(); }
+    else { drawEnemyShot(); }
   }
   
   void drawPlayerShot() {
+    stroke(255, 255, 255);
+    strokeWeight(2);
     if(type == 0) {
-      stroke(255, 255, 255);
-      strokeWeight(2);
       line(x, y, x, y + shotSize);
     }
-    if(type > 0) {
+    if(type == 1) {
       noStroke();
       fill(0, 0, 255);
       triangle(x - shotSize/2, y, x + shotSize/2, y, x, y + shotSize);
@@ -59,18 +56,19 @@ class Shot {
       return true;
     }
     if(dir < 0) {
-      for(int i = enemies.size() - 1; i > -1; i--) { //Correct when enemy y problem is solved.
-        if(y < enemies.get(i).y + enemies.get(i).eSize/2 && y > enemies.get(i).y - enemies.get(i).eSize/2) {
-          if(x < enemies.get(i).x + enemies.get(i).eSize/2 && x > enemies.get(i).x - enemies.get(i).eSize/2) {
+      for(int i = enemies.size() - 1; i > -1; i--) {
+        Enemy _enemy = enemies.get(i);
+        if(y < _enemy.y + _enemy.eSize/2 && y > _enemy.y - _enemy.eSize/2) {
+          if(x < _enemy.x + _enemy.eSize/2 && x > _enemy.x - _enemy.eSize/2) {
             players.get(owner).adjustScore();
             if(enemies.size() >= 1) {
-              spawner.spawnPowerUp(enemies.get(i).x, enemies.get(i).y, enemies.get(i).eSize);
+              spawner.spawnPowerUp(_enemy.x, _enemy.y, _enemy.eSize);
             }
             enemies.remove(i);
             if(enemies.size() == 0) {
               spawner.respawnEnemies();
             }
-            if(type == 0) {
+            if(type != 1) {
               return true;
             }
           }
@@ -80,10 +78,11 @@ class Shot {
     }
     else {
       for(int i = players.size() - 1; i > -1; i--) {
-        if(!players.get(i).isDead) {
-          if((y > players.get(i).y - players.get(i).pHeight - players.get(i).pHeight/3 && y < players.get(i).y + players.get(i).pHeight)) {
-            if((x > players.get(i).x && x < players.get(i).x + players.get(i).pWidth)) {
-              players.get(i).adjustLifes();
+        Player _player = players.get(i);
+        if(!_player.isDead) {
+          if((y > _player.y - _player.pHeight - _player.pHeight/3 && y < _player.y + _player.pHeight)) {
+            if((x > _player.x && x < _player.x + _player.pWidth)) {
+              _player.adjustLifes();
               return true;
             }
           }
