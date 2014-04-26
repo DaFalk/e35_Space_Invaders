@@ -55,5 +55,17 @@ class Enemy {
       shotCooldown = ceil(random(3, 6))*1000;
     }
   }
+  
+  void damageEnemy() {
+    if(enemies.size() > 0) {
+      spawner.spawnPowerUp(x, y, eSize);
+    }
+    if(enemies.size() > 1) {
+      enemies.remove(this);
+    }
+    else {
+      spawner.respawnEnemies();
+    }
+  }
 }
 

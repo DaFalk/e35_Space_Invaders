@@ -13,11 +13,7 @@ class Shot {
     else { this.dir = 1; }
     this.lastMove = millis();
     this.type = _type;
-<<<<<<< HEAD
-=======
-    this.owner = _owner;
     this.target = target;
->>>>>>> e14357bcadce6ea602ea398989df5216f091aeca
     audioHandler.playSFX(1);
   }
   
@@ -49,16 +45,14 @@ class Shot {
     }
   }
   
-  
+  //Not done!!
   void drawCurveLaser() {
     noFill();
     stroke(0, 220, 0, 150);
     float _x = players.get(owner).x + players.get(owner).pWidth/2;
     float _y = players.get(owner).y;
     for(int i = enemies.size()-1; i > -1; i--) {
-      if(i == enemies.size()-1) {
-        target = enemies.get(i);
-      }
+      target = enemies.get(i);
       if(dist(_x, _y, enemies.get(i).x, enemies.get(i).y) < dist(_x, _y, target.x, target.y) ) {
         target = enemies.get(i);
       }
@@ -90,14 +84,8 @@ class Shot {
         Enemy _enemy = enemies.get(i);
         if(y < _enemy.y + _enemy.eSize/2 && y > _enemy.y - _enemy.eSize/2) {
           if(x < _enemy.x + _enemy.eSize/2 && x > _enemy.x - _enemy.eSize/2) {
+            enemies.get(i).damageEnemy();
             players.get(owner).adjustScore();
-            if(enemies.size() >= 1) {
-              spawner.spawnPowerUp(_enemy.x, _enemy.y, _enemy.eSize);
-            }
-            enemies.remove(i);
-            if(enemies.size() == 0) {
-              spawner.respawnEnemies();
-            }
             if(type != 1) {
               return true;
             }

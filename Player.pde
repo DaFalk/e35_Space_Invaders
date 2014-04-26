@@ -5,6 +5,7 @@ class Player {
   int pWidth = 40;
   int speed = 150;
   int score = 0;
+  boolean attack;
   int weaponType;
   int powerUpStartTime;
   int powerUpDuration = 4000;
@@ -14,6 +15,7 @@ class Player {
     this.lifesLabel = "LIFES";
     this.x = xPos - pWidth/2;
     this.lifes = 3;
+    this.attack = false;
     this.shotCooldown = 1500;
     this.weaponType = 0;
     y = height - pWidth/2;
@@ -25,6 +27,7 @@ class Player {
       x += (right - left) * (speed*(millis()-lastMove)*0.001);
       lastMove = millis();
       checkCollision();
+      if(attack) { shoot(); }
       handlePowerUp();
       drawPlayer(x, y);
     }
@@ -51,7 +54,7 @@ class Player {
     }
   }
   
-  void attack() {
+  void shoot() {
     if(millis() >= lastShot + shotCooldown) {
       Shot s = new Shot(x + pWidth/2, y - pHeight, weaponType, players.indexOf(this));
       shots.add(s);
@@ -87,17 +90,19 @@ class Player {
     if(keyPressed) {
       if(keyCode == LEFT) { left = 1; }
       if(keyCode == RIGHT) { right = 1; }
-      if(keyCode == CONTROL) { attack(); }
+      if(keyCode == CONTROL) { attack = true; }
       if(key == 'a' || key == 'A') { left = 1; }
       if(key == 'd' || key == 'D') { right = 1; }
-      if(key == ' ') { attack(); }
+      if(key == ' ') { attack = true; }
     }
   }
   
   void keyUp() {
     if(keyCode == LEFT) { left = 0; }
     if(keyCode == RIGHT) { right = 0; }
+    if(keyCode == CONTROL) { attack = false; }
     if(key == 'a' || key == 'A') { left = 0; }
     if(key == 'd' || key == 'D') { right = 0; }
+    if(key == ' ') { attack = false; }
   }
 }
