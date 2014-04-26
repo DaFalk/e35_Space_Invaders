@@ -87,22 +87,20 @@ class Player {
   }
   
   void keyDown() {
-    if(keyPressed) {
-      if(keyCode == LEFT) { left = 1; }
-      if(keyCode == RIGHT) { right = 1; }
-      if(keyCode == CONTROL) { attack = true; }
-      if(key == 'a' || key == 'A') { left = 1; }
-      if(key == 'd' || key == 'D') { right = 1; }
-      if(key == ' ') { attack = true; }
-    }
+    if(key == 'a' || key == 'A') { left = 1; }
+    if(key == 'd' || key == 'D') { right = 1; }
+    if(key == ' ') { attack = true; }
+    if(keyCode == LEFT) { left = 1; }
+    if(keyCode == RIGHT) { right = 1; }
+    if(keyCode == CONTROL) { attack = true; }
   }
   
   void keyUp() {
-    if(keyCode == LEFT) { left = 0; }
-    if(keyCode == RIGHT) { right = 0; }
-    if(keyCode == CONTROL) { attack = false; }
     if(key == 'a' || key == 'A') { left = 0; }
     if(key == 'd' || key == 'D') { right = 0; }
     if(key == ' ') { attack = false; }
+    if(keyCode == LEFT) { left = 0; }
+    if(keyCode == RIGHT) { right = 0; }
+    if(keyCode == CONTROL) { attack = false; }
   }
 }

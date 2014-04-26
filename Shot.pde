@@ -30,35 +30,41 @@ class Shot {
   }
   
   void drawPlayerShot() {
-    stroke(255, 255, 255);
-    strokeWeight(2);
     if(type == 0) {
+      stroke(255, 255, 255);
+      strokeWeight(2);
       line(x, y, x, y + shotSize);
     }
     if(type == 1) {
       noStroke();
       fill(0, 0, 255);
       triangle(x - shotSize/2, y, x + shotSize/2, y, x, y + shotSize);
+//      stroke(255, 255, 255);
+//      strokeWeight(2);
+//      line(players.get(owner).x + players.get(owner).pWidth/2, players.get(owner).y, x, y + shotSize);
     }
-    if(type == 2) {
-      drawCurveLaser();
-    }
+//    if(type == 2) {
+//      if(enemies.size() > 0) {
+//        drawCurveLaser();
+//      }
+//    }
   }
   
   //Not done!!
-  void drawCurveLaser() {
-    noFill();
-    stroke(0, 220, 0, 150);
-    float _x = players.get(owner).x + players.get(owner).pWidth/2;
-    float _y = players.get(owner).y;
-    for(int i = enemies.size()-1; i > -1; i--) {
-      target = enemies.get(i);
-      if(dist(_x, _y, enemies.get(i).x, enemies.get(i).y) < dist(_x, _y, target.x, target.y) ) {
-        target = enemies.get(i);
-      }
-    }
-    bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
-  }
+//  void drawCurveLaser() {
+//    noFill();
+//    stroke(0, 220, 0, 150);
+//    strokeWeight(2);
+//    float _x = players.get(owner).x + players.get(owner).pWidth/2;
+//    float _y = players.get(owner).y;
+//    for(int i = enemies.size()-1; i > -1; i--) {
+//      target = enemies.get(i);
+//      if(dist(_x, _y, enemies.get(i).x, enemies.get(i).y) < dist(_x, _y, target.x, target.y) ) {
+//        target = enemies.get(i);
+//      }
+//    }
+//    bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
+//  }
   
   void drawEnemyShot() {
     stroke(255, 255, 255);

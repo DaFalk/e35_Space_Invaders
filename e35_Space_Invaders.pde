@@ -34,7 +34,7 @@ void draw() {
   audioHandler.manage();
   if(gameStarted) { displayGameObjects(); }
   menUI.display();
-  //mouseClicked is set to false at end of draw() to allow only 1 input when mouseClicked is true.
+  //mouseClicked is set to false at end of draw() to allow only 1 mousebutton input when mouseClicked is true.
   mouseClicked = false;
 }
 
@@ -44,7 +44,9 @@ void displayGameObjects() {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
   }
-  enemies.get(0).shoot();
+  if(enemies.size() > 0) {
+    enemies.get(0).shoot();
+  }
   //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
     Shot _shot = shots.get(i);

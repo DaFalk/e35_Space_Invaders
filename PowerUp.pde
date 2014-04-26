@@ -10,7 +10,7 @@ class PowerUp {
     this.y = _y;
     this.size = _size/2;
     this.lastMove = millis();
-    this.type = ceil(random(0, 2));
+    this.type = ceil(random(0, 1));
     this.duration = duration;
   }
   
