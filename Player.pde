@@ -78,6 +78,7 @@ class Player {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
         weaponType = 0;
+        shotCooldown = 1500;
       }
     }
   }

@@ -25,9 +25,23 @@ class PowerUp {
   
   void drawPowerUp() {
     if(type == 1) {
+<<<<<<< HEAD
       fill(0, 0, 255);
       triangle(x - size/2, y - size/2, x + size/2, y - size/2, x, y + size/2);
     }
+=======
+      ellipse(x, y, size, size);
+    }
+    if(type == 2) {
+      rect(x - 5, y - 5, size, size);
+    }
+//    if(type == 3) {
+//      triangle(x - size/2, y + size/2, x + size/2, y + size/2, x, y - size/2);
+//    }
+//    if(type == 4) {
+//      rect(x - 5, y - 5, 10, 10);
+//    }
+>>>>>>> e14357bcadce6ea602ea398989df5216f091aeca
   }
   
   boolean checkCollision() {
