@@ -91,7 +91,7 @@ class Shot {
         if(y < _enemy.y + _enemy.eSize/2 && y > _enemy.y - _enemy.eSize/2) {
           if(x < _enemy.x + _enemy.eSize/2 && x > _enemy.x - _enemy.eSize/2) {
             enemies.get(i).damageEnemy();
-            players.get(owner).adjustScore(enemies.get(i).score);
+            players.get(owner).adjustScore(_enemy.score);
             if(type != 1) {
               return true;
             }
