@@ -1,7 +1,6 @@
 import ddf.minim.*; //Import audio library
 Minim minim;
 AudioHandler audioHandler;
-AudioPlayer[] audioPlayer = new AudioPlayer[3];
 
 boolean gameStarted = false;
 boolean gamePaused = false;
@@ -22,9 +21,6 @@ void setup() {
   smooth();
   minim = new Minim(this);
   audioHandler = new AudioHandler();
-  audioPlayer[0] = minim.loadFile("theme.mp3");
-  audioPlayer[1] = minim.loadFile("playerShot.wav");
-  audioPlayer[2] = minim.loadFile("button.mp3");
   spawner = new Spawner();
   menUI = new MenUI();
 }
