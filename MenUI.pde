@@ -130,7 +130,7 @@ class MenUI {
               if(i == 0) { gamePaused = false; }
               else if(i == 1) { resetGame(); }
             }
-            audioHandler.playSFX(2);
+            audioHandler.playSFX(1);
           }
         }
       }

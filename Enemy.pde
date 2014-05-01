@@ -174,8 +174,8 @@ class Enemy {
     }
   }
   
-  void damageEnemy() {
-    spawner.spawnPowerUp(x, y, eSize);
+  void killEnemy() {
+    spawner.spawnPowerUp(x, y, (float)eSize);
     if(enemies.size() > 1) {
       enemies.remove(this);
       menUI.scoreTexts.add(new ScoreText(x, y, score));

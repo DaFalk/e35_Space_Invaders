@@ -1,16 +1,17 @@
 class PowerUp {
   float x, y;
-  float size = 10;
+  float size;
   float speed = 50;
-  int duration, lastMove, type;
+  int duration, lastMove, type, shotCooldown;
   
   PowerUp(float _x, float _y, float _size) {
     this.x = _x;
     this.y = _y;
-    this.size = _size/2;
+    this.size = _size*0.75;
     this.lastMove = millis();
-    this.type = ceil(random(0, 1));
-    this.duration = duration;
+    this.type = ceil(random(0, 2));
+    this.duration = type*5000;
+    this.shotCooldown = 4000/type;
   }
   
   void update() {
@@ -25,18 +26,14 @@ class PowerUp {
   }
   
   void drawPowerUp() {
-    if(type == 1) {
-      noStroke();
-      fill(0, 0, 255);
-      triangle(x - size/2, y - size/2, x + size/2, y - size/2, x, y + size/2);
-      duration = 4000;
-    }
-    if(type == 2) {
-      noFill();
-      stroke(0, 255, 0);
-      bezier(x - size/4, y - size/2, x - size/4, y + size/2, x + size/4, y - size/2, x + size/4, y + size/2);
-      duration = 10000;
-    }
+    noStroke();
+    fill(0, 255, 0);
+    triangle(x - size/2, y - size/2, x + size/2, y - size/2, x, y + size/2);
+    stroke(0, 255, 0);
+    noFill();
+    ellipse(x, y, size, size);
+    stroke(255);
+    ellipse(x, y, size*2, size*2);
   }
   
   boolean checkCollision() {
@@ -48,6 +45,7 @@ class PowerUp {
             _player.weaponType = type;
             _player.powerUpStartTime = millis();
             _player.powerUpDuration = duration;
+            _player.shotCooldown = shotCooldown;
             return true;
           }
         }

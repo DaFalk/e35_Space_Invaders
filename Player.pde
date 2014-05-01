@@ -8,7 +8,7 @@ class Player {
   boolean attack;
   int weaponType;
   int powerUpStartTime;
-  int powerUpDuration = 4000;
+  int powerUpDuration;
   boolean isDead = false;
   
   Player(int xPos) {
@@ -46,19 +46,25 @@ class Player {
   }
   
   void checkCollision() {
-    if(x <= pWidth/2) {
-      x = pWidth/2;
-    }
-    if(x >= width - pWidth/2) {
-      x = width - pWidth/2;
+    if(x <= 0) { x = 0; }
+    if(x >= width - pWidth) {
+      x = width - pWidth;
     }
   }
   
   void shoot() {
-    if(millis() >= lastShot + shotCooldown) {
-      Shot s = new Shot(x + pWidth/2, y - pHeight, weaponType, players.indexOf(this));
-      shots.add(s);
-      lastShot = millis();
+    if(weaponType != 2) {
+      if(millis() >= lastShot + shotCooldown) {
+        Shot s = new Shot(x + pWidth/2, y - pHeight, weaponType, players.indexOf(this));
+        shots.add(s);
+        lastShot = millis();
+      }
+    }
+    else {
+      if(shots.size() == 0) {
+        Shot s = new Shot(x + pWidth/2, y - pHeight, weaponType, players.indexOf(this));
+        shots.add(s);
+      }
     }
   }
   
