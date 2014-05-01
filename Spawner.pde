@@ -76,7 +76,7 @@ class Spawner {
   }
   
   void spawnPowerUp(float _x, float _y, float _size) {
-    if(random(0, 100) > 0) {
+    if(random(0, 100) > 85) {
       powerUps.add(new PowerUp(_x, _y, _size));
     }
   }
