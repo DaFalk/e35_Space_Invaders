@@ -1,6 +1,6 @@
 class Enemy {
   ArrayList<Block> blocks;
-  int eSize, eHeight;
+  float eSize, eHeight;
   float x, y;
   int type;
   int score;

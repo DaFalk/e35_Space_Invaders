@@ -42,12 +42,7 @@ void displayGameObjects() {
   }
   if(enemies.size() > 0) {
     enemies.get(0).shoot();
-    if(!spawner.checkEnemiesCollision()) {
-      spawner.moveEnemiesX();
-    }
-    else {
-      spawner.moveEnemiesY();
-    }
+    spawner.moveEnemies();
   }
   //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {

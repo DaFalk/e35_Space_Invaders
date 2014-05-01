@@ -1,11 +1,10 @@
 class PowerUp {
   float x, y;
-  int size = 10;
-  int speed = 50;
-  int duration;
-  int lastMove, type;
+  float size = 10;
+  float speed = 50;
+  int duration, lastMove, type;
   
-  PowerUp(float _x, float _y, int _size) {
+  PowerUp(float _x, float _y, float _size) {
     this.x = _x;
     this.y = _y;
     this.size = _size/2;
