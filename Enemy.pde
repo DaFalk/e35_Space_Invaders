@@ -1,6 +1,7 @@
 class Enemy {
   ArrayList<Block> blocks;
-  float eSize, eHeight;
+  int blockSize;
+  int eSize, eHeight;
   float x, y;
   int type;
   int score;
@@ -10,7 +11,6 @@ class Enemy {
   int moveInterval = 100; 
   int lastMove;
   int half;
-  int blockSize;
   boolean moveSwitch = false;
 
   Enemy(int _type, float _x, float _y, int _blockSize) {

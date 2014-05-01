@@ -1,16 +1,14 @@
 class Spawner {
   int enemyCols = 9;
   int enemyRows = 5;
-  int eSize;
   int dirX;
+  int eSize;
   float stepX;
-  float stepY;
   int moveInterval = 500; 
   int lastMove;
   boolean moveDown = false;
   
   Spawner() {
-    stepY = 0;
     dirX = 1;
   }
   
@@ -28,8 +26,8 @@ class Spawner {
   }
 
   void spawnEnemies() {
-    int _blockSize = 2;
-    eSize = _blockSize*12;
+    int blockSize = 2;
+    eSize = blockSize*12;
     stepX = width/eSize;
     for(int row = 0; row < enemyRows; row++) {
       for(int col = 0; col < enemyCols; col++) {
@@ -40,20 +38,26 @@ class Spawner {
             _type = 1;
           }
         }
-        enemies.add(new Enemy(_type, (1+col)*stepX, row*stepX + 100, _blockSize));
+        enemies.add(new Enemy(_type, (1+col)*stepX, row*stepX + 100, blockSize));
       }
     }
   }
+  
   void moveEnemies() {
     if(!gamePaused) {
       if(millis() - lastMove >= moveInterval) {
-        for(int i = enemies.size()-1; i > -1; i--) {
-          if(!moveDown) { enemies.get(i).x += stepX*dirX; }
-          else {
-            enemies.get(i).y += stepX;
-            dirX *= -1;
+        if(!moveDown) {
+          for(int i = enemies.size()-1; i > -1; i--) {
+            enemies.get(i).x += stepX*dirX;
+            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
           }
-          enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
+        }
+        else {
+          for(int i = enemies.size()-1; i > -1; i--) {
+            enemies.get(i).y += stepX;
+            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
+          }
+          dirX *= -1;
         }
         checkEnemiesCollision();
         lastMove = millis();
@@ -61,15 +65,14 @@ class Spawner {
     }
   }
   
-  boolean checkEnemiesCollision() {
+  void checkEnemiesCollision() {
     for(int i = enemies.size()-1; i > -1; i--) {
       if ((enemies.get(i).x + eSize > width-eSize && spawner.dirX > 0) || (enemies.get(i).x - eSize < eSize && spawner.dirX < 0)) {
-        moveDown = !moveDown;
-        return true;
+        moveDown = true;
+        return;
       }
     }
-    if(moveDown) { moveDown = false; }
-    return false;
+    moveDown = false;
   }
   
   void spawnPowerUp(float _x, float _y, float _size) {

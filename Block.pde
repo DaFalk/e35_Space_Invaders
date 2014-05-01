@@ -1,11 +1,11 @@
 class Block {
   float x, y;
   PVector blockPos;
-  float blockSize;
+  int blockSize;
   int lastMove, speed;
   boolean release = false;
   
-  Block(PVector _blockPos, float _blockSize) {
+  Block(PVector _blockPos, int _blockSize) {
     this.blockPos = _blockPos;
     this.blockSize = _blockSize;
   }

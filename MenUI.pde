@@ -53,6 +53,7 @@ class MenUI {
     textAlign(CENTER, TOP);
     textSize(titleSize*1.55);
     fill(255);
+    noStroke();
     text("SPACE", width/2, -titleSize/10);
     fill(0, 255, 0);
     //Add flicker effect to title.
@@ -64,8 +65,6 @@ class MenUI {
       }
     }
     textSize(titleSize);
-    stroke(255);
-    strokeWeight(100);
     text("INVADERS", width/2, titleSize*1.25);
   }
   
