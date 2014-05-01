@@ -1,7 +1,7 @@
 class Spawner {
   int enemyCols = 9;
   int enemyRows = 5;
-  int eSize = 20;
+  int eSize;
   int dirX;
   float stepX;
   float stepY;
@@ -9,13 +9,13 @@ class Spawner {
   int lastMove;
   
   Spawner() {
-    stepX = eSize*1.5;
     stepY = 0;
     dirX = 1;
   }
   
   void startGame(int _numPlayers) {
     spawnPlayers(_numPlayers);
+    enemies.clear();
     spawnEnemies();
     gameStarted = true;
   }
@@ -27,6 +27,9 @@ class Spawner {
   }
 
   void spawnEnemies() {
+    int _blockSize = 2;
+    eSize = _blockSize*12;
+    stepX = eSize*1.5;
     for(int row = 0; row < enemyRows; row++) {
       for(int col = 0; col < enemyCols; col++) {
         int _type = 3;
@@ -36,7 +39,7 @@ class Spawner {
             _type = 1;
           }
         }
-        enemies.add(new Enemy(_type, col*stepX, row*stepX + 100, eSize));
+        enemies.add(new Enemy(_type, col*stepX, row*stepX + 100, _blockSize));
       }
     }
   }

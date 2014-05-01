@@ -6,13 +6,13 @@ class AudioHandler {
     audioBank[0] = minim.loadFile("theme.mp3");
     audioBank[1] = minim.loadFile("playerShot.wav");
     audioBank[2] = minim.loadFile("button.mp3");
-    audioBank[1].setGain(-10);
-    audioBank[2].setGain(-10);
+    audioBank[1].setGain(-18);
+    audioBank[2].setGain(-18);
   }
   
   void manage() {
-    if(gamePaused) { audioBank[0].setGain(-15); }
-    else { audioBank[0].setGain(-10); }
+    if(gamePaused) { audioBank[0].setGain(-20); }
+    else { audioBank[0].setGain(-15); }
     playThemeSong();
   }
   

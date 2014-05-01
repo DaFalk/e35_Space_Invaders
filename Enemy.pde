@@ -13,18 +13,18 @@ class Enemy {
   int blockSize;
   boolean moveSwitch = false;
 
-  Enemy(int _type, float _x, float _y, int _eSize) {
+  Enemy(int _type, float _x, float _y, int _blockSize) {
     this.type = _type;
     this.x = _x;
     this.y = _y;
-    this.eSize = _eSize;
     this.score = type*10;
     this.blocks = new ArrayList<Block>();
+    this.blockSize = _blockSize;
+    this.eSize = 6*blockSize;
     this.half = ceil(setArrayLength()/2);
     for (int i = 0; i < setArrayLength(); i ++) {
-      blocks.add(new Block(new PVector(x, y)));
+      blocks.add(new Block(new PVector(x, y), blockSize));
     }
-    blockSize = blocks.get(0).blockSize;
   }
   
   void update() {

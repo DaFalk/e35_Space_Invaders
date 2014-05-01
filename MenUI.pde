@@ -1,5 +1,4 @@
 class MenUI {
-  String title = "SPACE INVADERS";
   int titleSize = 74;
   int lastTick = 0;
   int nextTick = 2000;
@@ -16,6 +15,11 @@ class MenUI {
   
   MenUI() {
     btnLabelY = btnLabelY;
+    for(int i = 0; i < 3; i++) {
+      int _blockSize = 4;
+      int _eOffset = _blockSize*12;
+      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize));
+    }
   }
   
   void display() {
@@ -30,22 +34,37 @@ class MenUI {
   
   void displayStartMenu() {
     displayTitle();
-    displayBtns(height/4);
+    displayEnemiesInfo();
+    displayBtns(height/4 + labelHeight);
   }
   
   void displayTitle() {
+    textAlign(CENTER, TOP);
+    textSize(titleSize*1.55);
+    fill(255);
+    text("SPACE", width/2, -titleSize/10);
     fill(0, 255, 0);
     //Add flicker effect to title.
-    if(millis() >= lastTick + nextTick) {
+    if(millis() - lastTick >= nextTick) {
       fill(0, 255, 0, random(50, 255));
       if(millis() >= lastTick + nextTick + 500) {
         lastTick = millis();
         nextTick = (int)random(3000, 10000);
       }
     }
-    textAlign(CENTER, TOP);
     textSize(titleSize);
-    text(title, width/2, width/2 - textWidth(title)/1.75);
+    text("INVADERS", width/2, titleSize*1.25);
+  }
+  
+  void displayEnemiesInfo() {
+    textAlign(LEFT, CENTER);
+    textSize(labelHeight);
+    for(int i = 0; i < 3; i++) {
+      enemies.get(i).update();
+      text("=", width/2, enemies.get(i).y);
+      String _scoreText = enemies.get(i).score + " PTS";
+      text(_scoreText, width - (width/8)*3 - textWidth(_scoreText)/2, enemies.get(i).y);
+    }
   }
   
   void displayBtns(float offsetY) {
@@ -57,7 +76,7 @@ class MenUI {
           if(i == 1) { btnLabel = "Multiplayer"; }
         }
         else {
-          if(i == 0) { btnLabel = "Yes"; }
+          if(i == 0) { btnLabel = "yes"; }
           if(i == 1) { btnLabel = "NO"; }
         }
       }
@@ -177,10 +196,10 @@ class MenUI {
       displayBtns(-menuHeight/2 + labelHeight*0.9);
     }
     else {
-      fill(126);
+      fill(180, 0, 0);
       textAlign(CENTER, CENTER);
       textSize(labelHeight);
-      text("Do You want to exit?", width/2, height/2 + labelHeight*5);
+      text("Do You want to exit?", width/2, height/2 + labelHeight*6.5);
     }
   }
 }
