@@ -69,6 +69,7 @@ void resetGame() {
   enemies.clear();
   shots.clear();
   powerUps.clear();
+  menUI.showEnemies();
 }
 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.

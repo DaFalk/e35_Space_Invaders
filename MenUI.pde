@@ -13,13 +13,13 @@ class MenUI {
   float btnLabelY;
   int numBtns = 2;
   
+  color c1, c2;
+  
   MenUI() {
     btnLabelY = btnLabelY;
-    for(int i = 0; i < 3; i++) {
-      int _blockSize = 4;
-      int _eOffset = _blockSize*12;
-      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize));
-    }
+    showEnemies();
+    c1 = color(0, 0, 0);
+    c2 = color(0, 0, 255);
   }
   
   void display() {
@@ -35,10 +35,22 @@ class MenUI {
   void displayStartMenu() {
     displayTitle();
     displayEnemiesInfo();
-    displayBtns(height/4 + labelHeight);
+    displayBtns(height/4 + labelHeight*3);
   }
   
   void displayTitle() {
+    noFill();
+    int _counter = 0;
+    for(int i = 0; i < height*0.625; i++) {
+      if(i > height*0.3125) {
+        _counter += 2;
+      }
+      color c = lerpColor(c1, c2, (i-_counter)/(height/2.75));
+      stroke(c);
+      line(0, height*0.2 + i, width, height*0.2 + i);
+      println(height/2,_counter);
+    }
+    
     textAlign(CENTER, TOP);
     textSize(titleSize*1.55);
     fill(255);
@@ -56,10 +68,18 @@ class MenUI {
     text("INVADERS", width/2, titleSize*1.25);
   }
   
+  void showEnemies() {
+    for(int i = 0; i < 3; i++) {
+      int _blockSize = 4;
+      int _eOffset = _blockSize*12;
+      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize));
+    }
+  }
+  
   void displayEnemiesInfo() {
     textAlign(LEFT, CENTER);
     textSize(labelHeight);
-    for(int i = 0; i < 3; i++) {
+    for(int i = enemies.size()-1; i > -1; i--) {
       enemies.get(i).update();
       text("=", width/2, enemies.get(i).y);
       String _scoreText = enemies.get(i).score + " PTS";
@@ -199,7 +219,7 @@ class MenUI {
       fill(180, 0, 0);
       textAlign(CENTER, CENTER);
       textSize(labelHeight);
-      text("Do You want to exit?", width/2, height/2 + labelHeight*6.5);
+      text("Do You want to exit?", width/2, (height/4)*3 + labelHeight);
     }
   }
 }
