@@ -38,10 +38,12 @@ void displayGameObjects() {
   //Iterates enemies array list and updates every enemy. 
   for(int i = enemies.size() - 1; i >= 0; i--) {
     Enemy _enemy = enemies.get(i);
-    _enemy.update();
+    _enemy.display();
   }
   if(enemies.size() > 0) {
     enemies.get(0).shoot();
+    spawner.moveEnemiesX();
+    spawner.checkEnemiesCollision();
   }
   //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {

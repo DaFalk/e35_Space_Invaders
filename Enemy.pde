@@ -1,44 +1,21 @@
 class Enemy {
-  int eSize = 20;
+  int eSize;
   float x, y;
   int score;
   int lastShot;
   int shotCooldown = 4000;
   int weaponType = 0;
-
-  float stepX = eSize*1.5;
-  float stepY = eSize*1.5;
-  float dirX = 1;
-  int moveInterval = 2000; 
+  int moveInterval = 100; 
   int lastMove;
 
-  Enemy(float _x, float _y, int _score) {
-    this.x = _x*stepX;
-    this.y = _y*stepY + 100;
+  Enemy(float _x, float _y, int _eSize, int _score) {
+    this.x = _x;
+    this.y = _y;
+    this.eSize = _eSize;
     this.score = _score;
   }
 
-  void update() {
-    if(!gamePaused) {
-      if(millis() - lastMove >= moveInterval) {
-        x += stepX*dirX;
-        checkCollision();
-        lastMove = millis();
-      }
-    }
-    drawEnemy();
-  }
-
-  boolean checkCollision() {
-    if ((x+eSize/2 > width-eSize && dirX > 0) || (x + eSize/2 < eSize && dirX < 0)) {
-      dirX *= -1;
-      y += stepY;
-      return true;
-    }
-    return false;
-  }
-
-  void drawEnemy() {
+  void display() {
     noStroke();
     fill(156, 156, 156);
     ellipse(x , y, eSize, eSize);
