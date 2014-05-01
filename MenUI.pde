@@ -48,7 +48,6 @@ class MenUI {
       color c = lerpColor(c1, c2, (i-_counter)/(height/2.75));
       stroke(c);
       line(0, height*0.2 + i, width, height*0.2 + i);
-      println(height/2,_counter);
     }
     
     textAlign(CENTER, TOP);
@@ -65,6 +64,8 @@ class MenUI {
       }
     }
     textSize(titleSize);
+    stroke(255);
+    strokeWeight(100);
     text("INVADERS", width/2, titleSize*1.25);
   }
   

@@ -68,6 +68,7 @@ class Shot {
   
   void drawEnemyShot() {
     stroke(255, 255, 255);
+    strokeWeight(2);
     float offset = shotSize/5;
     int flip;
     for (int i = 0; i < 5; i++) {
@@ -88,8 +89,8 @@ class Shot {
     if(dir < 0) {
       for(int i = enemies.size() - 1; i > -1; i--) {
         Enemy _enemy = enemies.get(i);
-        if(y < _enemy.y + _enemy.eSize/2 && y > _enemy.y - _enemy.eSize/2) {
-          if(x < _enemy.x + _enemy.eSize/2 && x > _enemy.x - _enemy.eSize/2) {
+        if(y < _enemy.y + _enemy.eHeight && y > _enemy.y - _enemy.eHeight) {
+          if(x < _enemy.x + _enemy.eSize && x > _enemy.x - _enemy.eSize) {
             enemies.get(i).damageEnemy();
             players.get(owner).adjustScore(_enemy.score);
             if(type != 1) {

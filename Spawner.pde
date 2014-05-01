@@ -39,7 +39,7 @@ class Spawner {
             _type = 1;
           }
         }
-        enemies.add(new Enemy(_type, col*stepX, row*stepX + 100, _blockSize));
+        enemies.add(new Enemy(_type, (1+col)*stepX, row*stepX + 100, _blockSize));
       }
     }
   }
@@ -55,15 +55,19 @@ class Spawner {
     }
   }
   void moveEnemiesY() {
-    for(int i = enemies.size()-1; i > -1; i--) {
-      enemies.get(i).y += stepX;
+    if(!gamePaused) {
+      if(millis() - lastMove >= moveInterval) {
+        for(int i = enemies.size()-1; i > -1; i--) {
+          enemies.get(i).y += stepX;
+          dirX *= -1;
+          lastMove = millis();
+        }
+      }
     }
   }
   boolean checkEnemiesCollision() {
     for(int i = enemies.size()-1; i > -1; i--) {
-      if ((enemies.get(i).x + eSize/2 >= width-eSize && spawner.dirX > 0) || (enemies.get(i).x - eSize/2 <= eSize && spawner.dirX < 0)) {
-        dirX *= -1;
-        moveEnemiesY();
+      if ((enemies.get(i).x + eSize >= width-eSize && spawner.dirX > 0) || (enemies.get(i).x - eSize <= eSize && spawner.dirX < 0)) {
         return true;
       }
     }

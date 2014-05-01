@@ -1,6 +1,6 @@
 class Enemy {
   ArrayList<Block> blocks;
-  int eSize;
+  int eSize, eHeight;
   float x, y;
   int type;
   int score;
@@ -21,6 +21,7 @@ class Enemy {
     this.blocks = new ArrayList<Block>();
     this.blockSize = _blockSize;
     this.eSize = 6*blockSize;
+    this.eHeight = 4*blockSize;
     this.half = ceil(setArrayLength()/2);
     for (int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(new PVector(x, y), blockSize));
