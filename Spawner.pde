@@ -7,7 +7,6 @@ class Spawner {
   float stepY;
   int moveInterval = 500; 
   int lastMove;
-  int baseScore = 50;
   
   Spawner() {
     stepX = eSize*1.5;
@@ -30,7 +29,14 @@ class Spawner {
   void spawnEnemies() {
     for(int row = 0; row < enemyRows; row++) {
       for(int col = 0; col < enemyCols; col++) {
-        enemies.add(new Enemy(1, col*stepX, row*stepX + 100, eSize, baseScore - (baseScore/5)*row));
+        int _type = 3;
+        if(row >= 1) {
+          _type = 2;
+          if(row >= 3) {
+            _type = 1;
+          }
+        }
+        enemies.add(new Enemy(_type, col*stepX, row*stepX + 100, eSize));
       }
     }
   }
