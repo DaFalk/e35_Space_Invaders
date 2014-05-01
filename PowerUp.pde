@@ -27,6 +27,7 @@ class PowerUp {
   
   void drawPowerUp() {
     if(type == 1) {
+      noStroke();
       fill(0, 0, 255);
       triangle(x - size/2, y - size/2, x + size/2, y - size/2, x, y + size/2);
       duration = 4000;

@@ -38,7 +38,7 @@ void displayGameObjects() {
   //Iterates enemies array list and updates every enemy. 
   for(int i = enemies.size() - 1; i >= 0; i--) {
     Enemy _enemy = enemies.get(i);
-    _enemy.display();
+    _enemy.update();
   }
   if(enemies.size() > 0) {
     enemies.get(0).shoot();

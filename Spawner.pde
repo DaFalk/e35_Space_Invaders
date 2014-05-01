@@ -30,7 +30,7 @@ class Spawner {
   void spawnEnemies() {
     for(int row = 0; row < enemyRows; row++) {
       for(int col = 0; col < enemyCols; col++) {
-        enemies.add(new Enemy(col*stepX, row*stepX + 100, eSize, baseScore - (baseScore/5)*row));
+        enemies.add(new Enemy(1, col*stepX, row*stepX + 100, eSize, baseScore - (baseScore/5)*row));
       }
     }
   }
@@ -40,6 +40,7 @@ class Spawner {
         for(int i = enemies.size()-1; i > -1; i--) {
           lastMove = millis();
           enemies.get(i).x += stepX*dirX;
+          enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
         }
       }
     }
