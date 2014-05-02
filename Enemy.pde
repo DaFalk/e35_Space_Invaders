@@ -35,6 +35,7 @@ class Enemy {
     }
   }
   void displayType(int _type) {
+    fill(255);
     if(_type == 1) {
       for (int i = 0; i < 2; i++) {
         int _flip = 1 - i*2;

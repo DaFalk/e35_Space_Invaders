@@ -1,5 +1,4 @@
 class Block {
-  float x, y;
   PVector blockPos;
   int blockSize;
   int lastMove, speed;
@@ -13,7 +12,6 @@ class Block {
   void display() {
     rectMode(CENTER);
     noStroke();
-    fill(255);
     if(release) { releaseBlocks(); }
     rect(blockPos.x, blockPos.y, blockSize, blockSize);
   }
