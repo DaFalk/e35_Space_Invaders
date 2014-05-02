@@ -72,7 +72,7 @@ class MenUI {
     for(int i = 0; i < 3; i++) {
       int _blockSize = 4;
       int _eOffset = _blockSize*12;
-      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize));
+      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize, 0));
     }
   }
   
@@ -219,7 +219,7 @@ class MenUI {
       fill(180, 0, 0);
       textAlign(CENTER, CENTER);
       textSize(labelHeight);
-      text("Do You want to exit?", width/2, (height/4)*3 + labelHeight);
+      text("Do you want to exit?", width/2, (height/4)*3 + labelHeight);
     }
   }
 }

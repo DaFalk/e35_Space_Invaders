@@ -4,7 +4,8 @@ class Spawner {
   int dirX;
   int eSize;
   float stepX;
-  int moveInterval = 500; 
+  int moveInterval = 1500;
+  int shotCooldown = 4000;
   int lastMove;
   boolean moveDown = false;
   
@@ -38,7 +39,7 @@ class Spawner {
             _type = 1;
           }
         }
-        enemies.add(new Enemy(_type, (1+col)*stepX, row*stepX + 100, blockSize));
+        enemies.add(new Enemy(_type, (1+col)*stepX, row*stepX + 100, blockSize, shotCooldown));
       }
     }
   }
@@ -88,6 +89,8 @@ class Spawner {
   void respawnEnemies() {
     enemies.clear();
     dirX = 1;
+    moveInterval -= 100;
+    shotCooldown -= 100;
     spawnEnemies();
   }
 }

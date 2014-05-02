@@ -18,7 +18,7 @@ class Player {
     this.attack = false;
     this.shotCooldown = 1500;
     this.weaponType = 0;
-    y = height - pWidth/2;
+    y = height - pWidth;
     pHeight = pWidth/4;
   }
   
@@ -70,15 +70,12 @@ class Player {
   
   void adjustLifes() {
     lifes--;
-    if(lifes > 0) {
-      spawner.respawnPlayer(this);
-    }
+    if(lifes > 0) { spawner.respawnPlayer(this); }
     else {
       isDead = true;
       lifesLabel = "DEAD";
     }
   }
-  
   void adjustScore(int _score) {
     score += _score;
   }

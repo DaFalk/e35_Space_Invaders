@@ -9,9 +9,9 @@ class PowerUp {
     this.y = _y;
     this.size = _size*0.75;
     this.lastMove = millis();
-    this.type = ceil(random(0, 2));
+    this.type = ceil(random(0, 1));
     this.duration = type*5000;
-    this.shotCooldown = 4000/type;
+    this.shotCooldown = 4000/(type*2);
   }
   
   void update() {

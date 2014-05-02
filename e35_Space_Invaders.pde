@@ -59,6 +59,10 @@ void displayGameObjects() {
     PowerUp _powerUp = powerUps.get(i);
     _powerUp.update();
   }
+  rectMode(CENTER);
+  noStroke();
+  fill(0, 255, 0);
+  rect(width/2 , height - height/60, width, height/30);
 }
 
 void resetGame() {
@@ -68,6 +72,8 @@ void resetGame() {
   enemies.clear();
   shots.clear();
   powerUps.clear();
+  spawner.moveInterval = 1500;
+  spawner.shotCooldown = 4000;
   menUI.showEnemies();
 }
 

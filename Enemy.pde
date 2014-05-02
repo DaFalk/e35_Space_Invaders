@@ -6,18 +6,19 @@ class Enemy {
   int type;
   int score;
   int lastShot;
-  int shotCooldown = 4000;
+  int shotCooldown;
   int weaponType = 0;
   int moveInterval = 100; 
   int lastMove;
   int half;
   boolean moveSwitch = false;
 
-  Enemy(int _type, float _x, float _y, int _blockSize) {
+  Enemy(int _type, float _x, float _y, int _blockSize, int _shotCooldown) {
     this.type = _type;
     this.x = _x;
     this.y = _y;
     this.score = type*10;
+    this.shotCooldown = _shotCooldown;
     this.blocks = new ArrayList<Block>();
     this.blockSize = _blockSize;
     this.eSize = 6*blockSize;
@@ -171,7 +172,8 @@ class Enemy {
       Shot s = new Shot(_enemy.x, _enemy.y + _enemy.eSize, weaponType, 10);
       shots.add(s);
       lastShot = millis();
-      shotCooldown = ceil(random(3, 6))*1000;
+//      shotCooldown = ceil(random(3, 6))*1000;
+      shotCooldown += millis();
     }
   }
   

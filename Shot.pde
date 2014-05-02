@@ -101,7 +101,7 @@ class Shot {
       }
       return false;
     }
-    else {
+    if(dir > 0) {
       for(int i = players.size() - 1; i > -1; i--) {
         Player _player = players.get(i);
         if(!_player.isDead) {
