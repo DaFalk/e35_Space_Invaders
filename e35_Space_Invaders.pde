@@ -19,7 +19,6 @@ MenUI menUI;
 
 void setup() {
   size(800, 600);
-  smooth();
   minim = new Minim(this);
   audioHandler = new AudioHandler();
   spawner = new Spawner();
@@ -80,7 +79,7 @@ void resetGame() {
 void keyReleased() {
   if(gameStarted) {
     if(key == CODED) { players.get(players.size()-1).keyUp(); }
-    else { players.get(0).keyUp(); }
+    if(key != CODED) { players.get(0).keyUp(); }
   }
 }
 void keyPressed() {
@@ -91,7 +90,7 @@ void keyPressed() {
   }
   if(gameStarted) {
     if(key == CODED) { players.get(players.size()-1).keyDown(); }
-    else { players.get(0).keyDown(); }
+    if(key != CODED) { players.get(0).keyDown(); }
   }
 }
 void mousePressed() {

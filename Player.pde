@@ -94,7 +94,7 @@ class Player {
     if(key == ' ') { attack = true; }
     if(keyCode == LEFT) { left = 1; }
     if(keyCode == RIGHT) { right = 1; }
-    if(keyCode == CONTROL) { attack = true; }
+    if(keyCode == UP) { attack = true; }
   }
   
   void keyUp() {
@@ -103,6 +103,6 @@ class Player {
     if(key == ' ') { attack = false; }
     if(keyCode == LEFT) { left = 0; }
     if(keyCode == RIGHT) { right = 0; }
-    if(keyCode == CONTROL) { attack = false; }
+    if(keyCode == UP) { attack = false; }
   }
 }
