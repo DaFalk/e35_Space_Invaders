@@ -82,7 +82,7 @@ class Shot {
     if((y < 0 && dir < 0) || (y > height + shotSize && dir > 0)) {
       if(type >= 2) {
         target.killEnemy();
-        players.get(owner).adjustScore(target.score);
+        players.get(owner).score += target.points;
       }
       return true;
     }
@@ -92,7 +92,7 @@ class Shot {
         if(y < _enemy.y + _enemy.eHeight && y > _enemy.y - _enemy.eHeight) {
           if(x < _enemy.x + _enemy.eSize && x > _enemy.x - _enemy.eSize) {
             enemies.get(i).killEnemy();
-            players.get(owner).adjustScore(_enemy.score);
+            players.get(owner).score += _enemy.points;
             if(type != 1) {
               return true;
             }
@@ -101,6 +101,7 @@ class Shot {
       }
       return false;
     }
+    //Check enemy shot for player collision
     if(dir > 0) {
       for(int i = players.size() - 1; i > -1; i--) {
         Player _player = players.get(i);

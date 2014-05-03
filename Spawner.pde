@@ -1,21 +1,22 @@
 class Spawner {
   int enemyCols = 9;
   int enemyRows = 5;
-  int dirX;
-  int eSize;
-  float stepX;
-  int moveInterval = 1500;
-  int shotCooldown = 4000;
-  int lastMove;
-  boolean moveDown = false;
+  int enemyDirX;
+  int enemySize;
+  float enemyStepX;
+  int enemyLastMove, enemyNextMove;
+  int enemyNextShot;
+  boolean enemyMoveDown = false;
   
   Spawner() {
-    dirX = 1;
+    enemyDirX = 1;
   }
   
   void startGame(int _numPlayers) {
     spawnPlayers(_numPlayers);
     enemies.clear();
+    enemyNextMove = 1200;
+    enemyNextShot = 3000;
     spawnEnemies();
     gameStarted = true;
   }
@@ -28,52 +29,18 @@ class Spawner {
 
   void spawnEnemies() {
     int blockSize = 2;
-    eSize = blockSize*12;
-    stepX = width/eSize;
+    enemySize = blockSize*12;
+    enemyStepX = width/enemySize;
     for(int row = 0; row < enemyRows; row++) {
       for(int col = 0; col < enemyCols; col++) {
         int _type = 3;
         if(row >= 1) {
           _type = 2;
-          if(row >= 3) {
-            _type = 1;
-          }
+          if(row >= 3) { _type = 1; }
         }
-        enemies.add(new Enemy(_type, (1+col)*stepX, row*stepX + 100, blockSize, shotCooldown));
+        enemies.add(new Enemy(_type, (1+col)*enemyStepX, row*enemyStepX + 100, blockSize));
       }
     }
-  }
-  
-  void moveEnemies() {
-    if(!gamePaused) {
-      if(millis() - lastMove >= moveInterval) {
-        if(!moveDown) {
-          for(int i = enemies.size()-1; i > -1; i--) {
-            enemies.get(i).x += stepX*dirX;
-            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
-          }
-        }
-        else {
-          for(int i = enemies.size()-1; i > -1; i--) {
-            enemies.get(i).y += stepX;
-            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
-          }
-          dirX *= -1;
-        }
-        checkEnemiesCollision();
-        lastMove = millis();
-      }
-    }
-  }
-  
-  void checkEnemiesCollision() {
-    for(int i = enemies.size()-1; i > -1; i--) {
-      if ((enemies.get(i).x + eSize > width-eSize && spawner.dirX > 0) || (enemies.get(i).x - eSize < eSize && spawner.dirX < 0)) {
-        moveDown = true;
-        return;
-      }
-    }
-    moveDown = false;
   }
   
   void spawnPowerUp(float _x, float _y, float _size) {
@@ -88,9 +55,41 @@ class Spawner {
   
   void respawnEnemies() {
     enemies.clear();
-    dirX = 1;
-    moveInterval -= 100;
-    shotCooldown -= 100;
+    enemyDirX = 1;
+    enemyNextMove -= 100;
+    enemyNextShot -= 200;
     spawnEnemies();
+  }
+  
+  void moveEnemies() {
+    if(!gamePaused) {
+      if(millis() - enemyLastMove >= enemyNextMove) {
+        if(!enemyMoveDown) {
+          for(int i = enemies.size()-1; i > -1; i--) {
+            enemies.get(i).x += enemyStepX*enemyDirX;
+            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
+          }
+        }
+        else {
+          for(int i = enemies.size()-1; i > -1; i--) {
+            enemies.get(i).y += enemyStepX;
+            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
+          }
+          enemyDirX *= -1;
+        }
+        checkEnemiesCollision();
+        enemyLastMove = millis();
+      }
+    }
+  }
+  
+  void checkEnemiesCollision() {
+    for(int i = enemies.size()-1; i > -1; i--) {
+      if ((enemies.get(i).x + enemySize > width-enemySize && enemyDirX > 0) || (enemies.get(i).x - enemySize < enemySize && enemyDirX < 0)) {
+        enemyMoveDown = true;
+        return;
+      }
+    }
+    enemyMoveDown = false;
   }
 }

@@ -72,8 +72,6 @@ void resetGame() {
   enemies.clear();
   shots.clear();
   powerUps.clear();
-  spawner.moveInterval = 1500;
-  spawner.shotCooldown = 4000;
   menUI.showEnemies();
 }
 

@@ -76,9 +76,6 @@ class Player {
       lifesLabel = "DEAD";
     }
   }
-  void adjustScore(int _score) {
-    score += _score;
-  }
   
   void handlePowerUp() {
     if(weaponType != 0) {

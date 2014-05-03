@@ -4,7 +4,7 @@ class MenUI {
   int nextTick = 2000;
   
   int totalScore;
-  ArrayList<ScoreText> scoreTexts = new ArrayList<ScoreText>();
+  ArrayList<PointsText> pointsTexts = new ArrayList<PointsText>();
   String scoreLabel = "SCORE";
   String totalScoreLabel = "TOTAL SCORE";
   int labelHeight = 20;
@@ -27,7 +27,7 @@ class MenUI {
     else {
       displayPlayerUI();
       displayTotalScore();
-      displayFloatingScores();
+      displayPoints();
     }
     if(gamePaused) { displayESCMenu(); }
   }
@@ -72,7 +72,7 @@ class MenUI {
     for(int i = 0; i < 3; i++) {
       int _blockSize = 4;
       int _eOffset = _blockSize*12;
-      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize, 0));
+      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize));
     }
   }
   
@@ -82,8 +82,8 @@ class MenUI {
     for(int i = enemies.size()-1; i > -1; i--) {
       enemies.get(i).update();
       text("=", width/2, enemies.get(i).y);
-      String _scoreText = enemies.get(i).score + " PTS";
-      text(_scoreText, width - (width/8)*3 - textWidth(_scoreText)/2, enemies.get(i).y);
+      String _pointsText = enemies.get(i).points + " PTS";
+      text(_pointsText, width - (width/8)*3 - textWidth(_pointsText)/2, enemies.get(i).y);
     }
   }
   
@@ -199,10 +199,10 @@ class MenUI {
     text(totalScore, width/2, labelHeight/2);
   }
   
-  void displayFloatingScores() {
-    for(int i = scoreTexts.size()-1; i > -1; i--) {
-      ScoreText scoreText = scoreTexts.get(i);
-      scoreText.update();
+  void displayPoints() {
+    for(int i = pointsTexts.size()-1; i > -1; i--) {
+      PointsText pointsText = pointsTexts.get(i);
+      pointsText.update();
     }
   }
   

@@ -1,4 +1,4 @@
-class ScoreText {
+class PointsText {
   float x, y, startY;
   int score;
   int lastMove, startTime;
@@ -6,7 +6,7 @@ class ScoreText {
   int speed = 20;
   float size;
   
-  ScoreText(float _x, float _y, int _score) {
+  PointsText(float _x, float _y, int _score) {
     textAlign(CENTER, CENTER);
     this.x = _x;
     this.y = _y;
@@ -23,7 +23,7 @@ class ScoreText {
     lastMove = millis();
     displayText();
     if(millis() >= startTime + duration) {
-      menUI.scoreTexts.remove(this);
+      menUI.pointsTexts.remove(this);
     }
   }
   
