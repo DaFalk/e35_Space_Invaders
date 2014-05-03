@@ -13,6 +13,8 @@ class MenUI {
   float btnLabelY;
   int numBtns = 2;
   
+  Block[] blocks = new Block[100];
+  int lastMove;
   color c1, c2;
   
   MenUI() {
@@ -20,13 +22,18 @@ class MenUI {
     showEnemies();
     c1 = color(0, 0, 0);
     c2 = color(0, 0, 255);
+    for(int i = 0; i < blocks.length; i++) {
+      blocks[i] = new Block(new PVector(0, 0), 2);
+    }
+    addEnemies();
   }
   
   void display() {
     //Start menu
     if(!gameStarted) {
+      displayStars();
       displayTitle();
-      menUI.showEnemies();
+      showEnemies();
       displayEnemiesInfo();
       displayBtns(height/4 + labelHeight*3);
     }
@@ -41,17 +48,6 @@ class MenUI {
   }
   
   void displayTitle() {
-    noFill();
-    int _counter = 0;
-    for(int i = 0; i < height*0.625; i++) {
-      if(i > height*0.3125) {
-        _counter += 2;
-      }
-      color c = lerpColor(c1, c2, (i-_counter)/(height/2.75));
-      stroke(c);
-      line(0, height*0.2 + i, width, height*0.2 + i);
-    }
-    
     textAlign(CENTER, TOP);
     textSize(titleSize*1.55);
     fill(255);
@@ -71,10 +67,22 @@ class MenUI {
   }
   
   void showEnemies() {
-    for(int i = 0; i < 3; i++) {
-      int _blockSize = 4;
-      int _eOffset = _blockSize*12;
-      enemies.add(new Enemy(1+i, (width/8)*3, height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize));
+    if(enemies.size() > 0) {
+      for(int i = enemies.size()-1; i > -1; i--) {
+        enemies.get(i).update();
+      }
+    }
+  }
+  
+  void addEnemies() {
+    for(int h = 5; h > 0; h--) {
+      for(int i = 0; i < 3; i++) {
+        int _blockSize = 4;
+        float _eOffset = _blockSize*12;
+        Enemy enemy = new Enemy(1+i, (width/8)*3 - (_eOffset*1.5)*(h-1), height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize);
+        enemies.add(enemy);
+        enemy.eFill = color(255, 255 - h*48);
+      }
     }
   }
   
@@ -86,6 +94,24 @@ class MenUI {
       text("=", width/2, enemies.get(i).y);
       String _pointsText = enemies.get(i).points + " PTS";
       text(_pointsText, width - (width/8)*3 - textWidth(_pointsText)/2, enemies.get(i).y);
+    }
+  }
+  
+  void displayStars() {
+    noFill();
+    int _counter = 0;
+    for(int i = 0; i < height*0.625; i++) {
+      if(i > height*0.3125) {
+        _counter += 2;
+      }
+      color c = lerpColor(c1, c2, (i-_counter)/(height/2.75));
+      stroke(c);
+      line(0, height*0.2 + i, width, height*0.2 + i);
+    }
+    
+    fill(255);
+    for(int i = 0; i < blocks.length; i++) {
+      blocks[i].moveBlock();
     }
   }
   

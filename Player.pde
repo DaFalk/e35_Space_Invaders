@@ -8,15 +8,15 @@ class Player {
   boolean attack;
   int weaponType;
   int powerUpStartTime;
-  int powerUpDuration;
+  int powerUpDuration = 10000;
   boolean isDead = false;
   
-  Player(int xPos) {
+  Player(float xPos) {
     this.lifesLabel = "LIFES";
     this.x = xPos - pWidth/2;
     this.lifes = 3;
     this.attack = false;
-    this.shotCooldown = 1500;
+    this.shotCooldown = 1000;
     this.weaponType = 0;
     y = height - pWidth;
     pHeight = pWidth/4;
@@ -49,24 +49,14 @@ class Player {
   
   void checkCollision() {
     if(x <= 0) { x = 0; }
-    if(x >= width - pWidth) {
-      x = width - pWidth;
-    }
+    if(x >= width - pWidth) { x = width - pWidth; }
   }
   
   void shoot() {
-    if(weaponType != 2) {
-      if(millis() >= lastShot + shotCooldown) {
-        Shot s = new Shot(x + pWidth/2, y - pHeight, weaponType, players.indexOf(this));
-        shots.add(s);
-        lastShot = millis();
-      }
-    }
-    else {
-      if(shots.size() == 0) {
-        Shot s = new Shot(x + pWidth/2, y - pHeight, weaponType, players.indexOf(this));
-        shots.add(s);
-      }
+    if(millis() >= lastShot + shotCooldown) {
+      Shot s = new Shot(new PVector(x + pWidth/2, y - pHeight), weaponType, players.indexOf(this));
+      shots.add(s);
+      lastShot = millis();
     }
   }
   
@@ -83,7 +73,7 @@ class Player {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
         weaponType = 0;
-        shotCooldown = 1500;
+        shotCooldown = 1000;
       }
     }
   }

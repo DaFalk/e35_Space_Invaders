@@ -41,20 +41,20 @@ void displayGameObjects() {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
   }
-  if(enemies.size() > 0) {
-//    enemies.get(0).shoot();
-    enemyHandler.update();
-  }
+  enemyHandler.update();
+  
   //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
     Shot _shot = shots.get(i);
     _shot.update();
   }
+  
   //Iterates players array list and updates every player.
   for(int i = players.size() - 1; i >= 0; i--) {
     Player _player = players.get(i);
     _player.update();
   }
+  
   //Iterates powerUps array list and updates every powerup. 
   for(int i = powerUps.size() - 1; i >= 0; i--) {
     PowerUp _powerUp = powerUps.get(i);

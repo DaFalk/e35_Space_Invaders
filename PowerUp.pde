@@ -9,7 +9,7 @@ class PowerUp {
     this.y = _y;
     this.size = _size*0.75;
     this.lastMove = millis();
-    this.type = ceil(random(0, 1));
+    this.type = ceil(random(0, 3));
     this.duration = type*5000;
     this.shotCooldown = 4000/(type*2);
   }
@@ -32,7 +32,9 @@ class PowerUp {
     stroke(0, 255, 0);
     noFill();
     ellipse(x, y, size, size);
-    stroke(255);
+    if(type == 1) { stroke(color(0, 0, 255, 155)); }
+    if(type == 2) { stroke(color(255, 155)); }
+    if(type == 3) { stroke(color(0, 255, 0, 155)); }
     ellipse(x, y, size*2, size*2);
   }
   

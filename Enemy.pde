@@ -4,17 +4,21 @@ class Enemy {
   int half;  //Half the size() of blocks arraylist.
   int blockSize, eSize, eHeight;
   int type, points;
+  int lastAnim, nextAnim;
   boolean moveSwitch = false;
+  color eFill;
 
   Enemy(int _type, float _x, float _y, int _blockSize) {
     this.type = _type;
     this.x = _x;
     this.y = _y;
     this.points = type*10;
+    this.eFill = color(255);
     this.blocks = new ArrayList<Block>();
     this.blockSize = _blockSize;
     this.eSize = 6*blockSize;
     this.eHeight = 4*blockSize;
+    nextAnim = enemyHandler.nextMove;
     this.half = ceil(setArrayLength()/2);
     for (int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(new PVector(x, y), blockSize));
@@ -27,6 +31,7 @@ class Enemy {
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).display();
     }
+    animate();
   }
   
   void killEnemy() {
@@ -50,7 +55,7 @@ class Enemy {
   }
   
   void displayType(int _type) {
-    fill(255);
+    fill(eFill);
     if(_type == 1) {
       for (int i = 0; i < 2; i++) {
         int _flip = 1 - i*2;
@@ -176,6 +181,13 @@ class Enemy {
           blocks.get(17 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
         }
       }
+    }
+  }
+  
+  void animate() {
+    if(millis() - lastAnim >= nextAnim) {
+      moveSwitch = !moveSwitch;
+      lastAnim = millis();
     }
   }
 }

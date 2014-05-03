@@ -3,18 +3,23 @@ class EnemyHandler {
   int eSize;
   float moveDist;
   int lastMove, nextMove;
-  int lastShot, nextShot;
+  int lastShot, shotTimer, nextShot;
   boolean moveDown = false;
   
   EnemyHandler() {
-    nextMove = 1200;
-    nextShot = 3000;
+    nextMove = 400;
+    shotTimer = 2000;
+    nextShot = shotTimer;
+    lastMove = millis();
+    lastShot = millis();
     dirX = 1;
   }
   
   void update() {
-    moveEnemies();
-    shoot();
+    if(enemies.size() > 0) {
+      moveEnemies();
+      shoot();
+    }
   }
   
   void moveEnemies() {
@@ -23,13 +28,13 @@ class EnemyHandler {
         if(!moveDown) {
           for(int i = enemies.size()-1; i > -1; i--) {
             enemies.get(i).x += moveDist*dirX;
-            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
+//            enemies.get(i).animate();
           }
         }
         else {
           for(int i = enemies.size()-1; i > -1; i--) {
             enemies.get(i).y += moveDist;
-            enemies.get(i).moveSwitch = !enemies.get(i).moveSwitch;
+//            enemies.get(i).animate();
           }
           dirX *= -1;
         }
@@ -41,7 +46,9 @@ class EnemyHandler {
   
   void checkEnemiesCollision() {
     for(int i = enemies.size()-1; i > -1; i--) {
-      if ((enemies.get(i).x + eSize > width-eSize && dirX > 0) || (enemies.get(i).x - eSize < eSize && dirX < 0)) {
+      float nextLeftX = enemies.get(i).x - eSize/2 - moveDist;
+      float nextRightX = enemies.get(i).x + eSize/2 + moveDist;
+      if((nextRightX > width && dirX > 0) || (nextLeftX < 0 && dirX < 0)) {
         moveDown = true;
         return;
       }
@@ -52,8 +59,9 @@ class EnemyHandler {
   void shoot() {
     if(millis() >= lastShot + nextShot) {
       int _randomEnemy = floor(random(0, enemies.size()));
+      nextShot = ceil(random(500, shotTimer));
       Enemy _enemy = enemies.get(_randomEnemy);
-      Shot s = new Shot(_enemy.x, _enemy.y + _enemy.eSize, 0, 10);
+      Shot s = new Shot(new PVector(_enemy.x, _enemy.y + _enemy.eSize), 0, 10);
       shots.add(s);
       lastShot = millis();
     }
@@ -61,8 +69,8 @@ class EnemyHandler {
   
   void reset() {
     enemies.clear();
-    nextMove = 1200;
-    nextShot = 3000;
+    nextMove = 400;
+    shotTimer = 2000;
     dirX = 1;
   }
 }

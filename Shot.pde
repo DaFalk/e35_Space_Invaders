@@ -1,25 +1,28 @@
 class Shot {
-  float x, y, startY;
-  int dir, lastMove, type, owner;
-  int shotSize = 15;
-  int speed = 250;
+  PVector shotPos, shotDir;
+  int lastMove, type, owner;
+  int shotSize = 5;
+  int speed = 500;
   Enemy target;
   
-  Shot(float _x, float _y, int _type, int _owner) {
+  Shot(PVector _shotPos, int _type, int _owner) {
     this.owner = _owner;
-    this.x = _x;
-    this.y = _y;
-    if(owner < players.size()) { this.dir = -1; }
-    else { this.dir = 1; }
-    this.lastMove = millis();
     this.type = _type;
-    this.target = target;
+    this.shotPos = _shotPos;
+    this.lastMove = millis();
+    this.target = enemies.get(ceil(random(0, enemies.size()-1)));
+    if(owner < players.size()) {
+      this.shotDir = new PVector(0, -1);
+    }
+    else {
+      this.shotDir = new PVector(0, 1);
+    }
     audioHandler.playSFX(2+type);
   }
   
   void update() {
     if(!gamePaused) {
-      y += (speed*dir)*((millis()-lastMove)*0.001);
+      shotPos.add(new PVector((speed*shotDir.x)*((millis()-lastMove)*0.001), (speed*shotDir.y)*((millis()-lastMove)*0.001)));
       lastMove = millis();
       if(checkCollision()) {
         shots.remove(this);
@@ -30,24 +33,36 @@ class Shot {
   }
   
   void drawPlayerShot() {
+    //Draw the shot related the player's weapon type.
+    strokeWeight(2);
     if(type == 0) {
       stroke(255, 255, 255);
-      strokeWeight(2);
-      line(x, y, x, y + shotSize);
+      line(shotPos.x, shotPos.y, shotPos.x, shotPos.y + shotSize);
     }
     else if(type == 1) {
       noStroke();
       fill(0, 0, 255);
-      triangle(x - shotSize/2, y, x + shotSize/2, y, x, y + shotSize);
+      triangle(shotPos.x - shotSize/2, shotPos.y, shotPos.x + shotSize/2, shotPos.y, shotPos.x, shotPos.y + shotSize);
     }
     else if(type == 2) {
-      if((enemies.size() > 0 && players.get(owner).weaponType == 2 && players.get(owner).attack == true)) {
+      stroke(255, 255, 255);
+      float angle = atan2(target.y - shotPos.y, target.x - shotPos.x);
+      shotDir = new PVector(cos(angle), sin(angle));
+      line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(angle), shotPos.y + abs(shotSize*sin(angle)));
+    }
+    else if(type == 3) {
+      stroke(255, 255, 255);
+      float angle = atan2(target.y - shotPos.y, target.x - shotPos.x);
+      shotDir = new PVector(cos(angle), sin(angle));
+      line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(angle), shotPos.y + abs(shotSize*sin(angle)));
+    }
+    else if(type == 4) {
+      if(players.get(owner).attack == true && players.get(owner).weaponType == 4) {
         drawCurveLaser();
+        return;
       }
-      else {
-        shots.remove(this);
-        audioHandler.audioBank[4].pause();
-      }
+      audioHandler.audioBank[5].pause();
+      shots.remove(this);
     }
   }
   
@@ -59,9 +74,6 @@ class Shot {
     float _y = players.get(owner).y;
     for(int i = enemies.size()-1; i > -1; i--) {
       target = enemies.get(i);
-      if(dist(_x, _y, enemies.get(i).x, enemies.get(i).y) < dist(_x, _y, target.x, target.y) ) {
-        target = enemies.get(i);
-      }
     }
     bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
   }
@@ -74,23 +86,24 @@ class Shot {
     for (int i = 0; i < 5; i++) {
       if(i%2 == 0) { flip = 1; }
       else { flip = -1; }
-      line(x - offset*flip, y + offset*i, x + offset*flip, y + offset + offset*i);
+      line(shotPos.x - offset*flip, shotPos.y + offset*i, shotPos.x + offset*flip, shotPos.y + offset + offset*i);
     }
   }
   
   boolean checkCollision() {
-    if((y < 0 && dir < 0) || (y > height + shotSize && dir > 0)) {
-      if(type >= 2) {
+    if((shotPos.y < 0 && shotDir.y < 0) || (shotPos.y > height + shotSize && shotDir.y > 0)) {
+      if(type == 4) {
         target.killEnemy();
         players.get(owner).score += target.points;
       }
       return true;
     }
-    if(dir < 0 && type != 2) {
+    //Check to see if this shot collides with a enemy
+    if(shotDir.y < 0 && type != 4) {
       for(int i = enemies.size() - 1; i > -1; i--) {
         Enemy _enemy = enemies.get(i);
-        if(y < _enemy.y + _enemy.eHeight && y > _enemy.y - _enemy.eHeight) {
-          if(x < _enemy.x + _enemy.eSize && x > _enemy.x - _enemy.eSize) {
+        if(shotPos.y < _enemy.y + _enemy.eHeight && shotPos.y > _enemy.y - _enemy.eHeight) {
+          if(shotPos.x < _enemy.x + _enemy.eSize && shotPos.x > _enemy.x - _enemy.eSize) {
             enemies.get(i).killEnemy();
             players.get(owner).score += _enemy.points;
             if(type != 1) {
@@ -101,13 +114,14 @@ class Shot {
       }
       return false;
     }
-    //Check enemy shot for player collision
-    if(dir > 0) {
+    
+    //Check to see if this shot collides with a player
+    if(shotDir.y > 0) {
       for(int i = players.size() - 1; i > -1; i--) {
         Player _player = players.get(i);
         if(!_player.isDead) {
-          if((y > _player.y - _player.pHeight - _player.pHeight/3 && y < _player.y + _player.pHeight)) {
-            if((x > _player.x && x < _player.x + _player.pWidth)) {
+          if((shotPos.y > _player.y - _player.pHeight - _player.pHeight/3 && shotPos.y < _player.y + _player.pHeight)) {
+            if((shotPos.x > _player.x && shotPos.x < _player.x + _player.pWidth)) {
               _player.adjustLifes();
               return true;
             }
