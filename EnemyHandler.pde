@@ -28,13 +28,11 @@ class EnemyHandler {
         if(!moveDown) {
           for(int i = enemies.size()-1; i > -1; i--) {
             enemies.get(i).x += moveDist*dirX;
-//            enemies.get(i).animate();
           }
         }
         else {
           for(int i = enemies.size()-1; i > -1; i--) {
             enemies.get(i).y += moveDist;
-//            enemies.get(i).animate();
           }
           dirX *= -1;
         }
@@ -61,7 +59,7 @@ class EnemyHandler {
       int _randomEnemy = floor(random(0, enemies.size()));
       nextShot = ceil(random(500, shotTimer));
       Enemy _enemy = enemies.get(_randomEnemy);
-      Shot s = new Shot(new PVector(_enemy.x, _enemy.y + _enemy.eSize), 0, 10);
+      Shot s = new Shot(new PVector(_enemy.x, _enemy.y + _enemy.eHeight), 0, 10);
       shots.add(s);
       lastShot = millis();
     }

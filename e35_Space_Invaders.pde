@@ -66,15 +66,6 @@ void displayGameObjects() {
   rect(width/2 , height - height/60, width, height/30);
 }
 
-void resetGame() {
-  gamePaused = false;
-  gameStarted = false;
-  players.clear();
-  enemies.clear();
-  shots.clear();
-  powerUps.clear();
-}
-
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
 void keyReleased() {
   if(gameStarted) {

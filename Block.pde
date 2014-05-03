@@ -7,7 +7,7 @@ class Block {
   Block(PVector _blockPos, int _blockSize) {
     this.blockPos = _blockPos;
     this.blockSize = _blockSize;
-    if(!gameStarted) { this.blockPos = randomStarPos(-width); }
+    if(!gameStarted) { this.blockPos = randomStarPos(); }
   }
   
   void display() {
@@ -23,15 +23,15 @@ class Block {
   }
   
   void moveBlock() {
-    blockPos.x -= 500*(millis()-lastMove)*0.001;
+    blockPos.x -= 400*(millis()-lastMove)*0.001;
     lastMove = millis();
     if(blockPos.x < -1) {
-      blockPos = randomStarPos(0);
+      blockPos.x = random(width+2, width*2);
     }
     display();
   }
   
-  PVector randomStarPos(float _offset) {
-    return new PVector(random(width+_offset, width*2+_offset), random(height/4, height - height/4));
+  PVector randomStarPos() {
+    return new PVector(random(-width/2, width*1.5), random(height/4, height - height/4));
   }
 }

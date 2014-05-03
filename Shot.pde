@@ -1,8 +1,8 @@
 class Shot {
   PVector shotPos, shotDir;
   int lastMove, type, owner;
-  int shotSize = 5;
-  int speed = 500;
+  int shotSize;
+  int speed;
   Enemy target;
   
   Shot(PVector _shotPos, int _type, int _owner) {
@@ -13,9 +13,15 @@ class Shot {
     this.target = enemies.get(ceil(random(0, enemies.size()-1)));
     if(owner < players.size()) {
       this.shotDir = new PVector(0, -1);
+      this.shotSize = 5;
+      if(type > 0) { this.shotSize = 15; }
+      this.speed = 500;
     }
     else {
       this.shotDir = new PVector(0, 1);
+      this.shotSize = 15;
+      this.shotPos.y += shotSize;
+      this.speed = 300;
     }
     audioHandler.playSFX(2+type);
   }
@@ -58,7 +64,15 @@ class Shot {
     }
     else if(type == 4) {
       if(players.get(owner).attack == true && players.get(owner).weaponType == 4) {
-        drawCurveLaser();
+        noFill();
+        stroke(0, 220, 0, 150);
+        strokeWeight(2);
+        float _x = players.get(owner).x + players.get(owner).pWidth/2;
+        float _y = players.get(owner).y;
+        for(int i = enemies.size()-1; i > -1; i--) {
+          target = enemies.get(i);
+        }
+        bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
         return;
       }
       audioHandler.audioBank[5].pause();
@@ -66,27 +80,19 @@ class Shot {
     }
   }
   
-  void drawCurveLaser() {
-    noFill();
-    stroke(0, 220, 0, 150);
-    strokeWeight(2);
-    float _x = players.get(owner).x + players.get(owner).pWidth/2;
-    float _y = players.get(owner).y;
-    for(int i = enemies.size()-1; i > -1; i--) {
-      target = enemies.get(i);
-    }
-    bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
-  }
-  
   void drawEnemyShot() {
-    stroke(255, 255, 255);
-    strokeWeight(2);
-    float offset = shotSize/5;
-    int flip;
-    for (int i = 0; i < 5; i++) {
-      if(i%2 == 0) { flip = 1; }
-      else { flip = -1; }
-      line(shotPos.x - offset*flip, shotPos.y + offset*i, shotPos.x + offset*flip, shotPos.y + offset + offset*i);
+    strokeWeight(1.5);
+    if(type == 0) {
+      float offset = shotSize/5;
+      int flip;
+      for (int i = 0; i < 5; i++) {
+        if(i%2 == 0) { flip = 1; }
+        else { flip = -1; }
+        float _diff = norm(height-(height/60)*2-shotPos.y, 0, height-(height/60)*2)*i;
+        println(_diff);
+        stroke(255 - _diff, 255, 255 - _diff);
+        line(shotPos.x - (offset/1.5)*flip, shotPos.y - offset*i, shotPos.x + (offset/1.5)*flip, shotPos.y - offset - offset*i);
+      }
     }
   }
   
@@ -127,6 +133,9 @@ class Shot {
             }
           }
         }
+      }
+      if(shotPos.y >= height - (height/60)*2) {
+        return true;
       }
     }
     return false;

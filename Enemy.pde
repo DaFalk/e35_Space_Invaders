@@ -31,7 +31,7 @@ class Enemy {
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).display();
     }
-    animate();
+    animateEnemy();
   }
   
   void killEnemy() {
@@ -184,7 +184,7 @@ class Enemy {
     }
   }
   
-  void animate() {
+  void animateEnemy() {
     if(millis() - lastAnim >= nextAnim) {
       moveSwitch = !moveSwitch;
       lastAnim = millis();

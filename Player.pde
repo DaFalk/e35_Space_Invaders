@@ -66,6 +66,7 @@ class Player {
     else {
       isDead = true;
       lifesLabel = "DEAD";
+      menUI.calcAllLifes();
     }
   }
   

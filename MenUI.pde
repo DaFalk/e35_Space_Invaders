@@ -13,7 +13,7 @@ class MenUI {
   float btnLabelY;
   int numBtns = 2;
   
-  Block[] blocks = new Block[100];
+  Block[] blocks;
   int lastMove;
   color c1, c2;
   
@@ -22,10 +22,7 @@ class MenUI {
     showEnemies();
     c1 = color(0, 0, 0);
     c2 = color(0, 0, 255);
-    for(int i = 0; i < blocks.length; i++) {
-      blocks[i] = new Block(new PVector(0, 0), 2);
-    }
-    addEnemies();
+    resetStartMenu();
   }
   
   void display() {
@@ -38,7 +35,7 @@ class MenUI {
       displayBtns(height/4 + labelHeight*3);
     }
     else {
-    //In-game menu
+    //In-game UI
       displayPlayerUI();
       displayTotalScore();
       displayPoints();
@@ -74,18 +71,6 @@ class MenUI {
     }
   }
   
-  void addEnemies() {
-    for(int h = 5; h > 0; h--) {
-      for(int i = 0; i < 3; i++) {
-        int _blockSize = 4;
-        float _eOffset = _blockSize*12;
-        Enemy enemy = new Enemy(1+i, (width/8)*3 - (_eOffset*1.5)*(h-1), height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize);
-        enemies.add(enemy);
-        enemy.eFill = color(255, 255 - h*48);
-      }
-    }
-  }
-  
   void displayEnemiesInfo() {
     textAlign(LEFT, CENTER);
     textSize(labelHeight);
@@ -98,6 +83,7 @@ class MenUI {
   }
   
   void displayStars() {
+    //background gradient
     noFill();
     int _counter = 0;
     for(int i = 0; i < height*0.625; i++) {
@@ -108,7 +94,7 @@ class MenUI {
       stroke(c);
       line(0, height*0.2 + i, width, height*0.2 + i);
     }
-    
+    //stars
     fill(255);
     for(int i = 0; i < blocks.length; i++) {
       blocks[i].moveBlock();
@@ -155,7 +141,10 @@ class MenUI {
             }
             //In-game pause button actions.
             else {
-              if(i == 0) { gamePaused = false; }
+              if(i == 0) {
+                gamePaused = false;
+                calcAllLifes();
+              }
               else if(i == 1) { resetGame(); }
             }
             audioHandler.playSFX(1);
@@ -164,6 +153,14 @@ class MenUI {
       }
       text(btnLabel, width/2, btnLabelY);
     }
+  }
+  
+  void calcAllLifes() {
+    int allLifes = 0;
+    for(int i = players.size()-1; i > -1; i--) {
+      allLifes += players.get(i).lifes;
+    }
+    if(allLifes < 1) { gamePaused = true; }
   }
   
   void displayPlayerUI() {
@@ -248,6 +245,35 @@ class MenUI {
       textAlign(CENTER, CENTER);
       textSize(labelHeight);
       text("Do you want to exit?", width/2, (height/4)*3 + labelHeight);
+    }
+  }
+  
+  void resetGame() {
+    gamePaused = false;
+    gameStarted = false;
+    players.clear();
+    shots.clear();
+    powerUps.clear();
+    enemies.clear();
+    resetStartMenu();
+  }
+  
+  void resetStartMenu() {
+    //reset blocks
+    blocks = new Block[100];
+    for(int i = 0; i < blocks.length; i++) {
+      blocks[i] = new Block(new PVector(0, 0), 2);
+    }
+  
+    //add start menu enemies
+    for(int h = 5; h > 0; h--) {
+      for(int i = 0; i < 3; i++) {
+        int _blockSize = 4;
+        float _eOffset = _blockSize*12;
+        Enemy enemy = new Enemy(1+i, (width/8)*3 - (_eOffset*1.5)*(h-1), height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize);
+        enemies.add(enemy);
+        enemy.eFill = color(255, 255 - h*48);
+      }
     }
   }
 }
