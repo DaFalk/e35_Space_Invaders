@@ -14,6 +14,7 @@ ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 
 Spawner spawner;
+EnemyHandler enemyHandler;
 MenUI menUI;
 
 void setup() {
@@ -22,6 +23,7 @@ void setup() {
   minim = new Minim(this);
   audioHandler = new AudioHandler();
   spawner = new Spawner();
+  enemyHandler = new EnemyHandler();
   menUI = new MenUI();
 }
 
@@ -41,8 +43,8 @@ void displayGameObjects() {
     _enemy.update();
   }
   if(enemies.size() > 0) {
-    enemies.get(0).shoot();
-    spawner.moveEnemies();
+//    enemies.get(0).shoot();
+    enemyHandler.update();
   }
   //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
@@ -72,7 +74,6 @@ void resetGame() {
   enemies.clear();
   shots.clear();
   powerUps.clear();
-  menUI.showEnemies();
 }
 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.

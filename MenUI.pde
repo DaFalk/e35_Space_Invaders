@@ -23,19 +23,21 @@ class MenUI {
   }
   
   void display() {
-    if(!gameStarted) { displayStartMenu(); }
+    //Start menu
+    if(!gameStarted) {
+      displayTitle();
+      menUI.showEnemies();
+      displayEnemiesInfo();
+      displayBtns(height/4 + labelHeight*3);
+    }
     else {
+    //In-game menu
       displayPlayerUI();
       displayTotalScore();
       displayPoints();
     }
+    //ESC menu
     if(gamePaused) { displayESCMenu(); }
-  }
-  
-  void displayStartMenu() {
-    displayTitle();
-    displayEnemiesInfo();
-    displayBtns(height/4 + labelHeight*3);
   }
   
   void displayTitle() {

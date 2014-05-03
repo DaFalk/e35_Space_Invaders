@@ -4,10 +4,6 @@ class Enemy {
   int half;  //Half the size() of blocks arraylist.
   int blockSize, eSize, eHeight;
   int type, points;
-  int lastShot, nextShot;
-  int weaponType = 0;
-  int moveInterval = 100; 
-  int lastMove;
   boolean moveSwitch = false;
 
   Enemy(int _type, float _x, float _y, int _blockSize) {
@@ -15,7 +11,6 @@ class Enemy {
     this.x = _x;
     this.y = _y;
     this.points = type*10;
-    this.nextShot = spawner.enemyNextShot;
     this.blocks = new ArrayList<Block>();
     this.blockSize = _blockSize;
     this.eSize = 6*blockSize;
@@ -26,20 +21,11 @@ class Enemy {
     }
   }
   
+  //Draw this enemy type using blocks and display the blocks
   void update() {
     displayType(type);
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).display();
-    }
-  }
-
-  void shoot() {
-    if(millis() >= lastShot + nextShot) {
-      int _randomEnemy = floor(random(0, enemies.size()));
-      Enemy _enemy = enemies.get(_randomEnemy);
-      Shot s = new Shot(_enemy.x, _enemy.y + _enemy.eSize, weaponType, 10);
-      shots.add(s);
-      lastShot = millis();
     }
   }
   

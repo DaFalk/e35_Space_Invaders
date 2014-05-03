@@ -23,12 +23,14 @@ class Player {
   }
   
   void update() {
-    if(!isDead && !gamePaused) {
-      x += (right - left) * (speed*(millis()-lastMove)*0.001);
-      lastMove = millis();
-      checkCollision();
-      if(attack) { shoot(); }
-      handlePowerUp();
+    if(!isDead) {
+      if(!gamePaused) {
+        x += (right - left) * (speed*(millis()-lastMove)*0.001);
+        lastMove = millis();
+        checkCollision();
+        if(attack) { shoot(); }
+        handlePowerUp();
+      }
       drawPlayer(x, y);
     }
   }
