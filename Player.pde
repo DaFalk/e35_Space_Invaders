@@ -16,8 +16,8 @@ class Player {
     this.x = xPos - pWidth/2;
     this.lifes = 3;
     this.attack = false;
-    this.shotCooldown = 1000;
-    this.weaponType = 3;
+    this.weaponType = 0;
+    setWeaponStats(weaponType);
     y = height - pWidth;
     pHeight = pWidth/4;
   }
@@ -60,6 +60,32 @@ class Player {
     }
   }
   
+  void setWeaponStats(int _weaponType) {
+    weaponType = _weaponType;
+    powerUpStartTime = millis();
+    switch(weaponType) {
+     case(0):
+      this.shotCooldown = 1000;
+      break;
+     case(1):
+      this.shotCooldown = 2000;
+      powerUpDuration = 5000;
+      break;
+     case(2):
+      this.shotCooldown = 100;
+      powerUpDuration = 3000;
+      break;
+     case(3):
+      this.shotCooldown = 2000;
+      powerUpDuration = 10000;
+      break;
+     case(4):
+      this.shotCooldown = 4000;
+      powerUpDuration = 10000;
+      break;
+    }
+  }
+  
   void adjustLifes() {
     lifes--;
     if(lifes > 0) { spawner.respawnPlayer(this); }
@@ -73,7 +99,7 @@ class Player {
   void handlePowerUp() {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
-        weaponType = 3;
+        weaponType = 0;
         shotCooldown = 1000;
       }
     }
@@ -86,6 +112,26 @@ class Player {
     if(keyCode == LEFT) { left = 1; }
     if(keyCode == RIGHT) { right = 1; }
     if(keyCode == UP) { attack = true; }
+    
+    //testing purpose
+    switch(key) {
+      case('1'):
+       weaponType = 1;
+       setWeaponStats(weaponType);
+       break;
+      case('2'):
+       weaponType = 2;
+       setWeaponStats(weaponType);
+       break;
+      case('3'):
+       weaponType = 3;
+       setWeaponStats(weaponType);
+       break;
+      case('4'):
+       weaponType = 4;
+       setWeaponStats(weaponType);
+       break;
+    }
   }
   
   void keyUp() {

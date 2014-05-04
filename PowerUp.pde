@@ -11,7 +11,6 @@ class PowerUp {
     this.lastMove = millis();
     this.type = ceil(random(0, 4));
     this.duration = type*5000;
-    this.shotCooldown = 4000/(type*2);
   }
   
   void update() {
@@ -32,9 +31,10 @@ class PowerUp {
     stroke(0, 255, 0);
     noFill();
     ellipse(x, y, size, size);
-    if(type == 1) { stroke(color(0, 0, 255, 155)); }
+    strokeWeight(3);
+    if(type == 1) { stroke(color(70, 110, 255, 155)); }
     if(type == 2) { stroke(color(255, 155)); }
-    if(type == 3) { stroke(color(126, 155)); }
+    if(type == 3) { stroke(color(255, 70, 110, 155)); }
     if(type == 4) { stroke(color(0, 255, 0, 155)); }
     ellipse(x, y, size*2, size*2);
   }
@@ -45,10 +45,7 @@ class PowerUp {
       if(!_player.isDead) {
         if((y > _player.y - (_player.pHeight/3)*2 && y < _player.y + _player.pHeight)) {
           if((x > _player.x && x < _player.x + _player.pWidth)) {
-            _player.weaponType = type;
-            _player.powerUpStartTime = millis();
-            _player.powerUpDuration = duration;
-            _player.shotCooldown = shotCooldown;
+            _player.setWeaponStats(type);
             return true;
           }
         }

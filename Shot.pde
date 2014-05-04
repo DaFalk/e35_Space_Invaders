@@ -1,18 +1,15 @@
 class Shot {
   PVector shotPos, shotDir;
-  int lastMove, type, owner;
-  int shotSize;
-  int speed;
-  int lastShot;
-  int cooldown;
+  int lastMove, type, owner, shotSize, speed, lastShot, cooldown;
   Enemy target;
+  PVector staticTarget;
 
   Shot(PVector _shotPos, int _type, int _owner) {
     this.owner = _owner;
     this.type = _type;
     this.shotPos = _shotPos;
     this.lastMove = millis();
-    this.target = enemies.get(ceil(random(0, enemies.size()-1)));
+    target = enemies.get(ceil(random(0, enemies.size()-1)));
     this.lastShot = millis();
     if (owner < players.size()) {
       this.cooldown = players.get(owner).shotCooldown;
@@ -20,8 +17,11 @@ class Shot {
       this.shotSize = 5;
       this.speed = 500;
       if (type > 0) {
-        this.shotSize = 15;
-        if(type == 3) { speed = 200; }
+        shotSize = 15;
+        if(type == 2) {
+          shotSize = 5;
+          speed = 600;
+        }
       }
     }
     else {
@@ -30,6 +30,7 @@ class Shot {
       this.shotPos.y += shotSize;
       this.speed = 300;
     }
+    staticTarget = new PVector(random(shotPos.x - shotSize*40, shotPos.x + shotSize*40), -shotSize);
     audioHandler.playSFX(2+type);
   }
 
@@ -56,15 +57,22 @@ class Shot {
       triangle(shotPos.x - shotSize/2, shotPos.y, shotPos.x + shotSize/2, shotPos.y, shotPos.x, shotPos.y + shotSize);
     }
     else if (type == 2) {
-      stroke(255, 255, 255);
-      float angle = atan2(target.y - shotPos.y, target.x - shotPos.x);
+      stroke(126, 126, 126);
+      float angle = atan2(staticTarget.y - shotPos.y, staticTarget.x - shotPos.x);
       shotDir = new PVector(cos(angle), sin(angle));
       line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(angle), shotPos.y + abs(shotSize*sin(angle)));
     }
     else if (type == 3) {
-      stroke(126, 126, 126);
+      stroke(0, 126, 0);
+      noFill();
+      ellipse(target.x, target.y, target.eSize*3, target.eSize*3);
+      if(dist(shotPos.x, shotPos.y, target.x, target.y) < target.eSize*5) {
+        target.eFill = color(255, 70, 110);
+        target.setBlocksFill();
+      }
       float angle = atan2(target.y - shotPos.y, target.x - shotPos.x);
       shotDir = new PVector(cos(angle), sin(angle));
+      stroke(126, 0, 0);
       line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(angle), shotPos.y + abs(shotSize*sin(angle)));
     }
     else if (type == 4) {
@@ -74,13 +82,13 @@ class Shot {
         strokeWeight(2);
         float _x = players.get(owner).x + players.get(owner).pWidth/2;
         float _y = players.get(owner).y;
-        for (int i = enemies.size()-1; i > -1; i--) {
+        for(int i = enemies.size()-1; i > -1; i--) {
           target = enemies.get(i);
         }
         bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
         return;
       }
-      audioHandler.audioBank[5].pause();
+      audioHandler.audioBank[2+type].pause();
       shots.remove(this);
     }
   }
@@ -107,28 +115,25 @@ class Shot {
     }
     
     //Special collision for type 3 and 4
-    if (type == 3 || type == 4) {
-      if(type == 3) {
-        if(target.isDead) {
-          this.target = enemies.get(ceil(random(0, enemies.size()-1)));
-        }
-        if (shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
-          if (shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
-            target.killEnemy();
-            players.get(owner).score += target.points;
-            if (type != 1) {
-              return true;
-            }
-          }
-        }
+    if(type == 3) {
+      if(target.isDead) {
+        this.target = enemies.get(ceil(random(0, enemies.size()-1)));
       }
-      if(type == 4) {
-        if(millis() - lastShot >= cooldown) {
+      if (shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
+        if (shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
           target.killEnemy();
           players.get(owner).score += target.points;
-          lastShot = millis();
-          return true;
         }
+      }
+      return false;
+    }
+    
+    if(type == 4) {
+      if(millis() - lastShot >= cooldown) {
+        target.killEnemy();
+        players.get(owner).score += target.points;
+        lastShot = millis();
+        return true;
       }
       return false;
     }

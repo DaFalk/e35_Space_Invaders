@@ -8,8 +8,8 @@ class AudioHandler {
     audioBank[2] = minim.loadFile("weaponType0.wav");
     audioBank[3] = minim.loadFile("weaponType1.wav");
     audioBank[4] = audioBank[2];
-    audioBank[5] = audioBank[2];
-    audioBank[6] = minim.loadFile("weaponType2.mp3");
+    audioBank[5] = minim.loadFile("weaponType3.mp3");
+    audioBank[6] = minim.loadFile("weaponType4.mp3");
     for(int i = 1; i < audioBank.length; i++) {
       audioBank[i].setGain(-18);
     }
