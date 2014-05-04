@@ -6,9 +6,9 @@ class Player {
   int speed = 150;
   int score = 0;
   boolean attack;
-  int weaponType;
+  int weaponType, weaponDamage;
   int powerUpStartTime;
-  int powerUpDuration = 10000;
+  int powerUpDuration;
   boolean isDead = false;
   
   Player(float xPos) {
@@ -17,6 +17,9 @@ class Player {
     this.lifes = 3;
     this.attack = false;
     this.weaponType = 0;
+    this.weaponDamage = 6;
+    this.shotCooldown = shotCooldown;
+    this.powerUpDuration = powerUpDuration;
     setWeaponStats(weaponType);
     y = height - pWidth;
     pHeight = pWidth/4;
@@ -53,36 +56,10 @@ class Player {
   }
   
   void shoot() {
-    if(millis() >= lastShot + shotCooldown) {
-      Shot s = new Shot(new PVector(x + pWidth/2, y - pHeight), weaponType, players.indexOf(this));
+    if(millis() - lastShot >= shotCooldown) {
+      Shot s = new Shot(new PVector(x + pWidth/2, y - pHeight), weaponType, players.indexOf(this), weaponDamage);
       shots.add(s);
       lastShot = millis();
-    }
-  }
-  
-  void setWeaponStats(int _weaponType) {
-    weaponType = _weaponType;
-    powerUpStartTime = millis();
-    switch(weaponType) {
-     case(0):
-      this.shotCooldown = 1000;
-      break;
-     case(1):
-      this.shotCooldown = 2000;
-      powerUpDuration = 5000;
-      break;
-     case(2):
-      this.shotCooldown = 100;
-      powerUpDuration = 3000;
-      break;
-     case(3):
-      this.shotCooldown = 2000;
-      powerUpDuration = 10000;
-      break;
-     case(4):
-      this.shotCooldown = 4000;
-      powerUpDuration = 10000;
-      break;
     }
   }
   
@@ -103,6 +80,37 @@ class Player {
         shotCooldown = 1000;
       }
     }
+  }
+  
+  void setWeaponStats(int _weaponType) {
+    weaponType = _weaponType;
+    powerUpStartTime = millis();
+    switch(weaponType) {
+     case(0):
+      shotCooldown = 1000;
+      break;
+     case(1):
+      shotCooldown = 2000;
+      weaponDamage = 6;
+      powerUpDuration = 5000;
+      break;
+     case(2):
+      shotCooldown = 100;
+      weaponDamage = 2;
+      powerUpDuration = 3000;
+      break;
+     case(3):
+      shotCooldown = 2000;
+      weaponDamage = 6;
+      powerUpDuration = 10000;
+      break;
+     case(4):
+      shotCooldown = 200;
+      weaponDamage = 1;
+      powerUpDuration = 10000;
+      break;
+    }
+    lastShot = shotCooldown;
   }
   
   void keyDown() {

@@ -3,7 +3,7 @@ class Enemy {
   float x, y;
   int half;  //Half the size() of blocks arraylist.
   int blockSize, eSize, eHeight;
-  int type, points;
+  int type, lifes, points;
   int lastAnim, nextAnim;
   boolean moveSwitch = false;
   boolean isDead;
@@ -12,6 +12,7 @@ class Enemy {
   Enemy(int _type, float _x, float _y, int _blockSize) {
     this.isDead = false;
     this.type = _type;
+    this.lifes = 6;
     this.x = _x;
     this.y = _y;
     this.points = type*10;
@@ -20,12 +21,9 @@ class Enemy {
     this.blockSize = _blockSize;
     this.eSize = 6*blockSize;
     this.eHeight = 4*blockSize;
-    nextAnim = enemyHandler.nextMove;
+    nextAnim = enemyHandler.nextMove*2;
     this.half = ceil(setArrayLength()/2);
-    for (int i = 0; i < setArrayLength(); i ++) {
-      blocks.add(new Block(new PVector(x, y), blockSize));
-      blocks.get(i).bFill = eFill;
-    }
+    colorBlocks();
   }
   
   //Draw this enemy type using blocks and display the blocks
@@ -37,20 +35,28 @@ class Enemy {
     animateEnemy();
   }
   
-  void killEnemy() {
-    isDead = true;
-    spawner.spawnPowerUp(x, y, (float)eSize);
-    if(enemies.size() > 1) {
-      enemies.remove(this);
-      for(int i = blocks.size()-1; i > -1; i--) {
-        blocks.get(i).deathPos = new PVector(x, y);
-        blocks.get(i).lastMove = millis();
-      }
-      menUI.pointsTexts.add(new PointsText(x, y, points));
+  void damageEnemy(int _player, int _dmg) {
+    if(lifes > 0) {
+       lifes -= _dmg;
+       eFill = color(255, 51*(lifes-1), 51*(lifes-1));
+       colorBlocks();
     }
-    else {
-      menUI.pointsTexts.add(new PointsText(enemies.get(0).x, enemies.get(0).y, enemies.get(0).points));
-      spawner.respawnEnemies();
+    if(lifes <= 0) {
+      isDead = true;
+      spawner.spawnPowerUp(x, y, (float)eSize);
+      if(enemies.size() > 1) {
+        enemies.remove(this);
+        for(int i = blocks.size()-1; i > -1; i--) {
+          blocks.get(i).deathPos = new PVector(x, y);
+          blocks.get(i).lastMove = millis();
+        }
+        players.get(_player).score += points;
+        menUI.pointsTexts.add(new PointsText(x, y, points));
+      }
+      else {
+        menUI.pointsTexts.add(new PointsText(enemies.get(0).x, enemies.get(0).y, enemies.get(0).points));
+        spawner.respawnEnemies();
+      }
     }
   }
 
@@ -194,6 +200,13 @@ class Enemy {
           blocks.get(17 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
         }
       }
+    }
+  }
+  
+  void colorBlocks() {
+    for (int i = 0; i < setArrayLength(); i ++) {
+      blocks.add(new Block(new PVector(x, y), blockSize));
+      blocks.get(i).bFill = eFill;
     }
   }
   

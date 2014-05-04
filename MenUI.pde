@@ -254,7 +254,6 @@ class MenUI {
     players.clear();
     shots.clear();
     powerUps.clear();
-    enemies.clear();
     resetStartMenu();
   }
   
@@ -267,6 +266,7 @@ class MenUI {
     }
   
     //add start menu enemies
+    enemyHandler.reset();
     for(int h = 5; h > 0; h--) {
       for(int i = 0; i < 3; i++) {
         int _blockSize = 4;

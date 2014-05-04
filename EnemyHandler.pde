@@ -63,7 +63,7 @@ class EnemyHandler {
       int _randomEnemy = floor(random(0, enemies.size()));
       nextShot = ceil(random(500, shotTimer));
       Enemy _enemy = enemies.get(_randomEnemy);
-      Shot s = new Shot(new PVector(_enemy.x, _enemy.y + _enemy.eHeight), 0, 10);
+      Shot s = new Shot(new PVector(_enemy.x, _enemy.y + _enemy.eHeight), 0, 10, 0);
       shots.add(s);
       lastShot = millis();
     }

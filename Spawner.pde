@@ -51,7 +51,7 @@ class Spawner {
   void respawnEnemies() {
     enemies.clear();
     enemyHandler.dirX = 1;
-    enemyHandler.nextMove -= 50;
+    enemyHandler.nextMove -= 25;
     enemyHandler.shotTimer -= 50;
     spawnEnemies();
   }
