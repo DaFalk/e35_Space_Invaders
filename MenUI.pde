@@ -20,7 +20,7 @@ class MenUI {
   MenUI() {
     btnLabelY = btnLabelY;
     showEnemies();
-    c1 = color(0, 0, 0);
+    c1 = color(0, 0, 0, 0);
     c2 = color(70, 115, 120);
     resetStartMenu();
   }
@@ -28,11 +28,12 @@ class MenUI {
   void display() {
     //Start menu
     if(!gameStarted) {
+      drawBackground(height*0.2, height*0.625);
       displayStars();
       displayTitle();
       showEnemies();
       displayEnemiesInfo();
-      displayBtns(height/4 + labelHeight*3);
+      displayBtns(height/4 + labelHeight*3, 2);
     }
     else {
     //In-game UI
@@ -82,41 +83,42 @@ class MenUI {
     }
   }
   
-  void displayStars() {
-    //background gradient
+  void drawBackground(float _y, float _height) {
     noFill();
     int _counter = 0;
-    for(int i = 0; i < height*0.625; i++) {
-      if(i > height*0.3125) {
+    for(int i = 0; i < _height; i++) {
+      if(i > _height/2) {
         _counter += 2;
       }
       color c = lerpColor(c1, c2, (i-_counter)/(height/2.75));
       stroke(c);
-      line(0, height*0.2 + i, width, height*0.2 + i);
+      line(0, _y + i, width, _y + i);
     }
-    //stars
+  }
+  
+  void displayStars() {
     fill(255);
     for(int i = 0; i < blocks.length; i++) {
       blocks[i].moveBlock();
     }
   }
   
-  void displayBtns(float offsetY) {
+  void displayBtns(float offsetY, int numBtns) {
     textAlign(CENTER, CENTER);
     for(int i = 0; i < numBtns; i++) {
       if(!gameStarted) {
         if(!gamePaused) {
           if(i == 0) { btnLabel = "Singleplayer"; }
-          if(i == 1) { btnLabel = "Multiplayer"; }
+          if(i == numBtns-1) { btnLabel = "Multiplayer"; }
         }
         else {
           if(i == 0) { btnLabel = "yes"; }
-          if(i == 1) { btnLabel = "NO"; }
+          if(i == numBtns-1) { btnLabel = "NO"; }
         }
       }
       else {
         if(i == 0) { btnLabel = "Resume"; }
-        if(i == 1) { btnLabel = "Quit"; }
+        if(i == numBtns-1) { btnLabel = "Quit"; }
       }
       
       fill(126, 126, 126);
@@ -141,11 +143,11 @@ class MenUI {
             }
             //In-game pause button actions.
             else {
-              if(i == 0) {
+              if(i == 0 && numBtns > 1) {
                 gamePaused = false;
                 calcAllLifes();
               }
-              else if(i == 1) { resetGame(); }
+              if(i == numBtns-1) { resetGame(); }
             }
             audioHandler.playSFX(1);
           }
@@ -234,11 +236,20 @@ class MenUI {
   void displayESCMenu() {
     if(gameStarted) {
       rectMode(CENTER);
-      fill(0, 255, 0, 50);
-      float menuHeight = labelHeight*4;
-      float menuWidth = menuHeight*4;
-      rect(width/2, height/2, menuWidth, menuHeight);
-      displayBtns(-menuHeight/2 + labelHeight*0.9);
+      fill(0, 255, 0, 70);
+      int playersAlive = 0;
+      for(int i = players.size()-1; i > -1; i--) {
+        if(!players.get(i).isDead) { playersAlive++; }
+      }
+      if(playersAlive > 0) {
+        float menuHeight = labelHeight*4;
+        drawBackground(height/2 - menuHeight*1.5, menuHeight*3);
+        displayBtns(-menuHeight/2 + labelHeight*0.9, 2);
+      }
+      else {
+        drawBackground(height*0.65, height*0.625);
+        displayBtns(height/4 + labelHeight*3, 1);
+      }
     }
     else {
       fill(180, 0, 0);

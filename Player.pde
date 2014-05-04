@@ -140,6 +140,9 @@ class Player {
        weaponType = 4;
        setWeaponStats(weaponType);
        break;
+      case('e'):
+       adjustLifes();
+       break;
     }
   }
   
