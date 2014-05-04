@@ -7,8 +7,7 @@ class Player {
   int score = 0;
   boolean attack;
   int weaponType, weaponDamage;
-  int powerUpStartTime;
-  int powerUpDuration;
+  int powerUpStartTime, powerUpDuration;
   boolean isDead = false;
   
   Player(float xPos) {
@@ -16,11 +15,9 @@ class Player {
     this.x = xPos - pWidth/2;
     this.lifes = 3;
     this.attack = false;
-    this.weaponType = 0;
-    this.weaponDamage = 6;
     this.shotCooldown = shotCooldown;
     this.powerUpDuration = powerUpDuration;
-    setWeaponStats(weaponType);
+    setWeaponStats(0);
     y = height - pWidth;
     pHeight = pWidth/4;
   }
@@ -76,8 +73,7 @@ class Player {
   void handlePowerUp() {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
-        weaponType = 0;
-        shotCooldown = 1000;
+        setWeaponStats(0);
       }
     }
   }
@@ -87,6 +83,7 @@ class Player {
     powerUpStartTime = millis();
     switch(weaponType) {
      case(0):
+      weaponDamage = 6;
       shotCooldown = 1000;
       break;
      case(1):
@@ -123,6 +120,10 @@ class Player {
     
     //testing purpose
     switch(key) {
+      case('0'):
+       weaponType = 0;
+       setWeaponStats(weaponType);
+       break;
       case('1'):
        weaponType = 1;
        setWeaponStats(weaponType);

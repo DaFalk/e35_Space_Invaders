@@ -25,7 +25,7 @@ class Spawner {
 
   void spawnEnemies() {
     enemyHandler.eSize = enemySize;
-    enemyHandler.moveDist = enemyStepX/4;
+    enemyHandler.moveDist = enemyStepX/2;
     for(int row = 0; row < enemyRows; row++) {
       for(int col = 0; col < enemyCols; col++) {
         int _type = 3;
@@ -39,7 +39,7 @@ class Spawner {
   }
   
   void spawnPowerUp(float _x, float _y, float _size) {
-    if(random(0, 100) > 85) {
+    if(random(0, 100) > 90) {
       powerUps.add(new PowerUp(_x, _y, _size));
     }
   }
