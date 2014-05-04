@@ -56,11 +56,11 @@ class PowerUp {
           if((x > _player.x && x < _player.x + _player.pWidth)) {
             if(type > 0) {
               _player.setWeaponTimers(type);
-              audioHandler.playSFX(2);
+              audioHandler.playSFX(4);
             }
             else {
               _player.hasShield = true;
-              audioHandler.playSFX(3);
+              audioHandler.playSFX(5);
             }
             return true;
           }

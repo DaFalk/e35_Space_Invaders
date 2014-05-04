@@ -1,3 +1,7 @@
+//
+//
+// Accesse classes: Enemy, Shot
+
 class EnemyHandler {
   int dirX;
   int eSize;

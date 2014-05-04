@@ -1,3 +1,7 @@
+//
+//
+// Accesse classes: Enemy, Player
+
 class MenUI {
   int titleSize = 74;
   int lastTick = 0;

@@ -18,14 +18,16 @@ class Shot {
     setShotStats();
     target = enemies.get(ceil(random(0, enemies.size()-1)));
     staticTarget = new PVector(random(shotPos.x - shotSize*20, shotPos.x + shotSize*20), -shotSize);
-    audioHandler.playSFX(5+type);
+    audioHandler.playSFX(7+type);
   }
 
   void update() {
     if(!gamePaused) {
       shotPos.add(new PVector((speed*shotDir.x)*((millis()-lastMove)*0.001), (speed*shotDir.y)*((millis()-lastMove)*0.001)));
       lastMove = millis();
-      if(checkCollision()) { shots.remove(this); }
+      if(checkCollision()) {
+        shots.remove(this);
+      }
     }
     drawShot();
   }
@@ -78,7 +80,7 @@ class Shot {
             }
           }
           if((!_player.attack && _player.weaponType != 4) || target.isDead) {
-            audioHandler.audioBank[5+type].pause();
+            audioHandler.audioBank[7+type].pause();
             shots.remove(this);
           }
         }
@@ -120,7 +122,7 @@ class Shot {
       if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
         if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
           target.damageEnemy(owner, damage);
-          audioHandler.audioBank[2+type].pause();
+          audioHandler.audioBank[7+type].pause();
           return true;
         }
       }

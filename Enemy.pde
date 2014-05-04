@@ -1,3 +1,7 @@
+//
+//
+// Accesse classes: spawner, menUI, audioHandler, enemyHandler, players[], enemies[]
+
 class Enemy {
   ArrayList<Block> blocks;
   float x, y;
@@ -36,14 +40,18 @@ class Enemy {
   }
   
   void damageEnemy(int _player, int _dmg) {
+   //Deal damage to enemy.
     if(lifes > 0) {
        lifes -= _dmg;
        eFill = color(255, 51*(lifes-1), 51*(lifes-1));
        colorBlocks();
     }
+   //Kill enemy, if it is the last then respawn all enemies.
     if(lifes <= 0) {
       isDead = true;
+      audioHandler.playSFX(2);
       spawner.spawnPowerUp(x, y, (float)eSize);
+     //remove enemy, add points to player score and show points UI.
       if(enemies.size() > 1) {
         enemies.remove(this);
         for(int i = blocks.size()-1; i > -1; i--) {
@@ -53,9 +61,10 @@ class Enemy {
         players.get(_player).score += points;
         menUI.pointsTexts.add(new PointsText(x, y, points));
       }
-      else {
+      else {  //Add points to player score, show points UI and respawn enemies.
+        players.get(_player).score += points;
         menUI.pointsTexts.add(new PointsText(enemies.get(0).x, enemies.get(0).y, enemies.get(0).points));
-        audioHandler.playSFX(4);
+        audioHandler.playSFX(6);
         spawner.respawnEnemies = true;
       }
     }
