@@ -27,12 +27,16 @@ class EnemyHandler {
       if(millis() - lastMove >= nextMove) {
         if(!moveDown) {
           for(int i = enemies.size()-1; i > -1; i--) {
-            enemies.get(i).x += moveDist*dirX;
+            if(!enemies.get(i).isDead) {
+              enemies.get(i).x += moveDist*dirX;
+            }
           }
         }
         else {
           for(int i = enemies.size()-1; i > -1; i--) {
-            enemies.get(i).y += moveDist;
+            if(!enemies.get(i).isDead) {
+              enemies.get(i).y += moveDist;
+            }
           }
           dirX *= -1;
         }

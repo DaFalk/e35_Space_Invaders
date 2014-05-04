@@ -7,15 +7,16 @@ boolean gamePaused = false;
 boolean isMultiplayer = false;
 boolean mouseClicked = false;
 
+Spawner spawner;
+EnemyHandler enemyHandler;
+MenUI menUI;
+
 //Each game object is stored in an array list associated to that kind of object.
 ArrayList<Player> players = new ArrayList<Player>(); //Player 1 is players.get(0) while Player 2 is players.get(1).
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
-
-Spawner spawner;
-EnemyHandler enemyHandler;
-MenUI menUI;
+Cover cover;
 
 void setup() {
   size(800, 600);
@@ -24,6 +25,7 @@ void setup() {
   spawner = new Spawner();
   enemyHandler = new EnemyHandler();
   menUI = new MenUI();
+  cover = new Cover();
 }
 
 void draw() {
@@ -60,10 +62,11 @@ void displayGameObjects() {
     PowerUp _powerUp = powerUps.get(i);
     _powerUp.update();
   }
-  rectMode(CENTER);
-  noStroke();
-  fill(0, 255, 0);
-  rect(width/2 , height - height/60, width, height/30);
+  cover.display();
+//  rectMode(CENTER);
+//  noStroke();
+//  fill(0, 255, 0);
+//  rect(width/2 , height - height/60, width, height/30);
 }
 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.

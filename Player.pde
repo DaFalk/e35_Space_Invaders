@@ -17,7 +17,7 @@ class Player {
     this.lifes = 3;
     this.attack = false;
     this.shotCooldown = 1000;
-    this.weaponType = 0;
+    this.weaponType = 3;
     y = height - pWidth;
     pHeight = pWidth/4;
   }
@@ -73,7 +73,7 @@ class Player {
   void handlePowerUp() {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
-        weaponType = 0;
+        weaponType = 3;
         shotCooldown = 1000;
       }
     }

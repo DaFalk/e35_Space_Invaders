@@ -18,7 +18,7 @@ class AudioHandler {
   void manage() {
     if(gamePaused) { audioBank[0].setGain(-20); }
     else { audioBank[0].setGain(-15); }
-//    playThemeSong();
+    playThemeSong();
   }
   
   void playThemeSong() {
@@ -31,7 +31,7 @@ class AudioHandler {
   void playSFX(int SFXIndex) {
     if(SFXIndex < audioBank.length) {
       audioBank[SFXIndex].rewind();
-//      audioBank[SFXIndex].play();
+      audioBank[SFXIndex].play();
     }
   }
 }

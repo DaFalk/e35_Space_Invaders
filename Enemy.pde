@@ -6,9 +6,11 @@ class Enemy {
   int type, points;
   int lastAnim, nextAnim;
   boolean moveSwitch = false;
+  boolean isDead;
   color eFill;
 
   Enemy(int _type, float _x, float _y, int _blockSize) {
+    this.isDead = false;
     this.type = _type;
     this.x = _x;
     this.y = _y;
@@ -22,12 +24,13 @@ class Enemy {
     this.half = ceil(setArrayLength()/2);
     for (int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(new PVector(x, y), blockSize));
+      blocks.get(i).bFill = eFill;
     }
   }
   
   //Draw this enemy type using blocks and display the blocks
   void update() {
-    displayType(type);
+    if(!isDead) { displayType(type); }
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).display();
     }
@@ -35,9 +38,14 @@ class Enemy {
   }
   
   void killEnemy() {
+    isDead = true;
     spawner.spawnPowerUp(x, y, (float)eSize);
     if(enemies.size() > 1) {
       enemies.remove(this);
+      for(int i = blocks.size()-1; i > -1; i--) {
+        blocks.get(i).deathPos = new PVector(x, y);
+        blocks.get(i).lastMove = millis();
+      }
       menUI.pointsTexts.add(new PointsText(x, y, points));
     }
     else {
@@ -54,8 +62,13 @@ class Enemy {
     else { return 0; }
   }
   
+  void setBlocksFill() {
+    for (int i = 0; i < setArrayLength(); i ++) {
+      blocks.get(i).bFill = eFill;
+    }
+  }
+  
   void displayType(int _type) {
-    fill(eFill);
     if(_type == 1) {
       for (int i = 0; i < 2; i++) {
         int _flip = 1 - i*2;

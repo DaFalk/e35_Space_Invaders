@@ -21,7 +21,7 @@ class MenUI {
     btnLabelY = btnLabelY;
     showEnemies();
     c1 = color(0, 0, 0);
-    c2 = color(0, 0, 255);
+    c2 = color(70, 115, 120);
     resetStartMenu();
   }
   
@@ -263,6 +263,7 @@ class MenUI {
     blocks = new Block[100];
     for(int i = 0; i < blocks.length; i++) {
       blocks[i] = new Block(new PVector(0, 0), 2);
+      blocks[i].bFill = color(255, 150);
     }
   
     //add start menu enemies
@@ -273,6 +274,7 @@ class MenUI {
         Enemy enemy = new Enemy(1+i, (width/8)*3 - (_eOffset*1.5)*(h-1), height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize);
         enemies.add(enemy);
         enemy.eFill = color(255, 255 - h*48);
+        enemy.setBlocksFill();
       }
     }
   }

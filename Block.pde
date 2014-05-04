@@ -1,24 +1,33 @@
 class Block {
   PVector blockPos;
+  PVector deathPos;
   int blockSize;
   int lastMove, speed;
-  boolean release = false;
+  color bFill;
   
   Block(PVector _blockPos, int _blockSize) {
     this.blockPos = _blockPos;
     this.blockSize = _blockSize;
+    this.speed = 200;
     if(!gameStarted) { this.blockPos = randomStarPos(); }
   }
   
   void display() {
     rectMode(CENTER);
     noStroke();
-    if(release) { releaseBlock(); }
+    fill(bFill);
+    if(deathPos != null) { releaseBlock(); }
     rect(blockPos.x, blockPos.y, blockSize, blockSize);
   }
   
   void releaseBlock() {
+    int flip;
+    if(blockPos.x < deathPos.x) { flip = -1; }
+    else { flip = 1; }
+    float angle = atan2(deathPos.y - cover.groundY, deathPos.x + 100*flip);
+    blockPos.x += (cos(angle)*speed)*(millis()-lastMove)*0.001;
     blockPos.y += 96*(millis()-lastMove)*0.001;
+    angle = angle*0.9;
     lastMove = millis();
   }
   
