@@ -33,40 +33,37 @@ void draw() {
   audioHandler.manage();
   if(gameStarted) { displayGameObjects(); }
   menUI.display();
-  //mouseClicked is set to false at end of draw() to allow only 1 mousebutton input when mouseClicked is true.
-  mouseClicked = false;
+  mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }
 
 void displayGameObjects() {
-  //Iterates enemies array list and updates every enemy. 
+ //Iterates enemies array list and updates every enemy. 
   for(int i = enemies.size() - 1; i >= 0; i--) {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
   }
   enemyHandler.update();
+  spawner.respawnEnemies();
   
-  //Iterate shots array list and updates every shot. 
+ //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
     Shot _shot = shots.get(i);
     _shot.update();
   }
   
-  //Iterates players array list and updates every player.
+ //Iterates players array list and updates every player.
   for(int i = players.size() - 1; i >= 0; i--) {
     Player _player = players.get(i);
     _player.update();
   }
   
-  //Iterates powerUps array list and updates every powerup. 
+ //Iterates powerUps array list and updates every powerup. 
   for(int i = powerUps.size() - 1; i >= 0; i--) {
     PowerUp _powerUp = powerUps.get(i);
     _powerUp.update();
   }
+ //Display ground and cover
   cover.display();
-//  rectMode(CENTER);
-//  noStroke();
-//  fill(0, 255, 0);
-//  rect(width/2 , height - height/60, width, height/30);
 }
 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
@@ -77,9 +74,8 @@ void keyReleased() {
   }
 }
 void keyPressed() {
-  //If ESC cancel other ESC events (e.g. quiting the program) and pause game.
-  if(key == 27) {
-    key = 0;
+  if(key == 27) {  //Key 27 = ESC
+    key = 0;  //Cancel other ESC events(e.g. quit processing).
     gamePaused = !gamePaused;
   }
   if(gameStarted) {
@@ -88,8 +84,5 @@ void keyPressed() {
   }
 }
 void mousePressed() {
-  mouseClicked = true;
-}
-
-void mouseClicked() {
+  mouseClicked = true;  //Register mousePressed as a click.
 }

@@ -211,7 +211,7 @@ class MenUI {
       for(int i = 0; i < _player.lifes; i++) {
         float p1LifesX = (tx + (_player.pWidth*1.25)*i)*(1-p);
         float p2LifesX = (width - tx - _player.pWidth - (_player.pWidth*1.5)*i)*p;
-        _player.drawPlayer(p1LifesX + p2LifesX, _player.pWidth);
+        _player.drawPlayer(p1LifesX + p2LifesX, _player.pWidth, false);
       }
       totalScore += _player.score;
     }

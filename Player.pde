@@ -6,18 +6,20 @@ class Player {
   int speed = 150;
   int score = 0;
   boolean attack;
-  int weaponType, weaponDamage;
+  int weaponType;
   int powerUpStartTime, powerUpDuration;
   boolean isDead = false;
+  boolean hasShield;
   
   Player(float xPos) {
     this.lifesLabel = "LIFES";
     this.x = xPos - pWidth/2;
     this.lifes = 3;
     this.attack = false;
+    this.hasShield = false;
     this.shotCooldown = shotCooldown;
     this.powerUpDuration = powerUpDuration;
-    setWeaponStats(0);
+    setWeaponTimers(0);
     y = height - pWidth;
     pHeight = pWidth/4;
   }
@@ -31,11 +33,12 @@ class Player {
         if(attack) { shoot(); }
         handlePowerUp();
       }
-      drawPlayer(x, y);
+      drawPlayer(x, y, true);
     }
   }
   
-  void drawPlayer(float _x, float _y) {
+//Draw player and shield if this drawn player is active.
+  void drawPlayer(float _x, float _y, boolean _active) {
     rectMode(CORNER);
     noStroke();
     fill(0, 255, 0);
@@ -45,21 +48,30 @@ class Player {
     //Canon
     rect(_x + pWidth/2.5, _y - pWidth/5, pWidth/5, pWidth/5);
     rect(_x + pWidth*(0.5 - (0.075/2)), _y - pWidth/3.5, pWidth*0.075, pWidth/3.5);
+    if(_active) {
+      if(hasShield) {
+        fill(200, 200, 255,100);
+        ellipse(_x + pWidth/2, _y + pHeight/3, pWidth*1.4, pWidth*0.85);
+      }
+    }
   }
   
+//Keep player within bounds.
   void checkCollision() {
     if(x <= 0) { x = 0; }
     if(x >= width - pWidth) { x = width - pWidth; }
   }
   
+//Trigger a shot of current weapon type.
   void shoot() {
     if(millis() - lastShot >= shotCooldown) {
-      Shot s = new Shot(new PVector(x + pWidth/2, y - pHeight), weaponType, players.indexOf(this), weaponDamage);
+      Shot s = new Shot(new PVector(x + pWidth/2, y - pHeight), weaponType, players.indexOf(this));
       shots.add(s);
       lastShot = millis();
     }
   }
   
+//Subtract life and check if player is dead.
   void adjustLifes() {
     lifes--;
     if(lifes > 0) { spawner.respawnPlayer(this); }
@@ -70,44 +82,42 @@ class Player {
     }
   }
   
+//Manage powerup duration and ajdust weapon type.
   void handlePowerUp() {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
-        setWeaponStats(0);
+        setWeaponTimers(0);
       }
     }
   }
   
-  void setWeaponStats(int _weaponType) {
+//Set the stats of the current weapon type.
+  void setWeaponTimers(int _weaponType) {
     weaponType = _weaponType;
     powerUpStartTime = millis();
+    
     switch(weaponType) {
-     case(0):
-      weaponDamage = 6;
-      shotCooldown = 1000;
+      case(0):  //Normal shot.
+        shotCooldown = 1000;
       break;
-     case(1):
-      shotCooldown = 2000;
-      weaponDamage = 6;
-      powerUpDuration = 5000;
+      case(1):  //Piercing shot.
+        shotCooldown = 2000;
+        powerUpDuration = 5000;
       break;
-     case(2):
-      shotCooldown = 100;
-      weaponDamage = 2;
-      powerUpDuration = 3000;
+      case(2):  //Rapid shot.
+        shotCooldown = 100;
+        powerUpDuration = 3000;
       break;
-     case(3):
-      shotCooldown = 2000;
-      weaponDamage = 6;
-      powerUpDuration = 10000;
+      case(3):  //Homeseking missile
+        shotCooldown = 2000;
+        powerUpDuration = 10000;
       break;
-     case(4):
-      shotCooldown = 200;
-      weaponDamage = 1;
-      powerUpDuration = 10000;
+      case(4):  //Charge beam
+        shotCooldown = 200;
+        powerUpDuration = 10000;
       break;
     }
-    lastShot = shotCooldown;
+    lastShot = millis();
   }
   
   void keyDown() {
@@ -120,29 +130,28 @@ class Player {
     
     //testing purpose
     switch(key) {
-      case('0'):
-       weaponType = 0;
-       setWeaponStats(weaponType);
-       break;
-      case('1'):
-       weaponType = 1;
-       setWeaponStats(weaponType);
-       break;
-      case('2'):
-       weaponType = 2;
-       setWeaponStats(weaponType);
-       break;
-      case('3'):
-       weaponType = 3;
-       setWeaponStats(weaponType);
-       break;
-      case('4'):
-       weaponType = 4;
-       setWeaponStats(weaponType);
-       break;
-      case('e'):
-       adjustLifes();
-       break;
+    case('0'):
+      hasShield = true;
+    break;
+    case('1'):
+      weaponType = 1;
+      setWeaponTimers(weaponType);
+    break;
+    case('2'):
+      weaponType = 2;
+      setWeaponTimers(weaponType);
+    break;
+    case('3'):
+      weaponType = 3;
+      setWeaponTimers(weaponType);
+    break;
+    case('4'):
+      weaponType = 4;
+      setWeaponTimers(weaponType);
+    break;
+    case('e'):
+      adjustLifes();
+    break;
     }
   }
   

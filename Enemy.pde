@@ -55,7 +55,8 @@ class Enemy {
       }
       else {
         menUI.pointsTexts.add(new PointsText(enemies.get(0).x, enemies.get(0).y, enemies.get(0).points));
-        spawner.respawnEnemies();
+        audioHandler.playSFX(4);
+        spawner.respawnEnemies = true;
       }
     }
   }

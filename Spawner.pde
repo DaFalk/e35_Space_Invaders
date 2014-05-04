@@ -4,6 +4,7 @@ class Spawner {
   int blockSize = 2;
   int enemySize;
   float enemyStepX;
+  boolean respawnEnemies = false;
   
   Spawner() {
     enemySize = blockSize*12;
@@ -49,10 +50,15 @@ class Spawner {
   }
   
   void respawnEnemies() {
-    enemies.clear();
-    enemyHandler.dirX = 1;
-    enemyHandler.nextMove -= 25;
-    enemyHandler.shotTimer -= 50;
-    spawnEnemies();
+    if(respawnEnemies) {
+      if(!audioHandler.audioBank[4].isPlaying()) {
+        enemies.clear();
+        enemyHandler.dirX = 1;
+        enemyHandler.nextMove -= 25;
+        enemyHandler.shotTimer -= 50;
+        spawnEnemies();
+        respawnEnemies = false;
+      }
+    }
   }
 }
