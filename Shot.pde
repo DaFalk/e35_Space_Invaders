@@ -23,8 +23,10 @@ class Shot {
 
   void update() {
     if(!gamePaused) {
-      shotPos.add(new PVector((speed*shotDir.x)*((millis()-lastMove)*0.001), (speed*shotDir.y)*((millis()-lastMove)*0.001)));
-      lastMove = millis();
+      if(type != 4) {
+        shotPos.add(new PVector((speed*shotDir.x)*((millis()-lastMove)*0.001), (speed*shotDir.y)*((millis()-lastMove)*0.001)));
+        lastMove = millis();
+      }
       if(checkCollision()) {
         shots.remove(this);
       }
@@ -69,14 +71,18 @@ class Shot {
           Player _player = players.get(owner);
           if(_player.attack && _player.weaponType == 4) {
             noFill();
-            stroke(0, 220, 0, 150);
+            stroke(10, 210, 210, random(20, 100));
+            strokeWeight(2.5);
             float _x = _player.x + _player.pWidth/2;
-            float _y = _player.y;
+            float _y = _player.y - _player.pHeight/2;
             for(int i = enemies.size()-1; i > -1; i--) {
               target = enemies.get(i);
             }
             if(!target.isDead) {
-              bezier(_x, _y, _x, _y - (_y - width/2), target.x, target.y + (width/2 - target.y), target.x, target.y);
+              bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
+              stroke(110, 255, 255, random(0, 75));
+              strokeWeight(ceil(random(4, 8)));
+              bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
             }
           }
           if((!_player.attack && _player.weaponType != 4) || target.isDead) {
@@ -116,9 +122,6 @@ class Shot {
     }
    //Special collision for type 3
     if(type == 3 && !target.isDead) {
-      if(target.isDead) {
-        this.target = enemies.get(ceil(random(0, enemies.size()-1)));
-      }
       if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
         if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
           target.damageEnemy(owner, damage);

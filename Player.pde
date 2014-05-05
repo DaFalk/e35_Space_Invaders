@@ -109,8 +109,8 @@ class Player {
         powerUpDuration = 3000;
       break;
       case(3):  //Homeseking missile
-        shotCooldown = 2000;
-        powerUpDuration = 10000;
+        shotCooldown = 1000;
+        powerUpDuration = 4000;
       break;
       case(4):  //Charge beam
         shotCooldown = 200;
