@@ -51,7 +51,7 @@ class Spawner {
   
   void respawnEnemies() {
     if(respawnEnemies) {
-      if(!audioHandler.audioBank[4].isPlaying()) {
+      if(!audioHandler.audioBank[6].isPlaying()) {
         enemies.clear();
         enemyHandler.dirX = 1;
         enemyHandler.nextMove -= 25;

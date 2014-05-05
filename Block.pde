@@ -8,6 +8,7 @@ class Block {
   Block(PVector _blockPos, int _blockSize) {
     this.blockPos = _blockPos;
     this.blockSize = _blockSize;
+    this.deathPos = deathPos;
     this.speed = 200;
     if(!gameStarted) { this.blockPos = randomStarPos(); }
   }
