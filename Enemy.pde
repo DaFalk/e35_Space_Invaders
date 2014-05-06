@@ -30,6 +30,7 @@ class Enemy {
     for (int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(new PVector(x, y), blockSize));
       blocks.get(i).bFill = eFill;
+      blocks.get(i).owner = this;
     }
     setBlockPositions();
   }
@@ -121,7 +122,7 @@ class Enemy {
       spawner.spawnPowerUp(x, y, (float)eSize);
      //remove enemy, add points to player score and show points UI.
       if(enemies.size() > 1) {
-        enemies.remove(this);
+//        enemies.remove(this);
         for(int i = blocks.size()-1; i > -1; i--) {
           blocks.get(i).deathPos = new PVector(x, y);
           blocks.get(i).lastMove = millis();
