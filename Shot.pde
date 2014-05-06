@@ -7,14 +7,10 @@ class Shot {
   Shot(PVector _shotPos, int _type, int _owner) {
     this.owner = _owner;
     this.type = _type;
-    this.damage = damage;
     this.shotPos = _shotPos;
     this.lastMove = millis();
     this.lastDmg = millis();
     this.nextDmg = 200;
-    this.speed = speed;
-    this.shotSize = shotSize;
-    this.shotDir = shotDir;
     setShotStats();
     target = enemies.get(ceil(random(0, enemies.size()-1)));
     staticTarget = new PVector(random(shotPos.x - shotSize*20, shotPos.x + shotSize*20), -shotSize);
@@ -38,22 +34,25 @@ class Shot {
   void drawShot() {
     strokeWeight(2);
     switch(type) {
-      case(0):
+      case(0):  //Default shot.
         stroke(255, 255, 255);
         line(shotPos.x, shotPos.y, shotPos.x, shotPos.y + shotSize);
       break;
-      case(1):
+      
+      case(1):  //Piercing shot.
         noStroke();
         fill(0, 0, 255);
         triangle(shotPos.x - shotSize/2, shotPos.y, shotPos.x + shotSize/2, shotPos.y, shotPos.x, shotPos.y + shotSize);
       break;
-      case(2):
+      
+      case(2):  //Rapid fire
         stroke(126, 126, 126);
         float angle = atan2(staticTarget.y - shotPos.y, staticTarget.x - shotPos.x);
         shotDir = new PVector(cos(angle), sin(angle));
         line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(angle), shotPos.y + abs(shotSize*sin(angle)));
       break;
-      case(3):
+      
+      case(3):  //Homeseeking missile.
         stroke(0, 126, 0);
         noFill();
         ellipse(target.x, target.y, target.eSize*3, target.eSize*3);
@@ -66,7 +65,8 @@ class Shot {
         stroke(126, 0, 0);
         line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(_angle), shotPos.y + abs(shotSize*sin(_angle)));
       break;
-      case(4):
+      
+      case(4):  //Curved laser.
         if(owner < 2) {
           Player _player = players.get(owner);
           if(_player.attack && _player.weaponType == 4) {
@@ -91,7 +91,8 @@ class Shot {
           }
         }
       break;
-      case(5):
+      
+      case(5):  //Enemy type 0 shot.
         strokeWeight(1.5);
         float offset = shotSize/5;
         int flip;
@@ -165,41 +166,39 @@ class Shot {
   }
   
   void setShotStats() {
+    this.shotDir = new PVector(0, -1);
     switch(type) {
       case(0):
-        shotDir = new PVector(0, -1);
-        shotSize = 5;
-        speed = 500;
-        damage = 6;
+        this.shotSize = 5;
+        this.speed = 500;
+        this.damage = 6;
       break;
       case(1):
-        shotDir = new PVector(0, -1);
-        shotSize = 15;
-        speed = 500;
-        damage = 6;
+        this.shotSize = 15;
+        this.speed = 500;
+        this.damage = 6;
       break;
       case(2):
-        shotDir = new PVector(0, -1);
-        shotSize = 5;
-        speed = 600;
-        damage = 2;
+        this.shotSize = 5;
+        this.speed = 600;
+        this.damage = 2;
       break;
       case(3):
-        shotDir = new PVector(0, -1);
-        shotSize = 15;
-        speed = 300;
-        damage = 6;
+        this.shotSize = 15;
+        this.speed = 300;
+        this.damage = 6;
       break;
       case(4):
-        shotDir = new PVector(0, 0);
-        speed = 0;
-        damage = 1;
+        this.shotSize = 0;
+        this.speed = 0;
+        this.damage = 1;
       break;
       case(5):
-        shotDir = new PVector(0, 1);
-        shotSize = 15;
+        this.shotDir = new PVector(0, 1);
+        this.shotSize = 15;
+        this.speed = 300;
+        this.damage = 0;
         shotPos.y += shotSize;
-        speed = 300;
       break;
     }
   }

@@ -55,7 +55,7 @@ class PowerUp {
         if((y > _player.y - (_player.pHeight/3)*2 && y < _player.y + _player.pHeight)) {
           if((x > _player.x && x < _player.x + _player.pWidth)) {
             if(type > 0) {
-              _player.setWeaponTimers(type);
+              _player.setWeaponTimer(type);
               audioHandler.playSFX(4);
             }
             else {

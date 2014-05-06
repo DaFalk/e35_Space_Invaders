@@ -27,7 +27,10 @@ class Enemy {
     this.eHeight = 4*blockSize;
     nextAnim = enemyHandler.nextMove*2;
     this.half = ceil(setArrayLength()/2);
-    colorBlocks();
+    for (int i = 0; i < setArrayLength(); i ++) {
+      blocks.add(new Block(new PVector(x, y), blockSize));
+      blocks.get(i).bFill = eFill;
+    }
   }
   
   //Draw this enemy type using blocks and display the blocks
@@ -38,13 +41,34 @@ class Enemy {
     }
     animateEnemy();
   }
+
+  int setArrayLength() {
+    if (type == 1) { return 62; }
+    else if (type == 2) { return 48; }
+    else if (type == 3) { return 36; }
+//    else if (type == 4) { return 64; }  //Boss
+    else { return 0; }
+  }
+  
+  void setBlocksFill() {
+    for (int i = 0; i < setArrayLength(); i ++) {
+      blocks.get(i).bFill = eFill;
+    }
+  }
+  
+  void animateEnemy() {
+    if(millis() - lastAnim >= nextAnim) {
+      moveSwitch = !moveSwitch;
+      lastAnim = millis();
+    }
+  }
   
   void damageEnemy(int _player, int _dmg) {
    //Deal damage to enemy.
     if(lifes > 0) {
        lifes -= _dmg;
        eFill = color(255, 51*(lifes-1), 51*(lifes-1));
-       colorBlocks();
+       setBlocksFill();
     }
    //Kill enemy, if it is the last then respawn all enemies.
     if(lifes <= 0) {
@@ -67,20 +91,6 @@ class Enemy {
         audioHandler.playSFX(6);
         spawner.respawnEnemies = true;
       }
-    }
-  }
-
-  int setArrayLength() {
-    if (type == 1) { return 62; }
-    else if (type == 2) { return 48; }
-    else if (type == 3) { return 36; }
-//    else if (type == 4) { return 64; }  //Boss
-    else { return 0; }
-  }
-  
-  void setBlocksFill() {
-    for (int i = 0; i < setArrayLength(); i ++) {
-      blocks.get(i).bFill = eFill;
     }
   }
   
@@ -210,20 +220,6 @@ class Enemy {
           blocks.get(17 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
         }
       }
-    }
-  }
-  
-  void colorBlocks() {
-    for (int i = 0; i < setArrayLength(); i ++) {
-      blocks.add(new Block(new PVector(x, y), blockSize));
-      blocks.get(i).bFill = eFill;
-    }
-  }
-  
-  void animateEnemy() {
-    if(millis() - lastAnim >= nextAnim) {
-      moveSwitch = !moveSwitch;
-      lastAnim = millis();
     }
   }
 }

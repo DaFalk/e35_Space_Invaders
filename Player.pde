@@ -1,8 +1,7 @@
 class Player {
   String lifesLabel;
   float x, y;
-  int lastMove, lastShot, shotCooldown, left, right, lifes, pHeight;
-  int pWidth = 40;
+  int lastMove, lastShot, shotCooldown, left, right, lifes, pHeight, pWidth;
   int speed = 150;
   int score = 0;
   boolean attack;
@@ -12,14 +11,15 @@ class Player {
   boolean hasShield;
   
   Player(float xPos) {
+    this.pWidth = 40;
     this.lifesLabel = "LIFES";
-    this.x = xPos - pWidth/2;
+    this.x = xPos;
     this.lifes = 3;
     this.attack = false;
     this.hasShield = false;
     this.shotCooldown = shotCooldown;
     this.powerUpDuration = powerUpDuration;
-    setWeaponTimers(0);
+    setWeaponTimer(0);
     y = height - pWidth;
     pHeight = pWidth/4;
   }
@@ -48,6 +48,7 @@ class Player {
     //Canon
     rect(_x + pWidth/2.5, _y - pWidth/5, pWidth/5, pWidth/5);
     rect(_x + pWidth*(0.5 - (0.075/2)), _y - pWidth/3.5, pWidth*0.075, pWidth/3.5);
+    
     if(_active) {
       if(hasShield) {
         fill(200, 200, 255,100);
@@ -86,13 +87,13 @@ class Player {
   void handlePowerUp() {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
-        setWeaponTimers(0);
+        setWeaponTimer(0);
       }
     }
   }
   
 //Set the stats of the current weapon type.
-  void setWeaponTimers(int _weaponType) {
+  void setWeaponTimer(int _weaponType) {
     weaponType = _weaponType;
     powerUpStartTime = millis();
     
@@ -135,19 +136,19 @@ class Player {
     break;
     case('1'):
       weaponType = 1;
-      setWeaponTimers(weaponType);
+      setWeaponTimer(weaponType);
     break;
     case('2'):
       weaponType = 2;
-      setWeaponTimers(weaponType);
+      setWeaponTimer(weaponType);
     break;
     case('3'):
       weaponType = 3;
-      setWeaponTimers(weaponType);
+      setWeaponTimer(weaponType);
     break;
     case('4'):
       weaponType = 4;
-      setWeaponTimers(weaponType);
+      setWeaponTimer(weaponType);
     break;
     case('e'):
       adjustLifes();
