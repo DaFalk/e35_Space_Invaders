@@ -20,6 +20,10 @@ class Shot {
   }
 
   void update() {
+    if(type >= 3) {
+      if(target == null) { getEnemyTarget(); }
+      else if(target.isDead) { getEnemyTarget(); }
+    }
     if(!gamePaused) {
       if(type != 4) {
         shotPos.add(new PVector((speed*shotDir.x)*((millis()-lastMove)*0.001), (speed*shotDir.y)*((millis()-lastMove)*0.001)));
@@ -27,22 +31,15 @@ class Shot {
       }
       if(checkCollision()) { shots.remove(this); }
     }
-    if(type >= 3) {
-      if(target == null) { getEnemyTarget(); }
-      else if(target.isDead) { getEnemyTarget(); }
-    }
     drawShot();
   }
   
+//Target new random enemy or remove shot.
   void getEnemyTarget() {
-    if(enemies.size() > 0) {
-      target = enemies.get(floor(random(0, enemies.size())));
-    }
-    else {
-      if(type == 4) {
-        audioHandler.audioBank[7+type].pause();
-        shots.remove(this);
-      }
+    if(enemies.size() > 0) { target = enemies.get(floor(random(0, enemies.size()))); }
+    else if(type == 4) {
+      audioHandler.audioBank[7+type].pause();
+      shots.remove(this);
     }
   }
   
@@ -69,22 +66,31 @@ class Shot {
       break;
       
       case(3):  //Homeseeking missile.
-        stroke(0, 126, 0);
-        noFill();
-        ellipse(target.x, target.y, target.eSize*3, target.eSize*3);
-        if (dist(shotPos.x, shotPos.y, target.x, target.y) < target.eSize*5) {
-          target.eFill = color(255, 70, 110);
-          target.setBlocksFill();
+        if(target != null) {
+          if(!target.isDead) {
+            stroke(0, 126, 0);
+            noFill();
+            ellipse(target.x, target.y, target.eSize*3, target.eSize*3);
+            if (dist(shotPos.x, shotPos.y, target.x, target.y) < target.eSize*5) {
+              target.eFill = color(255, 70, 110);
+              target.setBlocksFill();
+            }
+            float _angle = atan2(target.y - shotPos.y, target.x - shotPos.x);
+            shotDir = new PVector(cos(_angle), sin(_angle));
+            stroke(126, 0, 0);
+            line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(_angle), shotPos.y + abs(shotSize*sin(_angle)));
+          }
         }
-        float _angle = atan2(target.y - shotPos.y, target.x - shotPos.x);
-        shotDir = new PVector(cos(_angle), sin(_angle));
-        stroke(126, 0, 0);
-        line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(_angle), shotPos.y + abs(shotSize*sin(_angle)));
       break;
       
       case(4):  //Curved laser.
-        if(owner < 2) {
-          if(player.attack && player.weaponType == 4) {
+        if(target != null) {
+          if(!target.isDead) {
+            if(!player.attack || player.weaponType != 4) {
+              audioHandler.audioBank[7+type].pause();
+              shots.remove(this);
+              return;
+            }
             noFill();
             stroke(10, 210, 210, random(20, 100));
             strokeWeight(2.5);
@@ -97,11 +103,7 @@ class Shot {
               bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
             }
           }
-          if(!player.attack && player.weaponType != 4) {
-            audioHandler.audioBank[7+type].pause();
-            shots.remove(this);
-          }
-        }
+        } 
       break;
       
       case(5):  //Enemy type 0 shot.
@@ -120,55 +122,27 @@ class Shot {
   }
   
   boolean checkCollision() {
-   //Special collision for type 4
-    if(type == 4) {
-      if(millis() - lastDmg >= nextDmg) {
-        target.damageEnemy(this);
-        lastDmg = millis();
-      }
-      return false; //return is used to avoid the rest of the code
-    }
-    
    //Remove shot if out of bounds
     if(shotPos.y < 0 || shotPos.y > cover.groundY || shotPos.x < 0 || shotPos.x > width) {
       return true;
     }
     
-   //Special collision for type 3
-    if(type == 3 && target != null) {
-      if(!target.isDead) {
-        if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
-          if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
-            target.damageEnemy(this);
-            audioHandler.audioBank[7+type].pause();
-            return true;
-          }
-        }
-      }
-      else {
-        getEnemyTarget();
-        return false;
-      }
-    }
-    
-    //Check if player shot collides with an enemy
-    if(shotDir.y < 0) {
-      for(int i = enemies.size() - 1; i > -1; i--) {
-        Enemy _enemy = enemies.get(i);
-        if(!_enemy.isDead) {
-          if(shotPos.y < _enemy.y + _enemy.eHeight && shotPos.y > _enemy.y - _enemy.eHeight) {
-            if(shotPos.x < _enemy.x + _enemy.eSize && shotPos.x > _enemy.x - _enemy.eSize) {
-              enemies.get(i).damageEnemy(this);
-              if(type != 1) { return true; }
+    if(shotDir.y < 0) {  //Check if player shot collides with an enemy
+      if(type < 3) {
+        for(int i = enemies.size() - 1; i > -1; i--) {
+          Enemy _enemy = enemies.get(i);
+          if(!_enemy.isDead) {
+            if(shotPos.y < _enemy.y + _enemy.eHeight && shotPos.y > _enemy.y - _enemy.eHeight) {
+              if(shotPos.x < _enemy.x + _enemy.eSize && shotPos.x > _enemy.x - _enemy.eSize) {
+                enemies.get(i).damageEnemy(this);
+                if(type != 1) { return true; }
+              }
             }
           }
         }
       }
-      return false;
     }
-    
-    //Check if enemy shot collides with a player
-    if(shotDir.y > 0) {
+    else {  //Check if enemy shot collides with a player
       for(int i = players.size() - 1; i > -1; i--) {
         Player _player = players.get(i);
         if(!_player.isDead) {
@@ -182,6 +156,29 @@ class Shot {
         }
       }
     }
+    
+    if(target != null) {
+      if(!target.isDead) {
+        switch(type) {
+          case(3):
+            if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
+              if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
+                target.damageEnemy(this);
+                audioHandler.audioBank[7+type].pause();
+                return true;
+              }
+            }
+          break;
+          case(4):
+            if(millis() - lastDmg >= nextDmg) {
+              target.damageEnemy(this);
+              lastDmg = millis();
+            }
+          break;
+        }
+      }
+    }
+    
     return false;
   }
   

@@ -120,34 +120,27 @@ class Enemy {
   }
   
   void damageEnemy(Shot _shot) {
-   //Deal damage to enemy.
-    if(lifes > 0) {
+    if(lifes > 0) {  //Deal damage to enemy.
        lifes -= _shot.damage;
        eFill = color(255, 51*(lifes-1), 51*(lifes-1));
        setBlocksFill();
     }
-   //Kill enemy, if it is the last then respawn all enemies.
-    if(lifes <= 0 && !isDead) {
+    if(lifes <= 0 && !isDead) {  //Kill enemy.
       isDead = true;
       audioHandler.playSFX(2);
-      spawner.spawnPowerUp(x, y, (float)eSize);
-      enemyHandler.deadEnemies.add(this);
-      for(int i = blocks.size()-1; i > -1; i--) {
+      spawner.spawnPowerUp(x, y, (float)eSize);  //Roll for powerup.
+      enemyHandler.deadEnemies.add(this);  //Add to new arraylist to avoid interfering with shot targetting.
+      for(int i = blocks.size()-1; i > -1; i--) {  //Set blocks deathPos.
         blocks.get(i).deathPos = new PVector(x, y);
         blocks.get(i).lastMove = millis();
       }
-     //remove enemy, add points to player score and show points UI.
-      if(enemies.size() > 1) {
-        players.get(_shot.owner).score += points;
-        menUI.pointsTexts.add(new PointsText(x, y, points));
-      }
-      else {  //Add points to player score, show points UI and respawn enemies.
-        players.get(_shot.owner).score += points;
-        menUI.pointsTexts.add(new PointsText(x, y, points));
+      players.get(_shot.owner).score += points;
+      menUI.pointsTexts.add(new PointsText(x, y, points));
+      if(enemies.size() == 1) {  //Respawn if enemy is the last.
         audioHandler.playSFX(6);
         enemyHandler.respawnEnemies = true;
       }
-      enemies.remove(this);
+      enemies.remove(this);  //Remove from old arraylist
     }
   }
   

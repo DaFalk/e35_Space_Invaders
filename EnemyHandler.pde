@@ -26,10 +26,8 @@ class EnemyHandler {
       moveEnemies();
       shoot();
     }
-    if(deadEnemies.size() > 0) {
-      for(int i = deadEnemies.size()-1; i > -1; i--) {
-        deadEnemies.get(i).update();
-      }
+    for(int i = deadEnemies.size()-1; i > -1; i--) {
+      deadEnemies.get(i).update();
     }
     if(respawnEnemies) { spawner.respawnEnemies(); }
   }
