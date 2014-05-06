@@ -9,6 +9,8 @@ class EnemyHandler {
   int lastMove, nextMove;
   int lastShot, shotTimer, nextShot;
   boolean moveDown = false;
+  boolean respawnEnemies = false;
+  ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
   
   EnemyHandler() {
     nextMove = 400;
@@ -24,6 +26,12 @@ class EnemyHandler {
       moveEnemies();
       shoot();
     }
+    if(deadEnemies.size() > 0) {
+      for(int i = deadEnemies.size()-1; i > -1; i--) {
+        deadEnemies.get(i).update();
+      }
+    }
+    if(respawnEnemies) { spawner.respawnEnemies(); }
   }
   
   void moveEnemies() {
@@ -32,14 +40,14 @@ class EnemyHandler {
         if(!moveDown) {
           for(int i = enemies.size()-1; i > -1; i--) {
             if(!enemies.get(i).isDead) {
-              enemies.get(i).moveEnemy((moveDist/2)*dirX);
+              enemies.get(i).moveEnemy((moveDist/2)*dirX, 0);
             }
           }
         }
         else {
           for(int i = enemies.size()-1; i > -1; i--) {
             if(!enemies.get(i).isDead) {
-              enemies.get(i).y += moveDist;
+              enemies.get(i).moveEnemy(0, (moveDist/2)*dirX);
             }
           }
           dirX *= -1;

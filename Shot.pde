@@ -1,18 +1,20 @@
 class Shot {
   PVector shotPos, shotDir;
   int lastMove, type, owner, shotSize, speed, damage, lastDmg, nextDmg;
+  Player player;
   Enemy target;
   PVector staticTarget;
 
   Shot(PVector _shotPos, int _type, int _owner) {
-    this.owner = _owner;
-    this.type = _type;
-    this.shotPos = _shotPos;
-    this.lastMove = millis();
-    this.lastDmg = millis();
-    this.nextDmg = 200;
+    owner = _owner;
+    if(owner < 2) { player = players.get(owner); }
+    type = _type;
+    shotPos = _shotPos;
+    lastMove = millis();
+    lastDmg = millis();
+    nextDmg = 200;
     setShotStats();
-    target = enemies.get(ceil(random(0, enemies.size()-1)));
+    getEnemyTarget();
     staticTarget = new PVector(random(shotPos.x - shotSize*20, shotPos.x + shotSize*20), -shotSize);
     audioHandler.playSFX(7+type);
   }
@@ -23,11 +25,25 @@ class Shot {
         shotPos.add(new PVector((speed*shotDir.x)*((millis()-lastMove)*0.001), (speed*shotDir.y)*((millis()-lastMove)*0.001)));
         lastMove = millis();
       }
-      if(checkCollision()) {
+      if(checkCollision()) { shots.remove(this); }
+    }
+    if(type >= 3) {
+      if(target == null) { getEnemyTarget(); }
+      else if(target.isDead) { getEnemyTarget(); }
+    }
+    drawShot();
+  }
+  
+  void getEnemyTarget() {
+    if(enemies.size() > 0) {
+      target = enemies.get(floor(random(0, enemies.size())));
+    }
+    else {
+      if(type == 4) {
+        audioHandler.audioBank[7+type].pause();
         shots.remove(this);
       }
     }
-    drawShot();
   }
   
 //Draw shot related to the owner's weapon type.
@@ -68,24 +84,20 @@ class Shot {
       
       case(4):  //Curved laser.
         if(owner < 2) {
-          Player _player = players.get(owner);
-          if(_player.attack && _player.weaponType == 4) {
+          if(player.attack && player.weaponType == 4) {
             noFill();
             stroke(10, 210, 210, random(20, 100));
             strokeWeight(2.5);
-            float _x = _player.x + _player.pWidth/2;
-            float _y = _player.y - _player.pHeight/2;
-            for(int i = enemies.size()-1; i > -1; i--) {
-              target = enemies.get(i);
-            }
-            if(!target.isDead) {
+            float _x = player.x + player.pWidth/2;
+            float _y = player.y - player.pHeight/2;
+            if(target != null) {
               bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
               stroke(110, 255, 255, random(0, 75));
               strokeWeight(ceil(random(4, 8)));
               bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
             }
           }
-          if((!_player.attack && _player.weaponType != 4) || target.isDead) {
+          if(!player.attack && player.weaponType != 4) {
             audioHandler.audioBank[7+type].pause();
             shots.remove(this);
           }
@@ -109,29 +121,36 @@ class Shot {
   
   boolean checkCollision() {
    //Special collision for type 4
-    if(type == 4 && !target.isDead) {
+    if(type == 4) {
       if(millis() - lastDmg >= nextDmg) {
         target.damageEnemy(this);
         lastDmg = millis();
-        return true;
       }
       return false; //return is used to avoid the rest of the code
     }
+    
    //Remove shot if out of bounds
     if(shotPos.y < 0 || shotPos.y > cover.groundY || shotPos.x < 0 || shotPos.x > width) {
       return true;
     }
+    
    //Special collision for type 3
-    if(type == 3 && !target.isDead) {
-      if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
-        if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
-          target.damageEnemy(this);
-          audioHandler.audioBank[7+type].pause();
-          return true;
+    if(type == 3 && target != null) {
+      if(!target.isDead) {
+        if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
+          if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
+            target.damageEnemy(this);
+            audioHandler.audioBank[7+type].pause();
+            return true;
+          }
         }
       }
-      return false;
+      else {
+        getEnemyTarget();
+        return false;
+      }
     }
+    
     //Check if player shot collides with an enemy
     if(shotDir.y < 0) {
       for(int i = enemies.size() - 1; i > -1; i--) {
@@ -147,6 +166,7 @@ class Shot {
       }
       return false;
     }
+    
     //Check if enemy shot collides with a player
     if(shotDir.y > 0) {
       for(int i = players.size() - 1; i > -1; i--) {

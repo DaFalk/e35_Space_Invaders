@@ -36,14 +36,14 @@ class PowerUp {
     ellipse(x, y, size, size);
     strokeWeight(3);
     if(type == 0) {
-      stroke(color(255, 100));
+      stroke(255, 100);
       ellipse(x, y, size*3, size*3);
-      stroke(color(255, 155));
+      stroke(255, 155);
     }
-    if(type == 1) { stroke(color(70, 110, 255, 155)); }
-    if(type == 2) { stroke(color(255, 155)); }
-    if(type == 3) { stroke(color(255, 70, 110, 155)); }
-    if(type == 4) { stroke(color(0, 255, 0, 155)); }
+    if(type == 1) { stroke(70, 110, 255, 155); }
+    if(type == 2) { stroke(255, 155); }
+    if(type == 3) { stroke(255, 70, 110, 155); }
+    if(type == 4) { stroke(0, 255, 0, 155); }
     ellipse(x, y, size*2, size*2);
   }
   

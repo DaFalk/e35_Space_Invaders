@@ -50,15 +50,13 @@ class Spawner {
   }
   
   void respawnEnemies() {
-    if(respawnEnemies) {
-      if(!audioHandler.audioBank[6].isPlaying()) {
-        enemies.clear();
-        enemyHandler.dirX = 1;
-        enemyHandler.nextMove -= 25;
-        enemyHandler.shotTimer -= 50;
-        spawnEnemies();
-        respawnEnemies = false;
-      }
+    if(!audioHandler.audioBank[6].isPlaying()) {
+      enemies.clear();
+      enemyHandler.dirX = 1;
+      enemyHandler.nextMove -= 25;
+      enemyHandler.shotTimer -= 50;
+      spawnEnemies();
+      enemyHandler.respawnEnemies = false;
     }
   }
 }

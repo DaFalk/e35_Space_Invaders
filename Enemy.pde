@@ -52,10 +52,12 @@ class Enemy {
     animateEnemy();
   }
   
-  void moveEnemy(float _amount) {
-    x += _amount;
+  void moveEnemy(float _amountX, float _amountY) {
+    x += _amountX;
+    y += _amountY;
     for(int i = blocks.size()-1; i > -1; i--) {
-      blocks.get(i).blockPos.x += _amount;
+      blocks.get(i).blockPos.x += _amountX;
+      blocks.get(i).blockPos.y += _amountY;
     } 
   }
 
@@ -125,26 +127,27 @@ class Enemy {
        setBlocksFill();
     }
    //Kill enemy, if it is the last then respawn all enemies.
-    if(lifes <= 0) {
+    if(lifes <= 0 && !isDead) {
       isDead = true;
       audioHandler.playSFX(2);
       spawner.spawnPowerUp(x, y, (float)eSize);
+      enemyHandler.deadEnemies.add(this);
+      for(int i = blocks.size()-1; i > -1; i--) {
+        blocks.get(i).deathPos = new PVector(x, y);
+        blocks.get(i).lastMove = millis();
+      }
      //remove enemy, add points to player score and show points UI.
       if(enemies.size() > 1) {
-//        enemies.remove(this);
-        for(int i = blocks.size()-1; i > -1; i--) {
-          blocks.get(i).deathPos = new PVector(x, y);
-          blocks.get(i).lastMove = millis();
-        }
         players.get(_shot.owner).score += points;
         menUI.pointsTexts.add(new PointsText(x, y, points));
       }
       else {  //Add points to player score, show points UI and respawn enemies.
         players.get(_shot.owner).score += points;
-        menUI.pointsTexts.add(new PointsText(enemies.get(0).x, enemies.get(0).y, enemies.get(0).points));
+        menUI.pointsTexts.add(new PointsText(x, y, points));
         audioHandler.playSFX(6);
-        spawner.respawnEnemies = true;
+        enemyHandler.respawnEnemies = true;
       }
+      enemies.remove(this);
     }
   }
   

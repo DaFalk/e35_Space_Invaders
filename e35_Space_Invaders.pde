@@ -43,7 +43,6 @@ void displayGameObjects() {
     _enemy.update();
   }
   enemyHandler.update();
-  spawner.respawnEnemies();
   
  //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {
