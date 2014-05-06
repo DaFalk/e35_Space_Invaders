@@ -106,12 +106,12 @@ class Shot {
       break;
     }
   }
-
+  
   boolean checkCollision() {
    //Special collision for type 4
     if(type == 4 && !target.isDead) {
       if(millis() - lastDmg >= nextDmg) {
-        target.damageEnemy(owner, damage);
+        target.damageEnemy(this);
         lastDmg = millis();
         return true;
       }
@@ -125,7 +125,7 @@ class Shot {
     if(type == 3 && !target.isDead) {
       if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
         if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
-          target.damageEnemy(owner, damage);
+          target.damageEnemy(this);
           audioHandler.audioBank[7+type].pause();
           return true;
         }
@@ -139,7 +139,7 @@ class Shot {
         if(!_enemy.isDead) {
           if(shotPos.y < _enemy.y + _enemy.eHeight && shotPos.y > _enemy.y - _enemy.eHeight) {
             if(shotPos.x < _enemy.x + _enemy.eSize && shotPos.x > _enemy.x - _enemy.eSize) {
-              enemies.get(i).damageEnemy(owner, damage);
+              enemies.get(i).damageEnemy(this);
               if(type != 1) { return true; }
             }
           }

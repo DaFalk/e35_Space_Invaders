@@ -32,7 +32,7 @@ class EnemyHandler {
         if(!moveDown) {
           for(int i = enemies.size()-1; i > -1; i--) {
             if(!enemies.get(i).isDead) {
-              enemies.get(i).x += (moveDist/2)*dirX;
+              enemies.get(i).moveEnemy((moveDist/2)*dirX);
             }
           }
         }

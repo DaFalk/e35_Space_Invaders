@@ -1,27 +1,21 @@
 class Player {
-  String lifesLabel;
+  String lifesLabel = "LIFES";
   float x, y;
-  int lastMove, lastShot, shotCooldown, left, right, lifes, pHeight, pWidth;
+  int lastMove, lastShot, shotCooldown, left, right, pHeight;
+  int lifes = 3;
+  int pWidth = 40;
   int speed = 150;
   int score = 0;
-  boolean attack;
-  int weaponType;
-  int powerUpStartTime, powerUpDuration;
+  int weaponType, powerUpStartTime, powerUpDuration;
+  boolean attack = false;
   boolean isDead = false;
-  boolean hasShield;
+  boolean hasShield = false;
   
   Player(float xPos) {
-    this.pWidth = 40;
-    this.lifesLabel = "LIFES";
-    this.x = xPos;
-    this.lifes = 3;
-    this.attack = false;
-    this.hasShield = false;
-    this.shotCooldown = shotCooldown;
-    this.powerUpDuration = powerUpDuration;
-    setWeaponTimer(0);
+    x = xPos;
     y = height - pWidth;
     pHeight = pWidth/4;
+    setWeaponTimers(0);
   }
   
   void update() {
@@ -87,13 +81,13 @@ class Player {
   void handlePowerUp() {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
-        setWeaponTimer(0);
+        setWeaponTimers(0);
       }
     }
   }
   
 //Set the stats of the current weapon type.
-  void setWeaponTimer(int _weaponType) {
+  void setWeaponTimers(int _weaponType) {
     weaponType = _weaponType;
     powerUpStartTime = millis();
     
@@ -118,6 +112,7 @@ class Player {
         powerUpDuration = 10000;
       break;
     }
+    
     lastShot = millis();
   }
   
@@ -136,19 +131,19 @@ class Player {
     break;
     case('1'):
       weaponType = 1;
-      setWeaponTimer(weaponType);
+      setWeaponTimers(weaponType);
     break;
     case('2'):
       weaponType = 2;
-      setWeaponTimer(weaponType);
+      setWeaponTimers(weaponType);
     break;
     case('3'):
       weaponType = 3;
-      setWeaponTimer(weaponType);
+      setWeaponTimers(weaponType);
     break;
     case('4'):
       weaponType = 4;
-      setWeaponTimer(weaponType);
+      setWeaponTimers(weaponType);
     break;
     case('e'):
       adjustLifes();

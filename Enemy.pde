@@ -9,7 +9,7 @@ class Enemy {
   int blockSize, eSize, eHeight;
   int type, lifes, points;
   int lastAnim, nextAnim;
-  boolean moveSwitch = false;
+  int moveSwitch = 1;
   boolean isDead;
   color eFill;
 
@@ -31,15 +31,22 @@ class Enemy {
       blocks.add(new Block(new PVector(x, y), blockSize));
       blocks.get(i).bFill = eFill;
     }
+    setBlockPositions();
   }
   
   //Draw this enemy type using blocks and display the blocks
   void update() {
-    if(!isDead) { displayType(type); }
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).display();
     }
     animateEnemy();
+  }
+  
+  void moveEnemy(float _amount) {
+    x += _amount;
+    for(int i = blocks.size()-1; i > -1; i--) {
+      blocks.get(i).blockPos.x += _amount;
+    } 
   }
 
   int setArrayLength() {
@@ -58,15 +65,52 @@ class Enemy {
   
   void animateEnemy() {
     if(millis() - lastAnim >= nextAnim) {
-      moveSwitch = !moveSwitch;
+      switch(type) {
+        case(1):
+          for(int i = 0; i < 2; i++) {
+            int flip = 1 - i*2;
+            blocks.get(15 + half*i).blockPos.y += blockSize*moveSwitch;
+            blocks.get(21 + half*i).blockPos.x += ((blockSize*3)*flip)*moveSwitch;
+            blocks.get(21 + half*i).blockPos.y -= blockSize*moveSwitch;
+            blocks.get(26 + half*i).blockPos.y -= blockSize*moveSwitch;
+            blocks.get(30 + half*i).blockPos.x -= ((blockSize*2)*flip)*moveSwitch;
+          }
+        break;
+        
+        case(2):
+          for(int i = 0; i < 2; i++) {
+            int flip = 1 - i*2;
+            int _half = half - 2;
+            blocks.get(4 + _half*i).blockPos.x -= (blockSize*3)*flip*moveSwitch;
+            blocks.get(4 + _half*i).blockPos.y += (blockSize*2)*moveSwitch;
+            blocks.get(13 + _half*i).blockPos.x -= (blockSize*2)*flip*moveSwitch;
+            blocks.get(23 + _half*i).blockPos.y += (blockSize*3)*moveSwitch;
+            blocks.get(24 + _half*i).blockPos.y += (blockSize*3)*moveSwitch;
+            blocks.get(25 + _half*i).blockPos.x -= (blockSize*2)*flip*moveSwitch;
+            blocks.get(25 + _half*i).blockPos.y -= blockSize*moveSwitch;
+          }
+        break;
+        
+        case(3):
+          for(int i = 0; i < 2; i++) {
+            int flip = 1 - i*2;
+            blocks.get(5 + half*i).blockPos.y -= blockSize*moveSwitch;
+            blocks.get(9 + half*i).blockPos.x += blockSize*flip*moveSwitch;
+            blocks.get(10 + half*i).blockPos.x += blockSize*flip*moveSwitch;
+            blocks.get(14 + half*i).blockPos.y += blockSize*moveSwitch;
+            blocks.get(17 + half*i).blockPos.y -= blockSize*moveSwitch;
+          }
+        break;
+      }
+      moveSwitch *= -1;
       lastAnim = millis();
     }
   }
   
-  void damageEnemy(int _player, int _dmg) {
+  void damageEnemy(Shot _shot) {
    //Deal damage to enemy.
     if(lifes > 0) {
-       lifes -= _dmg;
+       lifes -= _shot.damage;
        eFill = color(255, 51*(lifes-1), 51*(lifes-1));
        setBlocksFill();
     }
@@ -82,11 +126,11 @@ class Enemy {
           blocks.get(i).deathPos = new PVector(x, y);
           blocks.get(i).lastMove = millis();
         }
-        players.get(_player).score += points;
+        players.get(_shot.owner).score += points;
         menUI.pointsTexts.add(new PointsText(x, y, points));
       }
       else {  //Add points to player score, show points UI and respawn enemies.
-        players.get(_player).score += points;
+        players.get(_shot.owner).score += points;
         menUI.pointsTexts.add(new PointsText(enemies.get(0).x, enemies.get(0).y, enemies.get(0).points));
         audioHandler.playSFX(6);
         spawner.respawnEnemies = true;
@@ -94,132 +138,109 @@ class Enemy {
     }
   }
   
-  void displayType(int _type) {
-    if(_type == 1) {
-      for (int i = 0; i < 2; i++) {
-        int _flip = 1 - i*2;
-        float _x = x + (blockSize/2)*_flip;
-        for (int j = 0; j < 5; j++) {
-          blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*3.5 + blockSize*j);
-        }
-        blocks.get(5 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
-        _x = x + (blockSize*1.5)*_flip;
-        blocks.get(6 + half*i).blockPos = new PVector(_x, y - blockSize*3.5);
-        blocks.get(7 + half*i).blockPos = new PVector(_x, y - blockSize*2.5);
-        blocks.get(8 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
-        blocks.get(9 + half*i).blockPos = new PVector(_x, y + blockSize/2);
-        blocks.get(10 + half*i).blockPos = new PVector(_x, y + blockSize*1.5);
-        _x = x + (blockSize*2.5)*_flip;
-        blocks.get(11 + half*i).blockPos = new PVector(_x, y - blockSize*2.5);
-        blocks.get(12 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
-        blocks.get(13 + half*i).blockPos = new PVector(_x, y + blockSize*0.5);
-        blocks.get(14 + half*i).blockPos = new PVector(_x, y + blockSize*1.5);
-        _x = x + (blockSize*3.5)*_flip;
-        for(int j = 16; j < 20; j++) {
-          blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*2.5 + blockSize*(j-16));
-        }
-        blocks.get(20 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
-        _x = x + (blockSize*4.5)*_flip;
-        for(int j = 22; j < 26; j++) {
-          blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*2.5 + blockSize*(j-22));
-        }
-        _x = x + (blockSize*5.5)*_flip;
-        blocks.get(27 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
-        blocks.get(28 + half*i).blockPos = new PVector(_x, y - blockSize*0.5);
-        blocks.get(29 + half*i).blockPos = new PVector(_x, y + blockSize*0.5);
-        
-        if(!moveSwitch) {
-          blocks.get(15 + half*i).blockPos = new PVector(_x - (blockSize*3)*_flip, y + blockSize*2.5);
-          blocks.get(21 + half*i).blockPos = new PVector(_x - (blockSize*2)*_flip, y);
-          blocks.get(26 + half*i).blockPos = new PVector(_x - (blockSize*1)*_flip, y + blockSize*3.5);
+  void setBlockPositions() {
+    int flip;
+    float _x;
+    switch(type) {
+      case(1):
+        for (int i = 0; i < 2; i++) {
+          flip = 1 - i*2;
+          _x = x + (blockSize/2)*flip;
+          for (int j = 0; j < 5; j++) {
+            blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*3.5 + blockSize*j);
+          }
+          blocks.get(5 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
+          _x = x + (blockSize*1.5)*flip;
+          blocks.get(6 + half*i).blockPos = new PVector(_x, y - blockSize*3.5);
+          blocks.get(7 + half*i).blockPos = new PVector(_x, y - blockSize*2.5);
+          blocks.get(8 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
+          blocks.get(9 + half*i).blockPos = new PVector(_x, y + blockSize/2);
+          blocks.get(10 + half*i).blockPos = new PVector(_x, y + blockSize*1.5);
+          _x = x + (blockSize*2.5)*flip;
+          blocks.get(11 + half*i).blockPos = new PVector(_x, y - blockSize*2.5);
+          blocks.get(12 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
+          blocks.get(13 + half*i).blockPos = new PVector(_x, y + blockSize*0.5);
+          blocks.get(14 + half*i).blockPos = new PVector(_x, y + blockSize*1.5);
+          _x = x + (blockSize*3.5)*flip;
+          blocks.get(15 + half*i).blockPos = new PVector(_x - blockSize*flip, y + blockSize*2.5);
+          for(int j = 16; j < 20; j++) {
+            blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*2.5 + blockSize*(j-16));
+          }
+          blocks.get(20 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
+          blocks.get(21 + half*i).blockPos = new PVector(_x - (blockSize*3)*flip, y + blockSize*2.5);
+          _x = x + (blockSize*4.5)*flip;
+          for(int j = 22; j < 26; j++) {
+            blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*2.5 + blockSize*(j-22));
+          }
+          _x = x + (blockSize*5.5)*flip;
+          blocks.get(26 + half*i).blockPos = new PVector(_x - (blockSize*1)*flip, y + blockSize*3.5);
+          blocks.get(27 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
+          blocks.get(28 + half*i).blockPos = new PVector(_x, y - blockSize*0.5);
+          blocks.get(29 + half*i).blockPos = new PVector(_x, y + blockSize*0.5);
           blocks.get(30 + half*i).blockPos = new PVector(_x, y + blockSize*3.5);
         }
-        else {
-          blocks.get(15 + half*i).blockPos = new PVector(_x - (blockSize*3)*_flip, y + blockSize*3.5);
-          blocks.get(21 + half*i).blockPos = new PVector(_x - (blockSize*2)*_flip, y + blockSize*1.5);
-          blocks.get(26 + half*i).blockPos = new PVector(_x - (blockSize*1)*_flip, y + blockSize*2.5);
-          blocks.get(30 + half*i).blockPos = new PVector(_x - (blockSize*2)*_flip, y + blockSize*3.5);
+      break;
+      
+      case(2):
+        _x = x;
+        int _half = half-2;
+        for(int j = 0; j < 4; j++) {
+          blocks.get(j).blockPos = new PVector(_x, y - blockSize*1.5 + blockSize*j);
         }
-      }
-    }
-    else if(type == 2) {
-      float _x = x;
-      int _half = half-2;
-      for(int j = 0; j < 4; j++) {
-        blocks.get(j).blockPos = new PVector(_x, y - blockSize*1.5 + blockSize*j);
-      }
-      for (int i = 0; i < 2; i++) {
-        int _flip = 1 - i*2;
-        _x = x + blockSize*_flip;
-        for(int j = 5; j < 9; j++) {
-          blocks.get(j + _half*i).blockPos = new PVector(_x, y - blockSize*1.5 + blockSize*(j-5));
-        }
-        _x = x + (blockSize*2)*_flip;
-        blocks.get(9 + _half*i).blockPos = new PVector(_x, y - blockSize*2.5);
-        blocks.get(10 + _half*i).blockPos = new PVector(_x, y - blockSize*1.5);
-        blocks.get(11 + _half*i).blockPos = new PVector(_x, y + blockSize/2);
-        blocks.get(12 + _half*i).blockPos = new PVector(_x, y + blockSize*1.5);
-        _x = x + (blockSize*3)*_flip;
-        blocks.get(14 + _half*i).blockPos = new PVector(_x, y - blockSize*3.5);
-        for(int j = 15; j < 20; j++) {
-          blocks.get(j + _half*i).blockPos = new PVector(_x, y - blockSize*1.5 + blockSize*(j-15));
-        }
-        _x = x + (blockSize*4)*_flip;
-        blocks.get(20 + _half*i).blockPos = new PVector(_x, y - blockSize/2);
-        blocks.get(21 + _half*i).blockPos = new PVector(_x, y + blockSize/2);
-        _x = x + (blockSize*5)*_flip;
-        blocks.get(22 + _half*i).blockPos = new PVector(_x, y + blockSize/2);
-        
-        if(!moveSwitch) {
-          blocks.get(4 + _half*i).blockPos = new PVector(_x - blockSize*_flip, y + blockSize*1.5);
-          blocks.get(13 + _half*i).blockPos = new PVector(_x - blockSize*_flip, y + blockSize*3.5);
+        for (int i = 0; i < 2; i++) {
+          flip = 1 - i*2;
+          _x = x + blockSize*flip;
+          blocks.get(4 + _half*i).blockPos = new PVector(_x + (blockSize*3)*flip, y + blockSize*1.5);
+          for(int j = 5; j < 9; j++) {
+            blocks.get(j + _half*i).blockPos = new PVector(_x, y - blockSize*1.5 + blockSize*(j-5));
+          }
+          _x = x + (blockSize*2)*flip;
+          blocks.get(9 + _half*i).blockPos = new PVector(_x, y - blockSize*2.5);
+          blocks.get(10 + _half*i).blockPos = new PVector(_x, y - blockSize*1.5);
+          blocks.get(11 + _half*i).blockPos = new PVector(_x, y + blockSize/2);
+          blocks.get(12 + _half*i).blockPos = new PVector(_x, y + blockSize*1.5);
+          blocks.get(13 + _half*i).blockPos = new PVector(_x + (blockSize*2)*flip, y + blockSize*3.5);
+          _x = x + (blockSize*3)*flip;
+          blocks.get(14 + _half*i).blockPos = new PVector(_x, y - blockSize*3.5);
+          for(int j = 15; j < 20; j++) {
+            blocks.get(j + _half*i).blockPos = new PVector(_x, y - blockSize*1.5 + blockSize*(j-15));
+          }
+          _x = x + (blockSize*4)*flip;
+          blocks.get(20 + _half*i).blockPos = new PVector(_x, y - blockSize/2);
+          blocks.get(21 + _half*i).blockPos = new PVector(_x, y + blockSize/2);
+          _x = x + (blockSize*5)*flip;
+          blocks.get(22 + _half*i).blockPos = new PVector(_x, y + blockSize/2);
           blocks.get(23 + _half*i).blockPos = new PVector(_x, y - blockSize/2);
           blocks.get(24 + _half*i).blockPos = new PVector(_x, y - blockSize*1.5);
           blocks.get(25 + _half*i).blockPos = new PVector(_x, y - blockSize*2.5);
         }
-        else {
-          blocks.get(4 + _half*i).blockPos = new PVector(_x - (blockSize*4)*_flip, y + blockSize*3.5);
-          blocks.get(13 + _half*i).blockPos = new PVector(_x - (blockSize*3)*_flip, y + blockSize*3.5);
-          blocks.get(23 + _half*i).blockPos = new PVector(_x, y + blockSize*2.5);
-          blocks.get(24 + _half*i).blockPos = new PVector(_x, y + blockSize*1.5);
-          blocks.get(25 + _half*i).blockPos = new PVector(_x, y + blockSize/2);
-        }
-      }
-    }
-    else if(type == 3) {
-      for (int i = 0; i < 2; i++) {
-        int _flip = 1 - i*2;
-        float _x = x + (blockSize/2)*_flip;
-        for (int j = 0; j < 5; j++) {
-          blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*3.5 + blockSize*j);
-        }
-        _x = x + (blockSize*1.5)*_flip;
-        blocks.get(6 + half*i).blockPos = new PVector(_x, y - blockSize*2.5);
-        blocks.get(7 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
-        blocks.get(8 + half*i).blockPos = new PVector(_x, y + blockSize/2);
-        _x = x + (blockSize*2.5)*_flip;
-        blocks.get(11 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
-        blocks.get(12 + half*i).blockPos = new PVector(_x, y - blockSize/2);
-        blocks.get(13 + half*i).blockPos = new PVector(_x, y + blockSize/2);
-        _x = x + (blockSize*3.5)*_flip;
-        blocks.get(15 + half*i).blockPos = new PVector(_x, y - blockSize/2);
-        blocks.get(16 + half*i).blockPos = new PVector(_x, y + blockSize/2);
-        
-        if(!moveSwitch) {
-          blocks.get(5 + half*i).blockPos = new PVector(_x - (blockSize*3)*_flip, y + blockSize*2.5);
-          blocks.get(9 + half*i).blockPos = new PVector(_x - (blockSize*2)*_flip, y + blockSize*1.5);
-          blocks.get(10 + half*i).blockPos = new PVector(_x - (blockSize*2)*_flip, y + blockSize*3.5);
-          blocks.get(14 + half*i).blockPos = new PVector(_x - (blockSize*1)*_flip, y + blockSize*2.5);
+      break;
+      
+      case(3):
+        for (int i = 0; i < 2; i++) {
+          flip = 1 - i*2;
+          _x = x + (blockSize/2)*flip;
+          for (int j = 0; j < 5; j++) {
+            blocks.get(j + half*i).blockPos = new PVector(_x, y - blockSize*3.5 + blockSize*j);
+          }
+          blocks.get(5 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
+          _x = x + (blockSize*1.5)*flip;
+          blocks.get(6 + half*i).blockPos = new PVector(_x, y - blockSize*2.5);
+          blocks.get(7 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
+          blocks.get(8 + half*i).blockPos = new PVector(_x, y + blockSize/2);
+          blocks.get(9 + half*i).blockPos = new PVector(_x, y + blockSize*1.5);
+          blocks.get(10 + half*i).blockPos = new PVector(_x, y + blockSize*3.5);
+          _x = x + (blockSize*2.5)*flip;
+          blocks.get(11 + half*i).blockPos = new PVector(_x, y - blockSize*1.5);
+          blocks.get(12 + half*i).blockPos = new PVector(_x, y - blockSize/2);
+          blocks.get(13 + half*i).blockPos = new PVector(_x, y + blockSize/2);
+          blocks.get(14 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
+          _x = x + (blockSize*3.5)*flip;
+          blocks.get(15 + half*i).blockPos = new PVector(_x, y - blockSize/2);
+          blocks.get(16 + half*i).blockPos = new PVector(_x, y + blockSize/2);
           blocks.get(17 + half*i).blockPos = new PVector(_x, y + blockSize*3.5);
         }
-        else {
-          blocks.get(5 + half*i).blockPos = new PVector(_x - (blockSize*3)*_flip, y + blockSize*1.5);
-          blocks.get(9 + half*i).blockPos = new PVector(_x - (blockSize*1)*_flip, y + blockSize*1.5);
-          blocks.get(10 + half*i).blockPos = new PVector(_x - (blockSize*1)*_flip, y + blockSize*3.5);
-          blocks.get(14 + half*i).blockPos = new PVector(_x - (blockSize*1)*_flip, y - blockSize/2);
-          blocks.get(17 + half*i).blockPos = new PVector(_x, y + blockSize*2.5);
-        }
-      }
+      break;
     }
   }
 }
