@@ -11,6 +11,5 @@ class Cover {
     noStroke();
     fill(0, 255, 0);
     rect(0 , groundY, width, groundHeight);
-    println(groundY);
   }
 }
