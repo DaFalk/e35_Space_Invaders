@@ -10,6 +10,7 @@ class Enemy {
   int type, lifes, points;
   int lastAnim, nextAnim;
   int moveSwitch = 1;
+  PVector lowestPoint = new PVector(0, 0);
   boolean isDead;
   color eFill;
 
@@ -39,6 +40,14 @@ class Enemy {
   void update() {
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).display();
+      if(isDead) {
+        if(blocks.get(i).blockPos.y > lowestPoint.y) {
+          lowestPoint = blocks.get(i).blockPos;
+        }
+      }
+    }
+    if(isDead) {
+      if(checkBlockCollision()) { enemies.remove(this); }
     }
     animateEnemy();
   }
@@ -137,6 +146,23 @@ class Enemy {
         spawner.respawnEnemies = true;
       }
     }
+  }
+  
+  boolean checkBlockCollision() {
+  //Check if enemy shot collides with a player
+    for(int i = players.size() - 1; i > -1; i--) {
+      Player _player = players.get(i);
+      if(!_player.isDead) {
+        if((lowestPoint.y > _player.y - _player.pHeight - _player.pHeight/3 && lowestPoint.y < _player.y + _player.pHeight)) {
+          if((lowestPoint.x > _player.x && lowestPoint.x < _player.x + _player.pWidth)) {
+            if(_player.hasShield) { _player.hasShield = false; }
+            else { _player.adjustLifes(); }
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
   
   void setBlockPositions() {
