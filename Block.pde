@@ -23,7 +23,7 @@ class Block {
     if(deathPos != null) { releaseBlock(); }
     rect(blockPos.x, blockPos.y, blockSize, blockSize);
   }
-  
+   
 //Apply gravity to block.
   void releaseBlock() {
     int flip;
