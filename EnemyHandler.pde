@@ -34,7 +34,8 @@ class EnemyHandler {
   
   void moveEnemies() {
     if(!gamePaused) {
-      if(millis() - lastMove >= nextMove) {
+      //Enemy nextMove depends on number of enemies alive
+      if(millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/2))*enemies.size()) {
         if(!moveDown) {
           for(int i = enemies.size()-1; i > -1; i--) {
             if(!enemies.get(i).isDead) {
