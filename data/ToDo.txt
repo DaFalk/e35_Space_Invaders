@@ -9,10 +9,11 @@ Need to do:
 - correct UI textsize and font.
 - make it more random when enemies turn into projectiles when they die. 
 - decrease how often enemies shoot.
-- make a variable that moves the enemies fster depending on how many enemies left.
 - the enemies need to move further down on the Y-axis.
 - make cover.
 - player losses all lifes when enemies reach the bottom plane of the screen.
+- Enemies shjouldnt shoot when in pause-mode.
+- when quitting a game and starting a new one then clear shots array. 
 
 
 Nice to do:
@@ -26,6 +27,8 @@ Nice to do:
 - make it possible to shoot the enimes shot (shots collide with shots).
 - shoot collision animation.
 - the "machine gun" power'up could use a small "buff".
+- add AOE to homing misile power-up.
+
 
 
 In progress
@@ -37,5 +40,6 @@ Done
 - Enemy block stuck on left sketch edge when spawning. (sometimes they also get stuck in mid-air) / (is caused by the "+ millis()-lastMove" in the enemy handler class - fixed by removing the "lastmove" correction in the timefix. 
 
 
+- make a variable that moves the enemies fster depending on how many enemies left.
 
 
