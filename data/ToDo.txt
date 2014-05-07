@@ -8,6 +8,8 @@ Need to do:
 - decrease how often enemies shoot.
 - make cover.
 - player losses all lifes when enemies reach the bottom plane of the screen.
+- the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
+- Points should be based on the amount of life taken from the enemy.
 
 
 Nice to do:
