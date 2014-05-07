@@ -3,7 +3,7 @@
 // Accesse classes: Enemy, Player
 
 class MenUI {
-  int titleSize = 74;
+  float titleSize = 120;
   int lastTick = 0;
   int nextTick = 2000;
   
@@ -11,7 +11,7 @@ class MenUI {
   ArrayList<PointsText> pointsTexts = new ArrayList<PointsText>();
   String scoreLabel = "SCORE";
   String totalScoreLabel = "TOTAL SCORE";
-  int labelHeight = 20;
+  float labelHeight = 20*(800/width);
   
   String btnLabel;
   float btnLabelY;
@@ -51,10 +51,10 @@ class MenUI {
    
   void displayTitle() {
     textAlign(CENTER, TOP);
-    textSize(titleSize*1.55);
+    textSize(titleSize);
     fill(255);
     noStroke();
-    text("SPACE", width/2, -titleSize/10);
+    text("SPACE", width/2 - titleSize/2, titleSize/5);
     fill(0, 255, 0);
     //Add flicker effect to title.
     if(millis() - lastTick >= nextTick) {
@@ -64,8 +64,8 @@ class MenUI {
         nextTick = (int)random(3000, 10000);
       }
     }
-    textSize(titleSize);
-    text("INVADERS", width/2, titleSize*1.25);
+    textSize(titleSize*0.65);
+    text("INVADERS", width/2 + titleSize/3, titleSize*0.95);
   }
   
   void showEnemies() {
@@ -171,12 +171,13 @@ class MenUI {
       gamePaused = true;
     }
   }
-  
+
+//Display Player's ID, Lifes, Score and players total score.
   void displayPlayerUI() {
-    totalScore = 0;
-    for(int p = players.size()-1; p > -1; p--) {
-      Player _player = players.get(p);
-      String numPlayer = "P" + nf(p+1, 0);
+    totalScore = 0;  //Reset total score and recalculate it.
+    for(int i = players.size()-1; i > -1; i--) {
+      Player _player = players.get(i);
+      String numPlayer = "P" + nf(i+1, 0);
       String score = nf(_player.score, 0);
       String lifesLabel = _player.lifesLabel;
       
@@ -184,30 +185,30 @@ class MenUI {
       else { fill(255, 0, 0, 220); }
       
       //Display player ID.
-      float tx = _player.pHeight/2;
+      float _x = labelHeight/2;
       textAlign(LEFT, CENTER);
-      textSize(62);
-      float p1IDx = tx*(1-p);
-      float p2IDx = (width - tx - textWidth(numPlayer))*p;
-      text(numPlayer, p1IDx + p2IDx, _player.pWidth/2);
+      textSize(labelHeight*3 + labelHeight/10);
+      float p1IDx = _x*(1-i);
+      float p2IDx = (width - textWidth(numPlayer))*i;
+      text(numPlayer, p1IDx + p2IDx, labelHeight*1.25);
       
       //Display labels for lifes and scores.
-      tx += textWidth(numPlayer);
+      _x += textWidth(numPlayer);
       textSize(labelHeight);
-      float p1LabelX = tx*(1-p);
-      float p2LifesLabelX = (width - tx - textWidth(lifesLabel))*p;
+      float p1LabelX = _x*(1-i);
+      float p2LifesLabelX = (width - _x + labelHeight/4 - textWidth(lifesLabel))*i;
       text(lifesLabel, p1LabelX + p2LifesLabelX, _player.pWidth);
       if(isMultiplayer) {
-        float p2ScoreLabelX = (width - tx - textWidth(scoreLabel))*p;
+        float p2ScoreLabelX = (width - _x + labelHeight/4 - textWidth(scoreLabel))*i;
         text(scoreLabel, p1LabelX + p2ScoreLabelX, _player.pWidth - labelHeight*1.25);
       }
       
       //Display scores.
-      tx += textWidth(lifesLabel) + _player.pWidth/4;
+      _x += textWidth(lifesLabel) + _player.pWidth/4;
       if(isMultiplayer) {
         //Display individual scores.
-        float p1ScoreX = (tx + _player.pWidth*1.75 - textWidth(score)/2)*(1-p);
-        float p2ScoreX = (width - tx - textWidth(score)/2 - _player.pWidth*2)*p;
+        float p1ScoreX = (_x + _player.pWidth*1.75 - textWidth(score)/2)*(1-i);
+        float p2ScoreX = (width - _x + labelHeight/4 - textWidth(score)/2 - _player.pWidth*2)*i;
         text(score, p1ScoreX + p2ScoreX, _player.pWidth - labelHeight*1.25);
       }
       else {
@@ -215,10 +216,10 @@ class MenUI {
       }
       
       //Display lifes.
-      for(int i = 0; i < _player.lifes; i++) {
-        float p1LifesX = (tx + (_player.pWidth*1.25)*i)*(1-p);
-        float p2LifesX = (width - tx - _player.pWidth - (_player.pWidth*1.5)*i)*p;
-        _player.drawPlayer(p1LifesX + p2LifesX, _player.pWidth, false);
+      for(int h = 0; h < _player.lifes; h++) {
+        float p1LifesX = (_x + (_player.pWidth*1.25)*h)*(1-i);
+        float p2LifesX = (width - _x + labelHeight/4 - _player.pWidth - (_player.pWidth*1.5)*h)*i;
+        _player.drawPlayer(p1LifesX + p2LifesX, _player.pWidth*0.95, false);
       }
       totalScore += _player.score;
     }
@@ -229,7 +230,7 @@ class MenUI {
     textAlign(CENTER, TOP);
     textSize(labelHeight/1.5);
     text(totalScoreLabel, width/2, 0);
-    textSize(42);
+    textSize(labelHeight*2 + titleSize/10);
     text(totalScore, width/2, labelHeight/2);
   }
   
@@ -288,7 +289,7 @@ class MenUI {
     enemyHandler.reset();
     for(int h = 5; h > 0; h--) {
       for(int i = 0; i < 3; i++) {
-        int _blockSize = 4;
+        int _blockSize = (int)labelHeight/5;
         float _eOffset = _blockSize*12;
         Enemy enemy = new Enemy(1+i, (width/8)*3 - (_eOffset*1.5)*(h-1), height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize);
         enemies.add(enemy);
