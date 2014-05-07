@@ -40,19 +40,19 @@ class EnemyHandler {
   }
 
   void moveEnemies() {
-    //Enemy nextMove depends on number of enemies alive
+    //Enemy nextMove time depends on number of enemies alive.
     if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/2))*enemies.size()) {
-      if (!moveDown) {
+      if (!moveDown) {  //Move enemies to the side.
         for (int i = enemies.size()-1; i > -1; i--) {
           if (!enemies.get(i).isDead) {
             enemies.get(i).moveEnemy((moveDist/2)*dirX, 0);
           }
         }
       }
-      else {
+      else {  //Move enemies down.
         for (int i = enemies.size()-1; i > -1; i--) {
           if (!enemies.get(i).isDead) {
-            enemies.get(i).moveEnemy(0, moveDist/2);
+            enemies.get(i).moveEnemy(0, moveDist);
           }
         }
         dirX *= -1;

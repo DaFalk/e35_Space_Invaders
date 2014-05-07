@@ -1,14 +1,11 @@
-
 Need to do:
 ------------
-
 - fix startscreen performance.
 - add comments to all code.
 - class headers. 
 - correct UI textsize and font.
 - make it more random when enemies turn into projectiles when they die. 
 - decrease how often enemies shoot.
-- the enemies need to move further down on the Y-axis.
 - make cover.
 - player losses all lifes when enemies reach the bottom plane of the screen.
 
@@ -30,7 +27,8 @@ Nice to do:
 
 In progress
 ---------------
-- make boss.
+- make a boss.
+
 
 Done
 ---------------
@@ -39,5 +37,6 @@ Done
 - Sync enemy animation.
 - Enemies shjouldnt shoot when in pause-mode.
 - when quitting a game and starting a new one then clear shots array. (was actually the dead enemies projectiles)
+- the enemies need to move further down on the Y-axis.
 
 
