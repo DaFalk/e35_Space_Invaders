@@ -30,7 +30,7 @@ class Block {
     if(blockPos.x < deathPos.x) { flip = -1; }
     else { flip = 1; }
     float angle = atan2(deathPos.y - blockPos.y, deathPos.x - blockPos.x);
-    blockPos.x += velocity*(millis()-lastMove)*0.001*cos(angle);
+    blockPos.x += (velocity/2)*(millis()-lastMove)*0.001*cos(angle);
     blockPos.y += velocity*(millis()-lastMove)*0.001;
     velocity += velocity*(millis()-lastMove)*0.001;  
     

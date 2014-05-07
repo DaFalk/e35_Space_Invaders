@@ -17,7 +17,7 @@ class EnemyHandler {
     nextMove = 400;
     shotTimer = 2000;
     nextShot = shotTimer;
-    nextAnim = nextMove*2;
+    nextAnim = nextMove;
     lastMove = millis();
     lastShot = millis();
     dirX = 1;
@@ -29,10 +29,13 @@ class EnemyHandler {
         moveEnemies();
         shoot();
       }
-      animateEnemies();
+      animate(enemies);
     }
-    for (int i = deadEnemies.size()-1; i > -1; i--) {
-      deadEnemies.get(i).update();
+    if(deadEnemies.size() > 0 && !gamePaused) {
+      for (int i = deadEnemies.size()-1; i > -1; i--) {
+        deadEnemies.get(i).update();
+      }
+      animate(deadEnemies);
     }
     if (respawnEnemies) { 
       spawner.respawnEnemies();
@@ -61,6 +64,15 @@ class EnemyHandler {
       lastMove = millis();
     }
   }
+  
+  void animate(ArrayList<Enemy> _enemies) {
+    if(millis() - lastAnim >= (nextAnim/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
+      for(int i = _enemies.size()-1; i > -1; i--) {
+        _enemies.get(i).animateEnemy();
+      }
+      lastAnim = millis();
+    }
+  }
 
 //Collision detection
   void checkEnemiesCollision() {
@@ -86,15 +98,6 @@ class EnemyHandler {
         shots.add(s);
         lastShot = millis();
       }
-    }
-  }
-  
-  void animateEnemies() {
-    if(millis() - lastAnim >= nextAnim) {
-      for(int i = enemies.size()-1; i > -1; i--) {
-        enemies.get(i).animate();
-      }
-      lastAnim = millis();
     }
   }
   
