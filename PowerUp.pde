@@ -82,7 +82,7 @@ class PowerUp {
       break;
       case(2):  //Rapid shot.
         _player.shotCooldown = 100;
-        _player.powerUpDuration = 3000;
+        _player.powerUpDuration = 4000;
       break;
       case(3):  //Homeseking missile
         _player.shotCooldown = 1000;

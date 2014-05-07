@@ -51,7 +51,7 @@ class EnemyHandler {
           dirX *= -1;
         }
         checkEnemiesCollision();
-        lastMove = millis() + millis()-lastMove;
+        lastMove = millis();
       }
     }
   }

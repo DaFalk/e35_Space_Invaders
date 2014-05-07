@@ -111,7 +111,7 @@ class Player {
     case('2'):
       weaponType = 2;
       shotCooldown = 100;
-      powerUpDuration = 3000;
+      powerUpDuration = 4000;
       powerUpStartTime = millis();
       lastShot = millis();
     break;

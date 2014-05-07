@@ -48,7 +48,7 @@ class MenUI {
     //ESC menu
     if(gamePaused) { displayESCMenu(); }
   }
-  
+   
   void displayTitle() {
     textAlign(CENTER, TOP);
     textSize(titleSize*1.55);
