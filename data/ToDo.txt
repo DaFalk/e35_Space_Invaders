@@ -1,9 +1,7 @@
 
-
 Need to do:
 ------------
-- Enemy block stuck on right sketch edge when spawning. (sometimes they also get stuck in mid-air)
-- make boss.
+
 - fix startscreen performance.
 - Sync enemy animation.
 - add comments to all code.
@@ -29,6 +27,14 @@ Nice to do:
 - shoot collision animation.
 - the "machine gun" power'up could use a small "buff".
 
+
+In progress
+---------------
+- make boss.
+
+Done
+---------------
+- Enemy block stuck on left sketch edge when spawning. (sometimes they also get stuck in mid-air) / (is caused by the "+ millis()-lastMove" in the enemy handler class - fixed by removing the "lastmove" correction in the timefix. 
 
 
 
