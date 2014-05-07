@@ -1,0 +1,24 @@
+
+
+Need to do:
+------------
+- Enemy block stuck on right sketch edge when spawning.
+- make boss.
+- fix startscreen performance.
+- Sync enemy animation.
+- add comments to all code.
+- class headers. 
+- correct UI textsize and font
+
+
+Nice to do:
+------------
+- Sounds are not compressed. Compress sounds.
+- Text on powerups. (floating points class).
+- MP competition. survival mode.
+- different looking enemy shoots. 
+
+
+
+
+

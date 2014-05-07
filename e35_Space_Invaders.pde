@@ -17,6 +17,7 @@ ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 Cover cover;
+PFont SpaceFont;
 
 void setup() {
   size(800, 600);
@@ -26,10 +27,13 @@ void setup() {
   enemyHandler = new EnemyHandler();
   menUI = new MenUI();
   cover = new Cover();
+  
+  SpaceFont = createFont("ca.ttf", 48);
 }
 
 void draw() {
   background(0);
+  textFont(SpaceFont);
   audioHandler.manage();
   if(gameStarted) { displayGameObjects(); }
   menUI.display();
