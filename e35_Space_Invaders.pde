@@ -4,8 +4,10 @@ AudioHandler audioHandler;
 
 boolean gameStarted = false;
 boolean gamePaused = false;
+boolean showHighscores = false;
 boolean isMultiplayer = false;
 boolean mouseClicked = false;
+PFont SpaceFont;
 
 Spawner spawner;
 EnemyHandler enemyHandler;
@@ -17,7 +19,6 @@ ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 Cover cover;
-PFont SpaceFont;
 
 void setup() {
   size(800, 600);
@@ -25,10 +26,9 @@ void setup() {
   audioHandler = new AudioHandler();
   spawner = new Spawner();
   enemyHandler = new EnemyHandler();
+  SpaceFont = createFont("ca.ttf", 48);
   menUI = new MenUI();
   cover = new Cover();
-  
-  SpaceFont = createFont("ca.ttf", 48);
 }
 
 void draw() {
@@ -79,7 +79,7 @@ void keyReleased() {
 void keyPressed() {
   if(key == 27) {  //Key 27 = ESC
     key = 0;  //Cancel other ESC events(e.g. quit processing).
-    gamePaused = !gamePaused;
+    if(!showHighscores) { gamePaused = !gamePaused; }
   }
   if(gameStarted) {
     if(key == CODED) { players.get(players.size()-1).keyDown(); }

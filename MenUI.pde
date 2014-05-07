@@ -166,7 +166,10 @@ class MenUI {
     for(int i = players.size()-1; i > -1; i--) {
       allLifes += players.get(i).lifes;
     }
-    if(allLifes < 1) { gamePaused = true; }
+    if(allLifes < 1) {
+      showHighscores = true;
+      gamePaused = true;
+    }
   }
   
   void displayPlayerUI() {
@@ -266,7 +269,9 @@ class MenUI {
   void resetGame() {
     gamePaused = false;
     gameStarted = false;
+    showHighscores = false;
     players.clear();
+    enemyHandler.deadEnemies.clear();
     shots.clear();
     powerUps.clear();
     resetStartMenu();
