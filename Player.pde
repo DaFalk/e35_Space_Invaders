@@ -15,7 +15,8 @@ class Player {
     x = xPos;
     y = height - pWidth;
     pHeight = pWidth/4;
-    setWeaponTimers(0);
+    weaponType = 0;
+    shotCooldown = 1000;
   }
   
   void update() {
@@ -81,39 +82,10 @@ class Player {
   void handlePowerUp() {
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
-        setWeaponTimers(0);
+        weaponType = 0;
+        shotCooldown = 1000;
       }
     }
-  }
-  
-//Set the stats of the current weapon type.
-  void setWeaponTimers(int _weaponType) {
-    weaponType = _weaponType;
-    powerUpStartTime = millis();
-    
-    switch(weaponType) {
-      case(0):  //Normal shot.
-        shotCooldown = 1000;
-      break;
-      case(1):  //Piercing shot.
-        shotCooldown = 2000;
-        powerUpDuration = 5000;
-      break;
-      case(2):  //Rapid shot.
-        shotCooldown = 100;
-        powerUpDuration = 3000;
-      break;
-      case(3):  //Homeseking missile
-        shotCooldown = 1000;
-        powerUpDuration = 4000;
-      break;
-      case(4):  //Charge beam
-        shotCooldown = 200;
-        powerUpDuration = 10000;
-      break;
-    }
-    
-    lastShot = millis();
   }
   
   void keyDown() {
@@ -131,19 +103,31 @@ class Player {
     break;
     case('1'):
       weaponType = 1;
-      setWeaponTimers(weaponType);
+      shotCooldown = 2000;
+      powerUpDuration = 5000;
+      powerUpStartTime = millis();
+      lastShot = millis();
     break;
     case('2'):
       weaponType = 2;
-      setWeaponTimers(weaponType);
+      shotCooldown = 100;
+      powerUpDuration = 3000;
+      powerUpStartTime = millis();
+      lastShot = millis();
     break;
     case('3'):
       weaponType = 3;
-      setWeaponTimers(weaponType);
+      shotCooldown = 1000;
+      powerUpDuration = 4000;
+      powerUpStartTime = millis();
+      lastShot = millis();
     break;
     case('4'):
       weaponType = 4;
-      setWeaponTimers(weaponType);
+      shotCooldown = 500;
+      powerUpDuration = 4000;
+      powerUpStartTime = millis();
+      lastShot = millis();
     break;
     case('e'):
       adjustLifes();

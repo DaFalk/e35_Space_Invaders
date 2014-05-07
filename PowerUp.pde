@@ -55,7 +55,7 @@ class PowerUp {
         if((y > _player.y - (_player.pHeight/3)*2 && y < _player.y + _player.pHeight)) {
           if((x > _player.x && x < _player.x + _player.pWidth)) {
             if(type > 0) {
-              _player.setWeaponTimers(type);
+              setWeaponTimers(_player, type);
               audioHandler.playSFX(4);
             }
             else {
@@ -68,5 +68,32 @@ class PowerUp {
       }
     }
     return false;
+  }
+  
+//Set the stats of the current weapon type.
+  void setWeaponTimers(Player _player, int _weaponType) {
+    _player.weaponType = _weaponType;
+    _player.powerUpStartTime = millis();
+    
+    switch(_weaponType) {
+      case(1):  //Piercing shot.
+        _player.shotCooldown = 2000;
+        _player.powerUpDuration = 5000;
+      break;
+      case(2):  //Rapid shot.
+        _player.shotCooldown = 100;
+        _player.powerUpDuration = 3000;
+      break;
+      case(3):  //Homeseking missile
+        _player.shotCooldown = 1000;
+        _player.powerUpDuration = 4000;
+      break;
+      case(4):  //Charge beam
+        _player.shotCooldown = 500;
+        _player.powerUpDuration = 4000;
+      break;
+    }
+    
+    _player.lastShot = millis();
   }
 }
