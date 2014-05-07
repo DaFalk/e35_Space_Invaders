@@ -271,7 +271,6 @@ class MenUI {
     gameStarted = false;
     showHighscores = false;
     players.clear();
-    enemyHandler.deadEnemies.clear();
     shots.clear();
     powerUps.clear();
     resetStartMenu();

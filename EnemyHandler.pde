@@ -8,6 +8,7 @@ class EnemyHandler {
   float moveDist;
   int lastMove, nextMove;
   int lastShot, shotTimer, nextShot;
+  int lastAnim, nextAnim;
   boolean moveDown = false;
   boolean respawnEnemies = false;
   ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
@@ -16,15 +17,19 @@ class EnemyHandler {
     nextMove = 400;
     shotTimer = 2000;
     nextShot = shotTimer;
+    nextAnim = nextMove*2;
     lastMove = millis();
     lastShot = millis();
     dirX = 1;
   }
 
   void update() {
-    if (enemies.size() > 0) {
-      moveEnemies();
-      shoot();
+    if (enemies.size() > 0 && !gamePaused) {
+      if(gameStarted) {
+        moveEnemies();
+        shoot();
+      }
+      animateEnemies();
     }
     for (int i = deadEnemies.size()-1; i > -1; i--) {
       deadEnemies.get(i).update();
@@ -35,30 +40,29 @@ class EnemyHandler {
   }
 
   void moveEnemies() {
-    if (!gamePaused) {
-      //Enemy nextMove depends on number of enemies alive
-      if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/2))*enemies.size()) {
-        if (!moveDown) {
-          for (int i = enemies.size()-1; i > -1; i--) {
-            if (!enemies.get(i).isDead) {
-              enemies.get(i).moveEnemy((moveDist/2)*dirX, 0);
-            }
+    //Enemy nextMove depends on number of enemies alive
+    if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/2))*enemies.size()) {
+      if (!moveDown) {
+        for (int i = enemies.size()-1; i > -1; i--) {
+          if (!enemies.get(i).isDead) {
+            enemies.get(i).moveEnemy((moveDist/2)*dirX, 0);
           }
         }
-        else {
-          for (int i = enemies.size()-1; i > -1; i--) {
-            if (!enemies.get(i).isDead) {
-              enemies.get(i).moveEnemy(0, moveDist/2);
-            }
-          }
-          dirX *= -1;
-        }
-        checkEnemiesCollision();
-        lastMove = millis();
       }
+      else {
+        for (int i = enemies.size()-1; i > -1; i--) {
+          if (!enemies.get(i).isDead) {
+            enemies.get(i).moveEnemy(0, moveDist/2);
+          }
+        }
+        dirX *= -1;
+      }
+      checkEnemiesCollision();
+      lastMove = millis();
     }
   }
 
+//Collision detection
   void checkEnemiesCollision() {
     for (int i = enemies.size()-1; i > -1; i--) {
       float nextLeftX = enemies.get(i).x - eSize/2 - moveDist;
@@ -71,6 +75,7 @@ class EnemyHandler {
     moveDown = false;
   }
 
+//Random enemy shot
   void shoot() {
     if (millis() >= lastShot + nextShot) {
       int _randomEnemy = floor(random(0, enemies.size()));
@@ -83,9 +88,20 @@ class EnemyHandler {
       }
     }
   }
-
+  
+  void animateEnemies() {
+    if(millis() - lastAnim >= nextAnim) {
+      for(int i = enemies.size()-1; i > -1; i--) {
+        enemies.get(i).animate();
+      }
+      lastAnim = millis();
+    }
+  }
+  
+//Rest
   void reset() {
     enemies.clear();
+    deadEnemies.clear();
     nextMove = 400;
     shotTimer = 2000;
     dirX = 1;

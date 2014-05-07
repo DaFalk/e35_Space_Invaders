@@ -36,6 +36,7 @@ void draw() {
   textFont(SpaceFont);
   audioHandler.manage();
   if(gameStarted) { displayGameObjects(); }
+  enemyHandler.update();
   menUI.display();
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }
@@ -46,7 +47,6 @@ void displayGameObjects() {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
   }
-  enemyHandler.update();
   
  //Iterate shots array list and updates every shot. 
   for(int i = shots.size() - 1; i >= 0; i--) {

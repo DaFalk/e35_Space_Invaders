@@ -8,7 +8,6 @@ class Enemy {
   int half;  //Half the size() of blocks arraylist.
   int blockSize, eSize, eHeight;
   int type, lifes, points;
-  int lastAnim, nextAnim;
   int moveSwitch = 1;
   PVector lowestPoint = new PVector(0, 0);
   boolean isDead;
@@ -26,7 +25,6 @@ class Enemy {
     this.blockSize = _blockSize;
     this.eSize = 6*blockSize;
     this.eHeight = 4*blockSize;
-    nextAnim = enemyHandler.nextMove*2;
     this.half = ceil(setArrayLength()/2);
     for (int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(new PVector(x, y), blockSize));
@@ -49,7 +47,6 @@ class Enemy {
     if(isDead) {
       if(checkBlockCollision()) { enemies.remove(this); }
     }
-    animateEnemy();
   }
   
   void moveEnemy(float _amountX, float _amountY) {
@@ -75,48 +72,45 @@ class Enemy {
     }
   }
   
-  void animateEnemy() {
-    if(millis() - lastAnim >= nextAnim) {
-      switch(type) {
-        case(1):
-          for(int i = 0; i < 2; i++) {
-            int flip = 1 - i*2;
-            blocks.get(15 + half*i).blockPos.y += blockSize*moveSwitch;
-            blocks.get(21 + half*i).blockPos.x += ((blockSize*3)*flip)*moveSwitch;
-            blocks.get(21 + half*i).blockPos.y -= blockSize*moveSwitch;
-            blocks.get(26 + half*i).blockPos.y -= blockSize*moveSwitch;
-            blocks.get(30 + half*i).blockPos.x -= ((blockSize*2)*flip)*moveSwitch;
-          }
-        break;
-        
-        case(2):
-          for(int i = 0; i < 2; i++) {
-            int flip = 1 - i*2;
-            int _half = half - 2;
-            blocks.get(4 + _half*i).blockPos.x -= (blockSize*3)*flip*moveSwitch;
-            blocks.get(4 + _half*i).blockPos.y += (blockSize*2)*moveSwitch;
-            blocks.get(13 + _half*i).blockPos.x -= (blockSize*2)*flip*moveSwitch;
-            blocks.get(23 + _half*i).blockPos.y += (blockSize*3)*moveSwitch;
-            blocks.get(24 + _half*i).blockPos.y += (blockSize*3)*moveSwitch;
-            blocks.get(25 + _half*i).blockPos.x -= (blockSize*2)*flip*moveSwitch;
-            blocks.get(25 + _half*i).blockPos.y -= blockSize*moveSwitch;
-          }
-        break;
-        
-        case(3):
-          for(int i = 0; i < 2; i++) {
-            int flip = 1 - i*2;
-            blocks.get(5 + half*i).blockPos.y -= blockSize*moveSwitch;
-            blocks.get(9 + half*i).blockPos.x += blockSize*flip*moveSwitch;
-            blocks.get(10 + half*i).blockPos.x += blockSize*flip*moveSwitch;
-            blocks.get(14 + half*i).blockPos.y += blockSize*moveSwitch;
-            blocks.get(17 + half*i).blockPos.y -= blockSize*moveSwitch;
-          }
-        break;
-      }
-      moveSwitch *= -1;
-      lastAnim = millis();
+  void animate() {
+    switch(type) {
+      case(1):
+        for(int i = 0; i < 2; i++) {
+          int flip = 1 - i*2;
+          blocks.get(15 + half*i).blockPos.y += blockSize*moveSwitch;
+          blocks.get(21 + half*i).blockPos.x += ((blockSize*3)*flip)*moveSwitch;
+          blocks.get(21 + half*i).blockPos.y -= blockSize*moveSwitch;
+          blocks.get(26 + half*i).blockPos.y -= blockSize*moveSwitch;
+          blocks.get(30 + half*i).blockPos.x -= ((blockSize*2)*flip)*moveSwitch;
+        }
+      break;
+      
+      case(2):
+        for(int i = 0; i < 2; i++) {
+          int flip = 1 - i*2;
+          int _half = half - 2;
+          blocks.get(4 + _half*i).blockPos.x -= (blockSize*3)*flip*moveSwitch;
+          blocks.get(4 + _half*i).blockPos.y += (blockSize*2)*moveSwitch;
+          blocks.get(13 + _half*i).blockPos.x -= (blockSize*2)*flip*moveSwitch;
+          blocks.get(23 + _half*i).blockPos.y += (blockSize*3)*moveSwitch;
+          blocks.get(24 + _half*i).blockPos.y += (blockSize*3)*moveSwitch;
+          blocks.get(25 + _half*i).blockPos.x -= (blockSize*2)*flip*moveSwitch;
+          blocks.get(25 + _half*i).blockPos.y -= blockSize*moveSwitch;
+        }
+      break;
+      
+      case(3):
+        for(int i = 0; i < 2; i++) {
+          int flip = 1 - i*2;
+          blocks.get(5 + half*i).blockPos.y -= blockSize*moveSwitch;
+          blocks.get(9 + half*i).blockPos.x += blockSize*flip*moveSwitch;
+          blocks.get(10 + half*i).blockPos.x += blockSize*flip*moveSwitch;
+          blocks.get(14 + half*i).blockPos.y += blockSize*moveSwitch;
+          blocks.get(17 + half*i).blockPos.y -= blockSize*moveSwitch;
+        }
+      break;
     }
+    moveSwitch *= -1;
   }
   
   void damageEnemy(Shot _shot) {
