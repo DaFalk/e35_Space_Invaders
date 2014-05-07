@@ -45,13 +45,13 @@ class EnemyHandler {
         else {
           for(int i = enemies.size()-1; i > -1; i--) {
             if(!enemies.get(i).isDead) {
-              enemies.get(i).moveEnemy(0, (moveDist/2)*dirX);
+              enemies.get(i).moveEnemy(0, moveDist/2);
             }
           }
           dirX *= -1;
         }
         checkEnemiesCollision();
-        lastMove = millis();
+        lastMove = millis() + millis()-lastMove;
       }
     }
   }
