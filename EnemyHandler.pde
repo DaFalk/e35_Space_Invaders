@@ -41,7 +41,7 @@ class EnemyHandler {
 
   void moveEnemies() {
     //Enemy nextMove time depends on number of enemies alive.
-    if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/2))*enemies.size()) {
+    if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
       if (!moveDown) {  //Move enemies to the side.
         for (int i = enemies.size()-1; i > -1; i--) {
           if (!enemies.get(i).isDead) {

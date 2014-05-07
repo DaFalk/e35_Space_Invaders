@@ -21,7 +21,9 @@ ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 Cover cover;
 
 void setup() {
-  size(800, 600);
+  int _width = 800;
+  int _height = _width - _width/4;
+  size(_width, _height);
   minim = new Minim(this);
   audioHandler = new AudioHandler();
   spawner = new Spawner();
@@ -35,57 +37,70 @@ void draw() {
   background(0);
   textFont(SpaceFont);
   audioHandler.manage();
-  if(gameStarted) { displayGameObjects(); }
+  if (gameStarted) { 
+    displayGameObjects();
+  }
   enemyHandler.update();
   menUI.display();
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }
 
 void displayGameObjects() {
- //Iterates enemies array list and updates every enemy. 
-  for(int i = enemies.size() - 1; i >= 0; i--) {
+  //Iterates enemies array list and updates every enemy. 
+  for (int i = enemies.size() - 1; i >= 0; i--) {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
   }
-  
- //Iterate shots array list and updates every shot. 
-  for(int i = shots.size() - 1; i >= 0; i--) {
+
+  //Iterate shots array list and updates every shot. 
+  for (int i = shots.size() - 1; i >= 0; i--) {
     Shot _shot = shots.get(i);
     _shot.update();
   }
-  
- //Iterates players array list and updates every player.
-  for(int i = players.size() - 1; i >= 0; i--) {
+
+  //Iterates players array list and updates every player.
+  for (int i = players.size() - 1; i >= 0; i--) {
     Player _player = players.get(i);
     _player.update();
   }
-  
- //Iterates powerUps array list and updates every powerup. 
-  for(int i = powerUps.size() - 1; i >= 0; i--) {
+
+  //Iterates powerUps array list and updates every powerup. 
+  for (int i = powerUps.size() - 1; i >= 0; i--) {
     PowerUp _powerUp = powerUps.get(i);
     _powerUp.update();
   }
- //Display ground and cover
+  //Display ground and cover
   cover.display();
 }
 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
 void keyReleased() {
-  if(gameStarted) {
-    if(key == CODED) { players.get(players.size()-1).keyUp(); }
-    if(key != CODED) { players.get(0).keyUp(); }
+  if (gameStarted) {
+    if (key == CODED) { 
+      players.get(players.size()-1).keyUp();
+    }
+    if (key != CODED) { 
+      players.get(0).keyUp();
+    }
   }
 }
 void keyPressed() {
-  if(key == 27) {  //Key 27 = ESC
+  if (key == 27) {  //Key 27 = ESC
     key = 0;  //Cancel other ESC events(e.g. quit processing).
-    if(!showHighscores) { gamePaused = !gamePaused; }
+    if (!showHighscores) { 
+      gamePaused = !gamePaused;
+    }
   }
-  if(gameStarted) {
-    if(key == CODED) { players.get(players.size()-1).keyDown(); }
-    if(key != CODED) { players.get(0).keyDown(); }
+  if (gameStarted) {
+    if (key == CODED) { 
+      players.get(players.size()-1).keyDown();
+    }
+    if (key != CODED) { 
+      players.get(0).keyDown();
+    }
   }
 }
 void mousePressed() {
   mouseClicked = true;  //Register mousePressed as a click.
 }
+

@@ -1,9 +1,9 @@
 //
 //
-// Accesse classes: Enemy, Player
+// Access classes: Enemy, Player, PointsText
 
 class MenUI {
-  float titleSize = 120;
+  float titleSize = 0.15*width;
   int lastTick = 0;
   int nextTick = 2000;
   
@@ -11,7 +11,7 @@ class MenUI {
   ArrayList<PointsText> pointsTexts = new ArrayList<PointsText>();
   String scoreLabel = "SCORE";
   String totalScoreLabel = "TOTAL SCORE";
-  float labelHeight = 20*(800/width);
+  float labelHeight = 0.025*width;
   
   String btnLabel;
   float btnLabelY;

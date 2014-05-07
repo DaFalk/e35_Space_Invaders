@@ -5,8 +5,8 @@
 class PowerUp {
   float x, y;
   float size;
-  float speed = 50;
-  int duration, lastMove, type, shotCooldown;
+  float speed = 0.0625*width;
+  int lastMove, type, shotCooldown;
   
   PowerUp(float _x, float _y, float _size) {
     this.x = _x;
@@ -14,7 +14,6 @@ class PowerUp {
     this.size = _size*0.75;
     this.lastMove = millis();
     this.type = ceil(random(-1, 4));
-    this.duration = type*5000;
   }
   
   void update() {
@@ -32,18 +31,29 @@ class PowerUp {
     fill(0, 255, 0);
     triangle(x - size/2, y - size/2, x + size/2, y - size/2, x, y + size/2);
     stroke(0, 255, 0);
+    strokeWeight(0.0025*width);
     noFill();
     ellipse(x, y, size, size);
-    strokeWeight(3);
-    if(type == 0) {
-      stroke(255, 100);
-      ellipse(x, y, size*3, size*3);
-      stroke(255, 155);
+    strokeWeight(0.00375*width);
+    switch(type) {
+      case(0):
+        stroke(255, 100);
+        ellipse(x, y, size*3, size*3);
+        stroke(255, 155);
+        break;
+      case(1):
+        stroke(70, 110, 255, 155);
+      break;
+      case(2):
+        stroke(255, 155);
+      break;
+      case(3):
+        stroke(255, 70, 110, 155);
+      break;
+      case(4):
+        stroke(0, 255, 0, 155);
+      break;
     }
-    if(type == 1) { stroke(70, 110, 255, 155); }
-    if(type == 2) { stroke(255, 155); }
-    if(type == 3) { stroke(255, 70, 110, 155); }
-    if(type == 4) { stroke(0, 255, 0, 155); }
     ellipse(x, y, size*2, size*2);
   }
   

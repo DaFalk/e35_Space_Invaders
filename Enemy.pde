@@ -1,31 +1,31 @@
 //
 //
-// Accesse classes: spawner, menUI, audioHandler, enemyHandler, players[], enemies[]
+// Accesse classes: Block, spawner, menUI, audioHandler, enemyHandler, players[], enemies[]
 
 class Enemy {
   ArrayList<Block> blocks;
   float x, y;
-  int half;  //Half the size() of blocks arraylist.
-  int blockSize, eSize, eHeight;
+  float eSize, eHeight;
+  int half;  //Half the size of the blocks arraylist (to be able to draw half the blocks and mirror them).
+  int blockSize;
   int type, lifes, points;
   int moveSwitch = 1;
+  boolean isDead = false;
   PVector lowestPoint = new PVector(0, 0);
-  boolean isDead;
   color eFill;
 
   Enemy(int _type, float _x, float _y, int _blockSize) {
-    this.isDead = false;
-    this.type = _type;
-    this.lifes = 6;
-    this.x = _x;
-    this.y = _y;
-    this.points = type*10;
-    this.eFill = color(255);
-    this.blocks = new ArrayList<Block>();
-    this.blockSize = _blockSize;
-    this.eSize = 6*blockSize;
-    this.eHeight = 4*blockSize;
-    this.half = ceil(setArrayLength()/2);
+    type = _type;
+    points = type*10;
+    lifes = 6;
+    x = _x;
+    y = _y;
+    eFill = color(255);
+    blocks = new ArrayList<Block>();
+    blockSize = _blockSize;
+    eSize = 6*blockSize;
+    eHeight = 4*blockSize;
+    half = ceil(setArrayLength()/2);
     for (int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(new PVector(x, y), blockSize));
       blocks.get(i).bFill = eFill;
@@ -45,7 +45,7 @@ class Enemy {
       }
     }
     if(isDead) {
-      if(checkBlockCollision()) { enemies.remove(this); }
+      if(checkBlockCollision()) { enemyHandler.deadEnemies.remove(this); }
     }
   }
   
@@ -145,8 +145,8 @@ class Enemy {
       if(!_player.isDead) {
         if((lowestPoint.y > _player.y - _player.pHeight - _player.pHeight/3 && lowestPoint.y < _player.y + _player.pHeight)) {
           if((lowestPoint.x > _player.x && lowestPoint.x < _player.x + _player.pWidth)) {
-            if(_player.hasShield) { _player.hasShield = false; }
-            else { _player.adjustLifes(); }
+            if(!_player.hasShield) { _player.adjustLifes(); }
+            else { _player.hasShield = false; }
             return true;
           }
         }

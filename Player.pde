@@ -1,12 +1,13 @@
 class Player {
   String lifesLabel = "LIFES";
   float x, y;
-  int lastMove, lastShot, shotCooldown, left, right, pHeight;
-  int lifes = 3;
-  int pWidth = 40;
-  int speed = 150;
-  int score = 0;
+  int lastMove, lastShot, shotCooldown, left, right;
   int weaponType, powerUpStartTime, powerUpDuration;
+  int lifes = 3;
+  int score = 0;
+  float pWidth = 0.05*width;
+  float pHeight = 0.0125*width;
+  float speed = 0.1875*width;
   boolean attack = false;
   boolean isDead = false;
   boolean hasShield = false;
@@ -14,7 +15,6 @@ class Player {
   Player(float xPos) {
     x = xPos;
     y = height - pWidth;
-    pHeight = pWidth/4;
     weaponType = 0;
     shotCooldown = 1000;
   }

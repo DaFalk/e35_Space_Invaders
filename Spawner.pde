@@ -1,7 +1,7 @@
 class Spawner {
   int enemyCols = 9;
   int enemyRows = 5;
-  int blockSize = 2;
+  int blockSize = (int)(0.0025*width);
   int enemySize;
   float enemyStepX;
   boolean respawnEnemies = false;
@@ -34,7 +34,7 @@ class Spawner {
           _type = 2;
           if(row >= 3) { _type = 1; }
         }
-        enemies.add(new Enemy(_type, enemySize/2 + col*enemyStepX, row*enemyStepX + 100, blockSize));
+        enemies.add(new Enemy(_type, enemySize/2 + col*enemyStepX, row*enemyStepX + 0.125*width, blockSize));
       }
     }
   }

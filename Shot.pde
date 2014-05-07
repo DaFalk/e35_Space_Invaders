@@ -1,6 +1,7 @@
 class Shot {
   PVector shotPos, shotDir;
-  int lastMove, type, owner, shotSize, speed, damage, lastDmg, nextDmg;
+  int lastMove, type, owner, damage, lastDmg, nextDmg;
+  float shotSize, speed;
   Player player;
   Enemy target;
   PVector staticTarget;
@@ -45,7 +46,7 @@ class Shot {
   
 //Draw shot related to the owner's weapon type.
   void drawShot() {
-    strokeWeight(2);
+    strokeWeight(0.0025*width);
     switch(type) {
       case(0):  //Default shot.
         stroke(255, 255, 255);
@@ -93,13 +94,13 @@ class Shot {
             }
             noFill();
             stroke(10, 210, 210, random(20, 100));
-            strokeWeight(2.5);
+            strokeWeight(0.003125*width);
             float _x = player.x + player.pWidth/2;
             float _y = player.y - player.pHeight/2;
             if(target != null) {
               bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
               stroke(110, 255, 255, random(0, 75));
-              strokeWeight(ceil(random(4, 8)));
+              strokeWeight(random(0.005, 0.01)*width);
               bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
             }
           }
@@ -107,7 +108,7 @@ class Shot {
       break;
       
       case(5):  //Enemy type 0 shot.
-        strokeWeight(1.5);
+        strokeWeight(0.001875*width);
         float offset = shotSize/5;
         int flip;
         for(int i = 0; i < 5; i++) {
@@ -186,35 +187,35 @@ class Shot {
     this.shotDir = new PVector(0, -1);
     switch(type) {
       case(0):
-        this.shotSize = 5;
-        this.speed = 500;
-        this.damage = 6;
+        shotSize = 0.00625*width;  //0.00625 = speed (5) divided by the original width (800)
+        speed = 0.625*width;
+        damage = 6;
       break;
       case(1):
-        this.shotSize = 15;
-        this.speed = 500;
-        this.damage = 6;
+        shotSize = 0.01875*width;
+        speed = 0.625*width;
+        damage = 6;
       break;
       case(2):
-        this.shotSize = 5;
-        this.speed = 600;
-        this.damage = 2;
+        shotSize = 0.00625*width;
+        speed = 0.75*width;
+        damage = 2;
       break;
       case(3):
-        this.shotSize = 15;
-        this.speed = 300;
-        this.damage = 6;
+        shotSize = 0.01875*width;
+        speed = 0.375*width;
+        damage = 6;
       break;
       case(4):
-        this.shotSize = 0;
-        this.speed = 0;
-        this.damage = 1;
+        shotSize = 0;
+        speed = 0;
+        damage = 1;
       break;
       case(5):
-        this.shotDir = new PVector(0, 1);
-        this.shotSize = 15;
-        this.speed = 300;
-        this.damage = 0;
+        shotDir = new PVector(0, 1);
+        shotSize = 0.01875*width;
+        speed = 0.375*width;
+        damage = 0;
         shotPos.y += shotSize;
       break;
     }
