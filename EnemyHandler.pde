@@ -14,7 +14,7 @@ class EnemyHandler {
 
   EnemyHandler() {
     nextMove = 400;
-    shotTimer = 2000;
+    shotTimer = 5000;
     nextShot = shotTimer;
     nextAnim = nextMove;
     lastMove = millis();
@@ -46,7 +46,7 @@ class EnemyHandler {
 
   void moveEnemies() {
     //Enemy nextMove time depends on number of enemies alive.
-    if (millis() - lastMove >= nextMove/*/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()*/) {
+    if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
       if (!moveDown) {  //Move enemies to the side.
         for (int i = enemies.size()-1; i > -1; i--) {
           if (!enemies.get(i).isDead) {
@@ -97,7 +97,7 @@ class EnemyHandler {
   void shoot() {
     if (millis() >= lastShot + nextShot) {
       int _randomEnemy = floor(random(0, enemies.size()));
-      nextShot = ceil(random(500, shotTimer));
+      nextShot = ceil(random(shotTimer/3, shotTimer));
       Enemy _enemy = enemies.get(_randomEnemy);
       if (!_enemy.isDead) {
         Shot s = new Shot(new PVector(_enemy.enemyPos.x, _enemy.enemyPos.y + _enemy.eHeight), 5, 10);
@@ -112,7 +112,7 @@ class EnemyHandler {
     enemies.clear();
     deadEnemies.clear();
     nextMove = 400;
-    shotTimer = 2000;
+    shotTimer = 5000;
     dirX = 1;
   }
 }

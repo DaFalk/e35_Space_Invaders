@@ -16,7 +16,7 @@ class Enemy {
 
   Enemy(int _type, PVector _pos, int _blockSize) {
     type = _type;
-    points = type*10;
+    points = type*5;
     lifes = 6;
     enemyPos = _pos;
     eFill = color(255);

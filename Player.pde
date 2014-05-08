@@ -28,26 +28,28 @@ class Player {
         if(attack) { shoot(); }
         handlePowerUp();
       }
-      drawPlayer(x, y, true);
+      drawPlayer(x, y, 1, true);
     }
   }
   
 //Draw player and shield if this drawn player is active.
-  void drawPlayer(float _x, float _y, boolean _active) {
+  void drawPlayer(float _x, float _y, float _scale, boolean _active) {
     rectMode(CORNER);
     noStroke();
+    float _pWidth = pWidth*_scale;
+    float _pHeight = pHeight*_scale;
     fill(0, 255, 0);
     //Body
-    rect(_x, _y, pWidth, pHeight);
-    rect(_x + (pWidth - pWidth*0.85)/2, _y - pHeight/3, pWidth*0.85, pHeight/3);
+    rect(_x, _y, _pWidth, _pHeight);
+    rect(_x + (_pWidth - _pWidth*0.85)/2, _y - _pHeight/3, _pWidth*0.85, _pHeight/3);
     //Canon
-    rect(_x + pWidth/2.5, _y - pWidth/5, pWidth/5, pWidth/5);
-    rect(_x + pWidth*(0.5 - (0.075/2)), _y - pWidth/3.5, pWidth*0.075, pWidth/3.5);
+    rect(_x + _pWidth/2.5, _y - _pWidth/5, _pWidth/5, _pWidth/5);
+    rect(_x + _pWidth*(0.5 - (0.075/2)), _y - _pWidth/3.5, _pWidth*0.075, _pWidth/3.5);
     
     if(_active) {
       if(hasShield) {
         fill(200, 200, 255,100);
-        ellipse(_x + pWidth/2, _y + pHeight/3, pWidth*1.4, pWidth*0.85);
+        ellipse(_x + _pWidth/2, _y + _pHeight/3, _pWidth*1.4, _pWidth*0.85);
       }
     }
   }
