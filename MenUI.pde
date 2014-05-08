@@ -81,9 +81,9 @@ class MenUI {
     textSize(labelHeight);
     for(int i = enemies.size()-1; i > -1; i--) {
       enemies.get(i).update();
-      text("=", width/2, enemies.get(i).y);
+      text("=", width/2, enemies.get(i).enemyPos.y);
       String _pointsText = enemies.get(i).points + " PTS";
-      text(_pointsText, width - (width/8)*3 - textWidth(_pointsText)/2, enemies.get(i).y);
+      text(_pointsText, width - (width/8)*3 - textWidth(_pointsText)/2, enemies.get(i).enemyPos.y);
     }
   }
   
@@ -279,7 +279,7 @@ class MenUI {
   
   void resetStartMenu() {
     //reset blocks
-    blocks = new Block[100];
+    blocks = new Block[50];
     for(int i = 0; i < blocks.length; i++) {
       blocks[i] = new Block(new PVector(0, 0), 2);
       blocks[i].bFill = color(255, 150);
@@ -290,8 +290,9 @@ class MenUI {
     for(int h = 5; h > 0; h--) {
       for(int i = 0; i < 3; i++) {
         int _blockSize = (int)labelHeight/5;
-        float _eOffset = _blockSize*12;
-        Enemy enemy = new Enemy(1+i, (width/8)*3 - (_eOffset*1.5)*(h-1), height/2 + _eOffset*1.5 - (_eOffset*1.5)*i, _blockSize);
+        float _eOffset = _blockSize*18;
+        PVector _pos = new PVector((width/8)*3 - _eOffset*(h-1), height/2 + _eOffset - _eOffset*i);
+        Enemy enemy = new Enemy(1+i, _pos, _blockSize);
         enemies.add(enemy);
         enemy.eFill = color(255, 255 - h*48);
         enemy.setBlocksFill();

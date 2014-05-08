@@ -71,12 +71,12 @@ class Shot {
           if(!target.isDead) {
             stroke(0, 126, 0);
             noFill();
-            ellipse(target.x, target.y, target.eSize*3, target.eSize*3);
-            if (dist(shotPos.x, shotPos.y, target.x, target.y) < target.eSize*5) {
+            ellipse(target.enemyPos.x, target.enemyPos.y, target.eSize*3, target.eSize*3);
+            if (dist(shotPos.x, shotPos.y, target.enemyPos.x, target.enemyPos.y) < target.eSize*5) {
               target.eFill = color(255, 70, 110);
               target.setBlocksFill();
             }
-            float _angle = atan2(target.y - shotPos.y, target.x - shotPos.x);
+            float _angle = atan2(target.enemyPos.y - shotPos.y, target.enemyPos.x - shotPos.x);
             shotDir = new PVector(cos(_angle), sin(_angle));
             stroke(126, 0, 0);
             line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(_angle), shotPos.y + abs(shotSize*sin(_angle)));
@@ -98,10 +98,10 @@ class Shot {
             float _x = player.x + player.pWidth/2;
             float _y = player.y - player.pHeight/2;
             if(target != null) {
-              bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
+              bezier(_x, _y, _x, _y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
               stroke(110, 255, 255, random(0, 75));
               strokeWeight(random(0.005, 0.01)*width);
-              bezier(_x, _y, _x, _y - (height-target.y), target.x, target.y + target.eSize*2, target.x, target.y);
+              bezier(_x, _y, _x, _y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
             }
           }
         } 
@@ -133,8 +133,8 @@ class Shot {
         for(int i = enemies.size() - 1; i > -1; i--) {
           Enemy _enemy = enemies.get(i);
           if(!_enemy.isDead) {
-            if(shotPos.y < _enemy.y + _enemy.eHeight && shotPos.y > _enemy.y - _enemy.eHeight) {
-              if(shotPos.x < _enemy.x + _enemy.eSize && shotPos.x > _enemy.x - _enemy.eSize) {
+            if(shotPos.y < _enemy.enemyPos.y + _enemy.eHeight && shotPos.y > _enemy.enemyPos.y - _enemy.eHeight) {
+              if(shotPos.x < _enemy.enemyPos.x + _enemy.eSize && shotPos.x > _enemy.enemyPos.x - _enemy.eSize) {
                 enemies.get(i).damageEnemy(this);
                 if(type != 1) { return true; }
               }
@@ -162,8 +162,8 @@ class Shot {
       if(!target.isDead) {
         switch(type) {
           case(3):
-            if(shotPos.y < target.y + target.eHeight && shotPos.y > target.y - target.eHeight) {
-              if(shotPos.x < target.x + target.eSize && shotPos.x > target.x - target.eSize) {
+            if(shotPos.y < target.enemyPos.y + target.eHeight && shotPos.y > target.enemyPos.y - target.eHeight) {
+              if(shotPos.x < target.enemyPos.x + target.eSize && shotPos.x > target.enemyPos.x - target.eSize) {
                 target.damageEnemy(this);
                 audioHandler.audioBank[7+type].pause();
                 return true;

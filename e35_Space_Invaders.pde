@@ -101,6 +101,6 @@ void keyPressed() {
   }
 }
 void mousePressed() {
-  mouseClicked = true;  //Register mousePressed as a click.
+  mouseClicked = true;  //Register mousePressed as a click (for the buttons).
 }
 

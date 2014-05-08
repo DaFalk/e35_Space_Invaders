@@ -3,14 +3,13 @@
 // Accesses Player class
 
 class PowerUp {
-  float x, y;
+  PVector powerUpPos;
   float size;
   float speed = 0.0625*width;
   int lastMove, type, shotCooldown;
   
-  PowerUp(float _x, float _y, float _size) {
-    this.x = _x;
-    this.y = _y;
+  PowerUp(PVector _pos, float _size) {
+    powerUpPos = _pos;
     this.size = _size*0.75;
     this.lastMove = millis();
     this.type = ceil(random(-1, 4));
@@ -18,7 +17,7 @@ class PowerUp {
   
   void update() {
     if(!gamePaused) {
-      y += speed*((millis()-lastMove)*0.001);
+      powerUpPos.y += speed*((millis()-lastMove)*0.001);
       lastMove = millis();
       if(checkCollision()) { powerUps.remove(this); }
     }
@@ -29,16 +28,16 @@ class PowerUp {
   void drawPowerUp() {
     noStroke();
     fill(0, 255, 0);
-    triangle(x - size/2, y - size/2, x + size/2, y - size/2, x, y + size/2);
+    triangle(powerUpPos.x - size/2, powerUpPos.y - size/2, powerUpPos.x + size/2, powerUpPos.y - size/2, powerUpPos.x, powerUpPos.y + size/2);
     stroke(0, 255, 0);
     strokeWeight(0.0025*width);
     noFill();
-    ellipse(x, y, size, size);
+    ellipse(powerUpPos.x, powerUpPos.y, size, size);
     strokeWeight(0.00375*width);
     switch(type) {
       case(0):
         stroke(255, 100);
-        ellipse(x, y, size*3, size*3);
+        ellipse(powerUpPos.x, powerUpPos.y, size*3, size*3);
         stroke(255, 155);
         break;
       case(1):
@@ -54,7 +53,7 @@ class PowerUp {
         stroke(0, 255, 0, 155);
       break;
     }
-    ellipse(x, y, size*2, size*2);
+    ellipse(powerUpPos.x, powerUpPos.y, size*2, size*2);
   }
   
 //Check if powerup collides with a player.
@@ -62,8 +61,8 @@ class PowerUp {
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
       if(!_player.isDead) {
-        if((y > _player.y - (_player.pHeight/3)*2 && y < _player.y + _player.pHeight)) {
-          if((x > _player.x && x < _player.x + _player.pWidth)) {
+        if((powerUpPos.y > _player.y - (_player.pHeight/3)*2 && powerUpPos.y < _player.y + _player.pHeight)) {
+          if((powerUpPos.x > _player.x && powerUpPos.x < _player.x + _player.pWidth)) {
             if(type > 0) {
               setWeaponTimers(_player, type);
               audioHandler.playSFX(4);

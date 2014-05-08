@@ -34,14 +34,15 @@ class Spawner {
           _type = 2;
           if(row >= 3) { _type = 1; }
         }
-        enemies.add(new Enemy(_type, enemySize/2 + col*enemyStepX, row*enemyStepX + 0.125*width, blockSize));
+        PVector _pos = new PVector(enemySize/2 + col*enemyStepX, row*enemyStepX + 0.125*width);
+        enemies.add(new Enemy(_type, _pos, blockSize));
       }
     }
   }
   
-  void spawnPowerUp(float _x, float _y, float _size) {
+  void spawnPowerUp(PVector _powerUpPos, float _size) {
     if(random(0, 100) > 90) {
-      powerUps.add(new PowerUp(_x, _y, _size));
+      powerUps.add(new PowerUp(_powerUpPos, _size));
     }
   }
   

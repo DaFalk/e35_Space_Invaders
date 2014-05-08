@@ -77,8 +77,8 @@ class EnemyHandler {
 //Collision detection
   void checkEnemiesCollision() {
     for (int i = enemies.size()-1; i > -1; i--) {
-      float nextLeftX = enemies.get(i).x - eSize/2 - moveDist;
-      float nextRightX = enemies.get(i).x + eSize/2 + moveDist;
+      float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
+      float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
       if ((nextRightX > width && dirX > 0) || (nextLeftX < 0 && dirX < 0)) {
         moveDown = true;
         return;
@@ -94,7 +94,7 @@ class EnemyHandler {
       nextShot = ceil(random(500, shotTimer));
       Enemy _enemy = enemies.get(_randomEnemy);
       if (!_enemy.isDead) {
-        Shot s = new Shot(new PVector(_enemy.x, _enemy.y + _enemy.eHeight), 5, 10);
+        Shot s = new Shot(new PVector(_enemy.enemyPos.x, _enemy.enemyPos.y + _enemy.eHeight), 5, 10);
         shots.add(s);
         lastShot = millis();
       }
