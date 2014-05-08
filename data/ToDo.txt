@@ -19,7 +19,6 @@ Nice to do:
 - make it possible to shoot the enemies shot (shots collide with shots).
 - shoot collision animation.
 - the "machine gun" power'up could use a small "buff".
-- add AOE to homing misile power-up.
 - Points should be based on the amount of life taken from the enemy.
 
 
@@ -39,5 +38,6 @@ Done
 - correct UI textsize and font. 
 - Text on powerups. Or make it more visible what PO you get. (floating points class).
 - decrease how often enemies shoot.
+- add AOE to homing misile power-up.
 
 

@@ -21,6 +21,15 @@ class EnemyHandler {
     lastShot = millis();
     dirX = 1;
   }
+  
+//Rest
+  void reset() {
+    enemies.clear();
+    deadEnemies.clear();
+    nextMove = 400;
+    shotTimer = 5000;
+    dirX = 1;
+  }
 
   void update() {
     if(!gamePaused) {
@@ -105,15 +114,6 @@ class EnemyHandler {
         lastShot = millis();
       }
     }
-  }
-  
-//Rest
-  void reset() {
-    enemies.clear();
-    deadEnemies.clear();
-    nextMove = 400;
-    shotTimer = 5000;
-    dirX = 1;
   }
 }
 

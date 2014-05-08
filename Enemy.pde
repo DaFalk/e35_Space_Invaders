@@ -113,9 +113,11 @@ class Enemy {
   void damageEnemy(Shot _shot) {
     //Deal shot damage to enemy and adjust enemy color according to lifes left.
     if(lifes > 0) {
-       lifes -= _shot.damage;
-       eFill = color(255, 51*(lifes-1), 51*(lifes-1));
-       setBlocksFill();
+      int _shotDamage = _shot.damage; 
+      if(this != _shot.target && _shot.type == 3) { _shotDamage = _shot.damage/2; }
+      lifes -= _shotDamage;
+      eFill = color(255, 51*(lifes-1), 51*(lifes-1));
+      setBlocksFill();
     }
     
     //Kill enemy if lifes goes below zero.

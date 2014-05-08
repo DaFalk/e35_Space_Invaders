@@ -165,7 +165,13 @@ class Shot {
           case(3):
             if(shotPos.y < target.enemyPos.y + target.eHeight && shotPos.y > target.enemyPos.y - target.eHeight) {
               if(shotPos.x < target.enemyPos.x + target.eSize && shotPos.x > target.enemyPos.x - target.eSize) {
-                target.damageEnemy(this);
+                for(int i = enemies.size()-1; i > -1; i--) {
+                  if(enemies.get(i).enemyPos.y < shotPos.y + spawner.enemyStepX*1.5 && enemies.get(i).enemyPos.y > shotPos.y - spawner.enemyStepX*1.5) {
+                    if(enemies.get(i).enemyPos.x < shotPos.x + spawner.enemyStepX*1.5 && enemies.get(i).enemyPos.x > shotPos.x - spawner.enemyStepX*1.5) {
+                      enemies.get(i).damageEnemy(this);
+                    }
+                  }
+                }
                 audioHandler.audioBank[7+type].pause();
                 return true;
               }
