@@ -16,6 +16,7 @@ MenUI menUI;
 //Each game object is stored in an array list associated to that kind of object.
 ArrayList<Player> players = new ArrayList<Player>(); //Player 1 is players.get(0) while Player 2 is players.get(1).
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 Cover cover;
@@ -51,7 +52,12 @@ void displayGameObjects() {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
   }
-
+  
+  //Iterates deadEnemies array list and updates every enemy.
+  for (int i = deadEnemies.size()-1; i > -1; i--) {
+    deadEnemies.get(i).update();
+  }
+  
   //Iterate shots array list and updates every shot. 
   for (int i = shots.size() - 1; i >= 0; i--) {
     Shot _shot = shots.get(i);

@@ -43,7 +43,7 @@ class Enemy {
         }
       }
     }
-    if(checkBlockCollision() && isDead) { enemyHandler.deadEnemies.remove(this); }
+    if(checkBlockCollision() && isDead) { deadEnemies.remove(this); }
   }
   
   void moveEnemy(float _amountX, float _amountY) {
@@ -111,34 +111,47 @@ class Enemy {
   }
   
   void damageEnemy(Shot _shot) {
-    if(lifes > 0) {  //Deal damage to enemy.
+    //Deal shot damage to enemy and adjust enemy color according to lifes left.
+    if(lifes > 0) {
        lifes -= _shot.damage;
        eFill = color(255, 51*(lifes-1), 51*(lifes-1));
        setBlocksFill();
     }
-    if(lifes <= 0 && !isDead) {  //Kill enemy.
+    
+    //Kill enemy if lifes goes below zero.
+    if(lifes <= 0 && !isDead) {
       isDead = true;
       audioHandler.playSFX(2);
-      spawner.spawnPowerUp(enemyPos, (float)eSize);  //Roll for powerup.
-      enemyHandler.deadEnemies.add(this);  //Add to new arraylist to avoid interfering with shot targetting.
-      for(int i = blocks.size()-1; i > -1; i--) {  //Set blocks deathPos.
-        blocks.get(i).deathPos = new PVector(enemyPos.x, enemyPos.y);
-        blocks.get(i).lastMove = millis();
-      }
+      
+      //Adjust player score and initialize floating points.
       players.get(_shot.owner).score += points;
       FloatingText floatingPoints = new FloatingText(enemyPos);
       floatingPoints.score = points;
       menUI.floatingTexts.add(floatingPoints);
-      if(enemies.size() == 1) {  //Respawn enemies if enemy is the last.
+      
+      //Check if enemy should spawn a powerup.
+      spawner.spawnPowerUp(enemyPos, (float)eSize);
+      
+      //Set blocks deathPos to initialize their movement.
+      for(int i = blocks.size()-1; i > -1; i--) {
+        blocks.get(i).deathPos = new PVector(enemyPos.x, enemyPos.y);
+        blocks.get(i).lastMove = millis();
+      }
+      
+      //Respawn enemies if this enemy was the last.
+      if(enemies.size() == 1) {
         audioHandler.playSFX(6);
         enemyHandler.respawnEnemies = true;
       }
-      enemies.remove(this);  //Remove from old arraylist
+      
+      //Add to new arraylist and remove from the old (to avoid interfering with shot targetting  and animation).
+      deadEnemies.add(this);
+      enemies.remove(this);
     }
   }
   
   boolean checkBlockCollision() {
-  //Check if enemy shot collides with a player
+    //Check if enemy shot collides with a player
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
       if(!_player.isDead) {

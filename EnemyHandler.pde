@@ -8,10 +8,9 @@ class EnemyHandler {
   float moveDist;
   int lastMove, nextMove;
   int lastShot, shotTimer, nextShot;
-  int lastAnim, nextAnim;
+  int lastAliveAnim, lastDeadAnim, nextAnim;
   boolean moveDown = false;
   boolean respawnEnemies = false;
-  ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 
   EnemyHandler() {
     nextMove = 400;
@@ -30,16 +29,16 @@ class EnemyHandler {
           moveEnemies();
           shoot();
         }
-        animate(enemies);
+        lastAliveAnim = animate(enemies, lastAliveAnim);
+        if(deadEnemies.size() > 0) { lastDeadAnim = animate(deadEnemies, lastDeadAnim); }
       }
     }
-    else { lastMove += millis() - lastMove; }
-    if(deadEnemies.size() > 0) {
-      for (int i = deadEnemies.size()-1; i > -1; i--) {
-        deadEnemies.get(i).update();
-      }
-      if(!gamePaused) { animate(deadEnemies); }
+    else {
+      lastMove += millis() - lastMove;
+      lastAliveAnim += millis() - lastAliveAnim;
+      lastDeadAnim += millis() - lastDeadAnim;
     }
+    
     if (respawnEnemies) { 
       spawner.respawnEnemies();
     }
@@ -47,7 +46,7 @@ class EnemyHandler {
 
   void moveEnemies() {
     //Enemy nextMove time depends on number of enemies alive.
-    if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
+    if (millis() - lastMove >= nextMove/*/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()*/) {
       if (!moveDown) {  //Move enemies to the side.
         for (int i = enemies.size()-1; i > -1; i--) {
           if (!enemies.get(i).isDead) {
@@ -68,13 +67,17 @@ class EnemyHandler {
     }
   }
   
-  void animate(ArrayList<Enemy> _enemies) {
-    if(millis() - lastAnim >= (nextAnim/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
+  int animate(ArrayList<Enemy> _enemies, int _lastAnim) {
+    int _nextAnim;
+    if(_enemies == enemies) { _nextAnim = (nextAnim/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size(); }
+    else { _nextAnim = nextAnim; }; 
+    if(millis() - _lastAnim >= _nextAnim) {
       for(int i = _enemies.size()-1; i > -1; i--) {
         _enemies.get(i).animateEnemy();
       }
-      lastAnim = millis();
+      return millis();
     }
+    return _lastAnim;
   }
 
 //Collision detection

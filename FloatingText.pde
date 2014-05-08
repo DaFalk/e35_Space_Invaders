@@ -11,7 +11,7 @@ class FloatingText {
   FloatingText(PVector _textPos) {
     textAlign(CENTER, CENTER);
     textPos = _textPos;
-    startY = _textPos.y;
+    startY = textPos.y;
     lastMove = millis();
     startTime = millis();
     size = size;
