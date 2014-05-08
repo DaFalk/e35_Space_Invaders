@@ -4,15 +4,17 @@
 
 class PowerUp {
   PVector powerUpPos;
+  String name;
   float size;
   float speed = 0.0625*width;
   int lastMove, type, shotCooldown;
   
   PowerUp(PVector _pos, float _size) {
     powerUpPos = _pos;
-    this.size = _size*0.75;
-    this.lastMove = millis();
-    this.type = ceil(random(-1, 4));
+    size = _size*0.75;
+    lastMove = millis();
+    type = ceil(random(-1, 4));
+    namePowerUp();
   }
   
   void update() {
@@ -71,6 +73,9 @@ class PowerUp {
               _player.hasShield = true;
               audioHandler.playSFX(5);
             }
+            FloatingText floatingText = new FloatingText(powerUpPos);
+            floatingText.textToDisplay = name;
+            menUI.floatingTexts.add(floatingText);
             return true;
           }
         }
@@ -79,25 +84,45 @@ class PowerUp {
     return false;
   }
   
+  void namePowerUp() {
+    switch(type) {
+      case(0):
+        name = "Shield";
+      break;
+      case(1):
+        name = "Piercer";
+      break;
+      case(2):
+        name = "Rapid fire";
+      break;
+      case(3):
+        name = "Seeker";
+      break;
+      case(4):
+        name = "Arc beam";
+      break;
+    }
+  }
+  
 //Set the stats of the current weapon type.
   void setWeaponTimers(Player _player, int _weaponType) {
     _player.weaponType = _weaponType;
     _player.powerUpStartTime = millis();
     
     switch(_weaponType) {
-      case(1):  //Piercing shot.
+      case(1):
         _player.shotCooldown = 2000;
         _player.powerUpDuration = 5000;
       break;
-      case(2):  //Rapid shot.
+      case(2):
         _player.shotCooldown = 100;
         _player.powerUpDuration = 4000;
       break;
-      case(3):  //Homeseking missile
+      case(3):
         _player.shotCooldown = 1000;
         _player.powerUpDuration = 4000;
       break;
-      case(4):  //Charge beam
+      case(4):
         _player.shotCooldown = 500;
         _player.powerUpDuration = 4000;
       break;

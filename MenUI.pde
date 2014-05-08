@@ -1,6 +1,6 @@
 //
 //
-// Access classes: Enemy, Player, PointsText
+// Access classes: Enemy, Player, FloatingText
 
 class MenUI {
   float titleSize = 0.15*width;
@@ -8,7 +8,7 @@ class MenUI {
   int nextTick = 2000;
   
   int totalScore;
-  ArrayList<PointsText> pointsTexts = new ArrayList<PointsText>();
+  ArrayList<FloatingText> floatingTexts = new ArrayList<FloatingText>();
   String scoreLabel = "SCORE";
   String totalScoreLabel = "TOTAL SCORE";
   float labelHeight = 0.025*width;
@@ -43,7 +43,7 @@ class MenUI {
     //In-game UI
       displayPlayerUI();
       displayTotalScore();
-      displayPoints();
+      displayFloatingPoints();
     }
     //ESC menu
     if(gamePaused) { displayESCMenu(); }
@@ -234,10 +234,9 @@ class MenUI {
     text(totalScore, width/2, labelHeight/2);
   }
   
-  void displayPoints() {
-    for(int i = pointsTexts.size()-1; i > -1; i--) {
-      PointsText pointsText = pointsTexts.get(i);
-      pointsText.update();
+  void displayFloatingPoints() {
+    for(int i = floatingTexts.size()-1; i > -1; i--) {
+      floatingTexts.get(i).update();
     }
   }
   

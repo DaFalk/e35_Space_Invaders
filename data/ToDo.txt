@@ -14,7 +14,6 @@ Need to do:
 Nice to do:
 ------------
 - Sounds are not compressed. Compress sounds.
-- Text on powerups. Or make it more visible what PO you get. (floating points class).
 - MP competition. survival mode.
 - different looking enemy shoots. 
 - make a power up that increase how mny points the player get when killing enemies. 
@@ -39,5 +38,6 @@ Done
 - Enemies shjouldnt shoot when in pause-mode.
 - when quitting a game and starting a new one then clear shots array. (was actually the dead enemies projectiles)
 - correct UI textsize and font. 
+- Text on powerups. Or make it more visible what PO you get. (floating points class).
 
 

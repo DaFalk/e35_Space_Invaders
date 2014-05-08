@@ -128,8 +128,10 @@ class Enemy {
         blocks.get(i).lastMove = millis();
       }
       players.get(_shot.owner).score += points;
-      menUI.pointsTexts.add(new PointsText(enemyPos.x, enemyPos.y, points));
-      if(enemies.size() == 1) {  //Respawn if enemy is the last.
+      FloatingText floatingPoints = new FloatingText(enemyPos);
+      floatingPoints.score = points;
+      menUI.floatingTexts.add(floatingPoints);
+      if(enemies.size() == 1) {  //Respawn enemies if enemy is the last.
         audioHandler.playSFX(6);
         enemyHandler.respawnEnemies = true;
       }

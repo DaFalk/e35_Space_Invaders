@@ -70,6 +70,7 @@ class Player {
 //Subtract life and check if player is dead.
   void adjustLifes() {
     lifes--;
+    weaponType = 0;
     if(lifes > 0) { spawner.respawnPlayer(this); }
     else {
       isDead = true;
