@@ -24,18 +24,21 @@ class EnemyHandler {
   }
 
   void update() {
-    if (enemies.size() > 0 && !gamePaused) {
-      if(gameStarted) {
-        moveEnemies();
-        shoot();
+    if(!gamePaused) {
+      if (enemies.size() > 0) {
+        if(gameStarted) {
+          moveEnemies();
+          shoot();
+        }
+        animate(enemies);
       }
-      animate(enemies);
     }
-    if(deadEnemies.size() > 0 && !gamePaused) {
+    else { lastMove += millis() - lastMove; }
+    if(deadEnemies.size() > 0) {
       for (int i = deadEnemies.size()-1; i > -1; i--) {
         deadEnemies.get(i).update();
       }
-      animate(deadEnemies);
+      if(!gamePaused) { animate(deadEnemies); }
     }
     if (respawnEnemies) { 
       spawner.respawnEnemies();

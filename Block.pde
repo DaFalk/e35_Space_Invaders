@@ -20,7 +20,10 @@ class Block {
     rectMode(CENTER);
     noStroke();
     fill(bFill);
-    if(deathPos != null) { releaseBlock(); }
+    if(deathPos != null) {
+      if(!gamePaused) { releaseBlock(); }
+      else { lastMove += millis() - lastMove; }
+    }
     rect(blockPos.x, blockPos.y, blockSize, blockSize);
   }
    
@@ -32,8 +35,7 @@ class Block {
     float angle = atan2(deathPos.y - blockPos.y, deathPos.x - blockPos.x);
     blockPos.x += (velocity/2)*(millis()-lastMove)*0.001*cos(angle);
     blockPos.y += velocity*(millis()-lastMove)*0.001;
-    velocity += velocity*(millis()-lastMove)*0.001;  
-    
+    velocity += velocity*(millis()-lastMove)*0.001;
     lastMove = millis();
   }
   

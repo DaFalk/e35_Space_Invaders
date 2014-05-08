@@ -43,9 +43,7 @@ class Enemy {
         }
       }
     }
-    if(isDead) {
-      if(checkBlockCollision()) { enemyHandler.deadEnemies.remove(this); }
-    }
+    if(checkBlockCollision() && isDead) { enemyHandler.deadEnemies.remove(this); }
   }
   
   void moveEnemy(float _amountX, float _amountY) {

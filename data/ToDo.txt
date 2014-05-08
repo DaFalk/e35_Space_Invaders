@@ -8,8 +8,7 @@ Need to do:
 - make cover.
 - player losses all lifes when enemies reach the bottom plane of the screen.
 - the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
-- Points should be based on the amount of life taken from the enemy.
-
+- fix so the floating text position doesn't follow the powerup if they spawn simultaneously.
 
 Nice to do:
 ------------
@@ -22,6 +21,7 @@ Nice to do:
 - shoot collision animation.
 - the "machine gun" power'up could use a small "buff".
 - add AOE to homing misile power-up.
+- Points should be based on the amount of life taken from the enemy.
 
 
 

@@ -32,6 +32,7 @@ class Shot {
       }
       if(checkCollision()) { shots.remove(this); }
     }
+    else { lastMove += millis() - lastMove; }
     drawShot();
   }
   
