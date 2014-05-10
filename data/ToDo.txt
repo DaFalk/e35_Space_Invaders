@@ -18,6 +18,7 @@ Nice to do:
 - "shoot on shot" collision animation.
 - the "machine gun" power'up could use a small "buff".
 - Points should be based on the amount of life taken from the enemy.
+- change enemy shot collision to color collision (for precision).
 
 
 
