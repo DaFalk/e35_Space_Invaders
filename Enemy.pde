@@ -12,6 +12,7 @@ class Enemy {
   int moveSwitch = 1;
   boolean isDead = false;
   boolean doAnimation = true;
+  int _blockDir = 1;
   PVector lowestPoint = new PVector(0, 0);
   color eFill;
   int fadeStart = 0;
@@ -122,8 +123,10 @@ class Enemy {
       int _shotDamage = _shot.damage; 
       if(this != _shot.target && _shot.type == 3) { _shotDamage = _shot.damage/2; }
       lifes -= _shotDamage;
-      eFill = color(255, 51*(lifes-1), 51*(lifes-1), 255 - fadeAmount);
-      setBlocksFill();
+      if(lifes > 0) {
+        eFill = color(255, 51*(lifes-1), 51*(lifes-1), 255 - fadeAmount);
+        setBlocksFill();
+      }
     }
     
     //Kill enemy if lifes goes below zero.
@@ -141,12 +144,8 @@ class Enemy {
       spawner.spawnPowerUp(enemyPos, (float)eSize);
       
       //Set blocks deathPos to initialize their movement.
-      int _blockDir = 1;
       if(random(0, 100) > 75) { _blockDir = -1; }
-      else {
-        doAnimation = false;
-        fadeStart = millis();
-      }
+      else { doAnimation = false; }
       for(int i = blocks.size()-1; i > -1; i--) {
         blocks.get(i).blockDir = _blockDir;
         blocks.get(i).deathPos = new PVector(enemyPos.x, enemyPos.y);
@@ -162,6 +161,8 @@ class Enemy {
       //Add to new arraylist and remove from the old (to avoid interfering with shot targetting  and animation).
       deadEnemies.add(this);
       enemies.remove(this);
+      
+      fadeStart = millis();
     }
   }
   
@@ -183,10 +184,19 @@ class Enemy {
   }
   
   void fade() {
-    fadeAmount += 1*(millis() - fadeStart)*0.001;
-    if(fadeAmount > 255) { deadEnemies.remove(this); );}
-    for(int i = blocks.size()-1; i > -1; i--) {
-      blocks.get(i).currentAlpha -= fadeAmount;      
+    if(_blockDir > 0) {
+      fadeAmount += (millis() - fadeStart)*0.001;
+      if(fadeAmount > 255) { deadEnemies.remove(this); }
+      for(int i = blocks.size()-1; i > -1; i--) {
+        blocks.get(i).currentAlpha -= fadeAmount;      
+      }
+    }
+    else {
+     float _timeElapsed = (millis()-fadeStart)*0.001;
+     if(_timeElapsed > 5) { _timeElapsed = 5; } 
+      color curEnemyColor = lerpColor(eFill, color(255), _timeElapsed/5);
+      eFill = curEnemyColor;
+      setBlocksFill();
     }
   }
   

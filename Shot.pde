@@ -73,10 +73,6 @@ class Shot {
             stroke(0, 126, 0);
             noFill();
             ellipse(target.enemyPos.x, target.enemyPos.y, target.eSize*3, target.eSize*3);
-            if (dist(shotPos.x, shotPos.y, target.enemyPos.x, target.enemyPos.y) < target.eSize*5) {
-              target.eFill = color(255, 70, 110);
-              target.setBlocksFill();
-            }
             float _angle = atan2(target.enemyPos.y - shotPos.y, target.enemyPos.x - shotPos.x);
             shotDir = new PVector(cos(_angle), sin(_angle));
             stroke(126, 0, 0);
@@ -115,8 +111,7 @@ class Shot {
         for(int i = 0; i < 5; i++) {
           if(i%2 == 0) { flip = 1; }
           else { flip = -1; }
-          float _diff = norm(ground.groundY - shotPos.y, 0, ground.groundY)*i;
-          stroke(255 - _diff, 255, 255 - _diff);
+          stroke(255);
           line(shotPos.x - (offset/1.5)*flip, shotPos.y - offset*i, shotPos.x + (offset/1.5)*flip, shotPos.y - offset - offset*i);
         }
       break;

@@ -40,6 +40,8 @@ class Block {
       velocityX = 5;
       spread = -sin(angle);
     }
+    else {
+    }
     //Add velocity to block x and y and readjust velocity.
     blockPos.x -= ((velocity*velocityX)*(millis()-lastMove)*0.001*cos(angle))*blockDir;
     blockPos.y += (velocity*velocityX)*(millis()-lastMove)*0.001*spread;
