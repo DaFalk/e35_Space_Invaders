@@ -27,8 +27,15 @@ class Ground {
     }
   }
   
-  void impactGround() {
-    
+  void damageGround(PVector _shotPos) {
+    for(int i = blocks.size()-1; i > -1; i--) {
+      if(blocks.get(i).blockPos.dist(_shotPos) < blockSize*3) {
+        if(random(0, 100) > 50){
+          blocks.get(i).deathPos = new PVector(_shotPos.x, _shotPos.y + 10);
+          blocks.get(i).lastMove = millis();
+        }
+      }
+    }
   }
   
   void reset() {

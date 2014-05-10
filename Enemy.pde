@@ -172,6 +172,10 @@ class Enemy {
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
       if(!_player.isDead) {
+        if(lowestPoint.y > ground.groundY) {
+          ground.damageGround(lowestPoint);
+          return true;
+        }
         if((lowestPoint.y > _player.y - _player.pHeight - _player.pHeight/3 && lowestPoint.y < _player.y + _player.pHeight)) {
           if((lowestPoint.x > _player.x && lowestPoint.x < _player.x + _player.pWidth)) {
             if(!_player.hasShield) { _player.adjustLifes(); }

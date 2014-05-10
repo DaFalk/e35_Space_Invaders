@@ -125,7 +125,8 @@ class Shot {
   
   boolean checkCollision() {
    //Remove shot if out of bounds
-    if(shotPos.y < 0 || shotPos.y > ground.groundY || shotPos.x < 0 || shotPos.x > width) {
+    if(shotPos.y < 0 || shotPos.y >= ground.groundY || shotPos.x < 0 || shotPos.x > width) {
+      if(shotPos.y >= ground.groundY) { ground.damageGround(shotPos); }
       return true;
     }
     

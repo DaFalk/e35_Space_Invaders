@@ -2,7 +2,7 @@ Need to do:
 ------------
 - fix startscreen performance.
 - class headers. 
-- make breakable cover and ground.
+- make breakable cover.
 - player losses all lifes when enemies reach the bottom plane of the screen.
 - the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
 - add comments to all code.
@@ -15,7 +15,7 @@ Nice to do:
 - make a power up that increase how mny points the player get when killing enemies. 
 - freeze time power up.
 - make it possible to shoot the enemies shot (shots collide with shots).
-- shoot collision animation.
+- "shoot on shot" collision animation.
 - the "machine gun" power'up could use a small "buff".
 - Points should be based on the amount of life taken from the enemy.
 
@@ -39,5 +39,5 @@ Done
 - add AOE to homing misile power-up.
 - make it more random when enemies turn into projectiles when they die. 
 - fix so the floating text position doesn't follow the powerup if they spawn simultaneously.
-
+- make breakable ground.
 

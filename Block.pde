@@ -5,7 +5,9 @@ class Block {
   int blockSize;
   int blockDir = 1;
   int lastMove;
-  float speed, velocity;
+  float speed;
+  float velocity = 0.0125*width;
+  float gravity = 0.025*width;
   color bFill;
   float currentAlpha = 255;
   
@@ -14,7 +16,6 @@ class Block {
     blockSize = _blockSize;
     deathPos = deathPos;
     speed = 200;
-    velocity = 9.6;
     if(!gameStarted) { this.blockPos = randomStarPos(); }
   }
   
@@ -23,7 +24,14 @@ class Block {
     noStroke();
     fill(bFill, currentAlpha);
     if(deathPos != null) {
-      if(!gamePaused) { releaseBlock(); }
+      if(!gamePaused) {
+        if(blockDir < 0) { implode(); }
+        else { explode(); }
+        lastMove = millis();
+        if(owner == null) {
+          if(blockPos.y > height) { ground.blocks.remove(this); }
+        }
+      }
       else {
         //Adjust lastMove to pause blocks
         lastMove += millis() - lastMove;
@@ -32,23 +40,30 @@ class Block {
     rect(blockPos.x, blockPos.y, blockSize, blockSize);
   }
    
-//Apply gravity to block.
-  void releaseBlock() {
-    int velocityX = 1;
-    float spread = 1;
-    float angle = atan2(deathPos.y - blockPos.y, deathPos.x - blockPos.x);
+//Move towards deathPos x and affect deathPos y by gravity (forms a new projectile).
+  void implode() {
+    float angle = atan2(blockPos.y - deathPos.y, blockPos.x - deathPos.x);
     
-    //Explode if direction is above 1 otherwise implode.
-    if(blockDir > 0) {
-      velocityX = 5;
-      spread = -sin(angle);
-    }
-    else {
-    }
     //Add velocity to block position and adjust velocity.
-    blockPos.add(new PVector(-(timeFix(velocity*velocityX, lastMove)*cos(angle))*blockDir, timeFix(velocity*velocityX, lastMove)*spread));
-    velocity += timeFix(velocity, lastMove)*(blockDir*-1);
-    lastMove = millis();
+    blockPos.add(new PVector(-timeFix(velocity, lastMove)*cos(angle), timeFix(velocity, lastMove)));
+    velocity += timeFix(velocity, lastMove);
+    gravity += timeFix(gravity, lastMove);
+  }
+   
+//Move away from deathPos x and y.
+  void explode() {
+    float angle = atan2(blockPos.y - deathPos.y, blockPos.x - deathPos.x);
+    float _velX = timeFix(velocity*5, lastMove);
+    float _velY = timeFix(velocity*5, lastMove)*sin(angle);
+    if(owner == null) {
+      _velX = timeFix(velocity*2.5, lastMove);
+      _velY = timeFix(velocity*random(5, 10), lastMove)*sin(angle) + timeFix(gravity, lastMove);
+    }
+    
+    //Add velocity to block position and adjust velocity.
+    blockPos.add(new PVector((_velX*cos(angle))*blockDir, _velY));
+    velocity -= timeFix(velocity, lastMove);
+    gravity += timeFix(gravity, lastMove);
   }
   
 //Used to move the stars in the startmenu.

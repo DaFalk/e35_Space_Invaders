@@ -79,6 +79,7 @@ void displayGameObjects() {
   ground.display();
 }
 
+//time fix function (to avoid typo's).
 float timeFix(float _amount, int _lastTick) {
   float amount = _amount*(millis()-_lastTick)*0.001;
   return amount;
