@@ -115,7 +115,7 @@ class Shot {
         for(int i = 0; i < 5; i++) {
           if(i%2 == 0) { flip = 1; }
           else { flip = -1; }
-          float _diff = norm(cover.groundY - shotPos.y, 0, cover.groundY)*i;
+          float _diff = norm(ground.groundY - shotPos.y, 0, ground.groundY)*i;
           stroke(255 - _diff, 255, 255 - _diff);
           line(shotPos.x - (offset/1.5)*flip, shotPos.y - offset*i, shotPos.x + (offset/1.5)*flip, shotPos.y - offset - offset*i);
         }
@@ -125,7 +125,7 @@ class Shot {
   
   boolean checkCollision() {
    //Remove shot if out of bounds
-    if(shotPos.y < 0 || shotPos.y > cover.groundY || shotPos.x < 0 || shotPos.x > width) {
+    if(shotPos.y < 0 || shotPos.y > ground.groundY || shotPos.x < 0 || shotPos.x > width) {
       return true;
     }
     

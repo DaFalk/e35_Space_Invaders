@@ -16,6 +16,7 @@ class Spawner {
     enemyHandler.reset();
     spawnEnemies();
     gameStarted = true;
+    ground.spawnGround();
   }
   
   void spawnPlayers(int numPlayers) {

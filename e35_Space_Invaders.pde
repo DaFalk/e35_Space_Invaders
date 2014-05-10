@@ -19,7 +19,7 @@ ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
-Cover cover;
+Ground ground;
 
 void setup() {
   int _width = 800;
@@ -31,18 +31,18 @@ void setup() {
   enemyHandler = new EnemyHandler();
   SpaceFont = createFont("ca.ttf", 48);
   menUI = new MenUI();
-  cover = new Cover();
+  ground = new Ground();
 }
 
 void draw() {
   background(0);
   textFont(SpaceFont);
   audioHandler.manage();
+  menUI.display();
   if (gameStarted) { 
     displayGameObjects();
   }
   enemyHandler.update();
-  menUI.display();
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }
 
@@ -76,7 +76,7 @@ void displayGameObjects() {
     _powerUp.update();
   }
   //Display ground and cover
-  cover.display();
+  ground.display();
 }
 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.

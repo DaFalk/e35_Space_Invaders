@@ -3,9 +3,11 @@ class Block {
   PVector deathPos;
   Enemy owner;
   int blockSize;
+  int blockDir = 1;
   int lastMove;
   float speed, velocity;
   color bFill;
+  float currentAlpha = 255;
   
   Block(PVector _blockPos, int _blockSize) {
     blockPos = _blockPos;
@@ -19,7 +21,7 @@ class Block {
   void display() {
     rectMode(CENTER);
     noStroke();
-    fill(bFill);
+    fill(bFill, currentAlpha);
     if(deathPos != null) {
       if(!gamePaused) { releaseBlock(); }
       else { lastMove += millis() - lastMove; }
@@ -29,13 +31,19 @@ class Block {
    
 //Apply gravity to block.
   void releaseBlock() {
-    int flip;
-    if(blockPos.x < deathPos.x) { flip = -1; }
-    else { flip = 1; }
+    int velocityX = 1;
+    float spread = 1;
     float angle = atan2(deathPos.y - blockPos.y, deathPos.x - blockPos.x);
-    blockPos.x += (velocity/2)*(millis()-lastMove)*0.001*cos(angle);
-    blockPos.y += velocity*(millis()-lastMove)*0.001;
-    velocity += velocity*(millis()-lastMove)*0.001;
+    
+    //Explode if direction is above 1 otherwise implode.
+    if(blockDir > 0) {
+      velocityX = 5;
+      spread = -sin(angle);
+    }
+    //Add velocity to block x and y and readjust velocity.
+    blockPos.x -= ((velocity*velocityX)*(millis()-lastMove)*0.001*cos(angle))*blockDir;
+    blockPos.y += (velocity*velocityX)*(millis()-lastMove)*0.001*spread;
+    velocity += (velocity*(millis()-lastMove)*0.001)*(blockDir*-1);
     lastMove = millis();
   }
   

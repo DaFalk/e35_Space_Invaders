@@ -82,7 +82,9 @@ class EnemyHandler {
     else { _nextAnim = nextAnim; }; 
     if(millis() - _lastAnim >= _nextAnim) {
       for(int i = _enemies.size()-1; i > -1; i--) {
-        _enemies.get(i).animateEnemy();
+        if(_enemies.get(i).doAnimation) {
+          _enemies.get(i).animateEnemy();
+        }
       }
       return millis();
     }

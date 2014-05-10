@@ -11,8 +11,11 @@ class Enemy {
   int type, lifes, points;
   int moveSwitch = 1;
   boolean isDead = false;
+  boolean doAnimation = true;
   PVector lowestPoint = new PVector(0, 0);
   color eFill;
+  int fadeStart = 0;
+  float fadeAmount = 0;
 
   Enemy(int _type, PVector _pos, int _blockSize) {
     type = _type;
@@ -33,7 +36,7 @@ class Enemy {
     setBlockPositions();
   }
   
-  //Draw this enemy type using blocks and display the blocks
+  //Draw enemy type using blocks and display the blocks
   void update() {
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).display();
@@ -42,6 +45,9 @@ class Enemy {
           lowestPoint = blocks.get(i).blockPos;
         }
       }
+    }
+    if(fadeStart > 0) {
+      fade();
     }
     if(checkBlockCollision() && isDead) { deadEnemies.remove(this); }
   }
@@ -116,7 +122,7 @@ class Enemy {
       int _shotDamage = _shot.damage; 
       if(this != _shot.target && _shot.type == 3) { _shotDamage = _shot.damage/2; }
       lifes -= _shotDamage;
-      eFill = color(255, 51*(lifes-1), 51*(lifes-1));
+      eFill = color(255, 51*(lifes-1), 51*(lifes-1), 255 - fadeAmount);
       setBlocksFill();
     }
     
@@ -135,7 +141,14 @@ class Enemy {
       spawner.spawnPowerUp(enemyPos, (float)eSize);
       
       //Set blocks deathPos to initialize their movement.
+      int _blockDir = 1;
+      if(random(0, 100) > 75) { _blockDir = -1; }
+      else {
+        doAnimation = false;
+        fadeStart = millis();
+      }
       for(int i = blocks.size()-1; i > -1; i--) {
+        blocks.get(i).blockDir = _blockDir;
         blocks.get(i).deathPos = new PVector(enemyPos.x, enemyPos.y);
         blocks.get(i).lastMove = millis();
       }
@@ -167,6 +180,14 @@ class Enemy {
       }
     }
     return false;
+  }
+  
+  void fade() {
+    fadeAmount += 1*(millis() - fadeStart)*0.001;
+    if(fadeAmount > 255) { deadEnemies.remove(this); );}
+    for(int i = blocks.size()-1; i > -1; i--) {
+      blocks.get(i).currentAlpha -= fadeAmount;      
+    }
   }
   
   void setBlockPositions() {
