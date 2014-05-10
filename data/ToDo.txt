@@ -2,7 +2,6 @@ Need to do:
 ------------
 - fix startscreen performance.
 - class headers. 
-- make it more random when enemies turn into projectiles when they die. 
 - make breakable cover and ground.
 - player losses all lifes when enemies reach the bottom plane of the screen.
 - the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
@@ -39,5 +38,6 @@ Done
 - Text on powerups. Or make it more visible what PO you get. (floating points class).
 - decrease how often enemies shoot.
 - add AOE to homing misile power-up.
+- make it more random when enemies turn into projectiles when they die. 
 
 
