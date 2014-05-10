@@ -5,7 +5,6 @@ Need to do:
 - make breakable cover and ground.
 - player losses all lifes when enemies reach the bottom plane of the screen.
 - the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
-- fix so the floating text position doesn't follow the powerup if they spawn simultaneously.
 - add comments to all code.
 
 Nice to do:
@@ -39,5 +38,6 @@ Done
 - decrease how often enemies shoot.
 - add AOE to homing misile power-up.
 - make it more random when enemies turn into projectiles when they die. 
+- fix so the floating text position doesn't follow the powerup if they spawn simultaneously.
 
 

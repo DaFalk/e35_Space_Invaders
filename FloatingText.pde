@@ -5,7 +5,7 @@ class FloatingText {
   String textToDisplay;
   int lastMove, startTime;
   int duration = 3000;
-  int speed = 20;
+  float speed = 0.025*width;
   float size;
   
   FloatingText(PVector _textPos) {
@@ -18,7 +18,7 @@ class FloatingText {
   }
   
   void update() {
-    textPos.y -= speed*(millis()-lastMove)*0.001;
+    textPos.y -= timeFix(speed, lastMove);
     size = menUI.labelHeight/2 + (startY - textPos.y)/2;
     lastMove = millis();
     displayText();

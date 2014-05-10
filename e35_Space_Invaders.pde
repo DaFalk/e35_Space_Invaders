@@ -79,6 +79,11 @@ void displayGameObjects() {
   ground.display();
 }
 
+float timeFix(float _amount, int _lastTick) {
+  float amount = _amount*(millis()-_lastTick)*0.001;
+  return amount;
+}
+
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
 void keyReleased() {
   if (gameStarted) {

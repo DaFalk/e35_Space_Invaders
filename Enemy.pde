@@ -121,7 +121,7 @@ class Enemy {
     //Deal shot damage to enemy and adjust enemy color according to lifes left.
     if(lifes > 0) {
       int _shotDamage = _shot.damage; 
-      if(this != _shot.target && _shot.type == 3) { _shotDamage = _shot.damage/2; }
+      if(this != _shot.target && _shot.type == 3) { _shotDamage = _shot.damage/3; }
       lifes -= _shotDamage;
       if(lifes > 0) {
         eFill = color(255, 51*(lifes-1), 51*(lifes-1), 255 - fadeAmount);
@@ -134,14 +134,14 @@ class Enemy {
       isDead = true;
       audioHandler.playSFX(2);
       
+      //Check if enemy should spawn a powerup.
+      spawner.spawnPowerUp(new PVector(enemyPos.x, enemyPos.y), (float)eSize);
+      
       //Adjust player score and initialize floating points.
       players.get(_shot.owner).score += points;
-      FloatingText floatingPoints = new FloatingText(enemyPos);
+      FloatingText floatingPoints = new FloatingText(new PVector(enemyPos.x, enemyPos.y));
       floatingPoints.score = points;
       menUI.floatingTexts.add(floatingPoints);
-      
-      //Check if enemy should spawn a powerup.
-      spawner.spawnPowerUp(enemyPos, (float)eSize);
       
       //Set blocks deathPos to initialize their movement.
       if(random(0, 100) > 75) { _blockDir = -1; }
@@ -162,6 +162,7 @@ class Enemy {
       deadEnemies.add(this);
       enemies.remove(this);
       
+      //Start fading by raising fadeStart above 0.
       fadeStart = millis();
     }
   }
@@ -185,14 +186,14 @@ class Enemy {
   
   void fade() {
     if(_blockDir > 0) {
-      fadeAmount += (millis() - fadeStart)*0.001;
+      fadeAmount += timeFix(1, fadeStart);
       if(fadeAmount > 255) { deadEnemies.remove(this); }
       for(int i = blocks.size()-1; i > -1; i--) {
         blocks.get(i).currentAlpha -= fadeAmount;      
       }
     }
     else {
-     float _timeElapsed = (millis()-fadeStart)*0.001;
+     float _timeElapsed = timeFix(1, fadeStart);
      if(_timeElapsed > 5) { _timeElapsed = 5; } 
       color curEnemyColor = lerpColor(eFill, color(255), _timeElapsed/5);
       eFill = curEnemyColor;

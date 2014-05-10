@@ -43,6 +43,7 @@ class EnemyHandler {
       }
     }
     else {
+      //Adjust "lastTick"'s to pause enemies.
       lastMove += millis() - lastMove;
       lastAliveAnim += millis() - lastAliveAnim;
       lastDeadAnim += millis() - lastDeadAnim;

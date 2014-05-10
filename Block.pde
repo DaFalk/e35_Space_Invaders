@@ -24,7 +24,10 @@ class Block {
     fill(bFill, currentAlpha);
     if(deathPos != null) {
       if(!gamePaused) { releaseBlock(); }
-      else { lastMove += millis() - lastMove; }
+      else {
+        //Adjust lastMove to pause blocks
+        lastMove += millis() - lastMove;
+      }
     }
     rect(blockPos.x, blockPos.y, blockSize, blockSize);
   }
@@ -42,16 +45,15 @@ class Block {
     }
     else {
     }
-    //Add velocity to block x and y and readjust velocity.
-    blockPos.x -= ((velocity*velocityX)*(millis()-lastMove)*0.001*cos(angle))*blockDir;
-    blockPos.y += (velocity*velocityX)*(millis()-lastMove)*0.001*spread;
-    velocity += (velocity*(millis()-lastMove)*0.001)*(blockDir*-1);
+    //Add velocity to block position and adjust velocity.
+    blockPos.add(new PVector(-(timeFix(velocity*velocityX, lastMove)*cos(angle))*blockDir, timeFix(velocity*velocityX, lastMove)*spread));
+    velocity += timeFix(velocity, lastMove)*(blockDir*-1);
     lastMove = millis();
   }
   
 //Used to move the stars in the startmenu.
   void moveBlock() {
-    blockPos.x -= 400*(millis()-lastMove)*0.001;
+    blockPos.x -= timeFix(400, lastMove);
     lastMove = millis();
     if(blockPos.x < -1) {
       blockPos.x = random(width+2, width*2);

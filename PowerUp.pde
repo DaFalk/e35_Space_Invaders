@@ -19,7 +19,7 @@ class PowerUp {
   
   void update() {
     if(!gamePaused) {
-      powerUpPos.y += speed*((millis()-lastMove)*0.001);
+      powerUpPos.y += timeFix(speed, lastMove);
       lastMove = millis();
       if(checkCollision()) { powerUps.remove(this); }
     }

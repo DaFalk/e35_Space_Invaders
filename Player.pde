@@ -22,7 +22,7 @@ class Player {
   void update() {
     if(!isDead) {
       if(!gamePaused) {
-        x += (right - left) * (speed*(millis()-lastMove)*0.001);
+        x += (right - left) * timeFix(speed, lastMove);
         lastMove = millis();
         checkCollision();
         if(attack) { shoot(); }

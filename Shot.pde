@@ -22,17 +22,22 @@ class Shot {
 
   void update() {
     if(type >= 3) {
+      //Get a new target if the old target was killed or if the target is none.
       if(target == null) { getEnemyTarget(); }
       else if(target.isDead) { getEnemyTarget(); }
     }
     if(!gamePaused) {
       if(type != 4) {
-        shotPos.add(new PVector((speed*shotDir.x)*((millis()-lastMove)*0.001), (speed*shotDir.y)*((millis()-lastMove)*0.001)));
+        shotPos.add(new PVector(timeFix(speed*shotDir.x, lastMove), timeFix(speed*shotDir.y, lastMove)));
         lastMove = millis();
       }
+      //Destroy shot if it triggers a collision.
       if(checkCollision()) { shots.remove(this); }
     }
-    else { lastMove += millis() - lastMove; }
+    else {
+      //Adjust lastMove in order to pause shot.
+      lastMove += millis() - lastMove;
+    }
     drawShot();
   }
   
