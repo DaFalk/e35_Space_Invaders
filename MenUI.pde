@@ -154,7 +154,12 @@ class MenUI {
                 gamePaused = false;
                 calcAllLifes();
               }
-              if (i == numBtns-1) { resetGame(); }
+              if (i == numBtns-1) {
+                if(showHighscores) {
+                  highscores.updateName();
+                }
+                resetGame();
+              }
             }
             audioHandler.playSFX(1);
           }
@@ -224,6 +229,7 @@ class MenUI {
     }
     if (allLifes < 1) {
       displayLoadingHighscores();
+      loadHighscores = true;
       gamePaused = true;
     }
   }
@@ -253,7 +259,6 @@ class MenUI {
     text(totalScoreLabel, width/2, 0);
     textSize(labelHeight*2 + titleSize/10);
     text(totalScore, width/2, labelHeight/2);
-    loadHighscores = true;
   }
 
   void displayFloatingPoints() {

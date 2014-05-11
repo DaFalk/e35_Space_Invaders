@@ -106,19 +106,24 @@ void keyReleased() {
   }
 }
 void keyPressed() {
-  if (key == 27) {  //Key 27 = ESC
+  if(key == 27) {  //Key 27 = ESC
     key = 0;  //Cancel other ESC events(e.g. quit processing).
-    if (!showHighscores) { 
+    if(!showHighscores && !menUI.loadHighscores) { 
       gamePaused = !gamePaused;
     }
+    println(showHighscores, gamePaused, gameStarted);
   }
-  if (gameStarted) {
-    if (key == CODED) { 
-      players.get(players.size()-1).keyDown();
-    }
-    if (key != CODED) { 
-      players.get(0).keyDown();
-    }
+  if(gameStarted) {
+    if (key == CODED) { players.get(players.size()-1).keyDown(); }
+    if (key != CODED) { players.get(0).keyDown(); }
+    
+  }
+  if(!showHighscores) {
+    if(keyCode == ENTER) { spawner.startGame(1); }
+  }
+  else {
+    //Update the highscore name whenever there is a key input.
+    highscores.updateName();
   }
 }
 void mousePressed() {
