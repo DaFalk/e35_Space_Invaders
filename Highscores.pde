@@ -1,6 +1,7 @@
 //
 // 
-// Spreadsheet reference: https://github.com/joshsager/Fancy-Pants-Conference-Info-Wall/blob/master/RandomKittenSpreadsheet/SimpleSpreadsheetManager.pde
+// Spreadsheet references: https://github.com/joshsager/Fancy-Pants-Conference-Info-Wall/blob/master/RandomKittenSpreadsheet/SimpleSpreadsheetManager.pde
+//                       : http://makezine.com/2010/12/10/save-sensor-data-to-google-spreadsh/
 // Insertion sort reference: http://www.journaldev.com/585/insertion-sort-in-java-algorithm-and-code-with-example
 
 class Highscores extends MenUI {
