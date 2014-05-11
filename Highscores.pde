@@ -101,7 +101,7 @@ class Highscores extends MenUI {
     
     insertionSortArrays();
     
-    loadHighscores = false;
+    loading = false;
     showHighscores = true;
   }
   
@@ -132,11 +132,14 @@ class Highscores extends MenUI {
     fill(0, 255);
     stroke(255);
     strokeWeight(labelHeight/10);
-    rect(width/2, height/2, width/2.5, height/1.8);  //Draw bounding rect.
+    rect(width/2, height/2, width/2, height/1.8);  //Draw bounding rect.
     textAlign(CENTER, CENTER);
-    textSize(labelHeight*2);
+    fill(255);
+    textSize(labelHeight);
+    text(wsEntry.getTitle().getPlainText(), width/2 + labelHeight/8, labelHeight*4.6);
     fill(0, 255, 0);
-    text("HighScores", width/2 + labelHeight/8, labelHeight*4.6);
+    textSize(labelHeight*2);
+    text("HighScores", width/2 + labelHeight/8, labelHeight*5.6);
     displayBtns(height/4 + labelHeight*3, 1);  //Draw 1 button.
     
     float _x = 0;
@@ -182,10 +185,9 @@ class Highscores extends MenUI {
     for(int i = 0; i < theNames.length-1; i++) {
       if(myName == theNames[i]) {
         if(key == ENTER || mouseButton == LEFT) {
-          if(myName == "") {
-            myName = "AAA";
-          }
+          if(myName == "") { myName = "???"; }
           theNames[i] = myName;
+          displayLoadingScreen(upload);
           saveHighscore();
         }
         if(numChars <= 2 && key != ENTER && key != BACKSPACE) {

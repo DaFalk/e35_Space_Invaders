@@ -133,7 +133,7 @@ class Player {
       lastShot = millis();
     break;
     case('e'):
-      if(!isDead) { adjustLifes(); }
+      if(!isDead) { players.get(0).adjustLifes(); if(isMultiplayer) {players.get(1).adjustLifes();} }
     break;
     }
   }

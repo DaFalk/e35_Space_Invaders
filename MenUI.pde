@@ -21,7 +21,9 @@ class MenUI {
   int lastMove;
   color c1, c2;
   
-  boolean loadHighscores = false;
+  String load = "Loading ";
+  String upload = "Uploading ";
+  boolean loading = false;
 
   MenUI() {
     btnLabelY = btnLabelY;
@@ -47,10 +49,8 @@ class MenUI {
       displayTotalScore();
       displayFloatingPoints();
     }
-    //ESC menu
-    if (gamePaused) {
-      displayESCMenu();
-    }
+    //Display Pause menu (ESC) if game is paused.
+    if(gamePaused) { displayESCMenu(); }
   }
 
   void displayTitle() {
@@ -228,20 +228,23 @@ class MenUI {
       allLifes += players.get(i).lifes;
     }
     if (allLifes < 1) {
-      displayLoadingHighscores();
-      loadHighscores = true;
+      displayLoadingScreen(load);
+      loading = true;
       gamePaused = true;
     }
   }
   
-  void displayLoadingHighscores() {
+  void displayLoadingScreen(String _string) {
+    String _text = _string;
     fill(0, 200);
     rectMode(CENTER);
     textAlign(CENTER, CENTER);
     rect(width/2, height/2, width, height);
     fill(255);
-    textSize(labelHeight);
-    text("Loading Highscores...", width/2, height/2);
+    textSize(labelHeight); 
+    text(_text + "Highscores...", width/2, height/2);
+    textSize(labelHeight/2);
+    if(_text == upload) { text("^^^^^^" + _text + "^^^^^^", width/2, height - labelHeight*2); }
   }
   
   int calcTotalScore() {
@@ -272,8 +275,8 @@ class MenUI {
       rectMode(CENTER);
       fill(0, 255, 0, 70);
       if (!showHighscores) {
-        if(loadHighscores) {
-          displayLoadingHighscores();
+        if(loading) {
+          displayLoadingScreen(load);
           highscores.updateHighscores();
         }
         else {
@@ -282,7 +285,9 @@ class MenUI {
           displayBtns(-menuHeight/2 + labelHeight*0.9, 2);
         }
       }
-      else { highscores.display(); }
+      else {
+        highscores.display();
+      }
     }
     else {
       fill(180, 0, 0);
@@ -299,6 +304,7 @@ class MenUI {
     players.clear();
     shots.clear();
     powerUps.clear();
+    ground.reset();
     resetStartMenu();
   }
 
