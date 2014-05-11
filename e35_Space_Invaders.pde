@@ -1,11 +1,9 @@
 import java.net.URL;
-import java.util.List;
+import java.util.*;
 import com.google.gdata.client.spreadsheet.*;
 import com.google.gdata.data.*;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.*;
-SpreadsheetService service;
-WorksheetEntry wsEntry;
 
 import ddf.minim.*; //Import audio library
 Minim minim;
@@ -52,6 +50,7 @@ void draw() {
     displayGameObjects();
   }
   menUI.display();
+  if(showHighscores) { highscores.display(); }
   enemyHandler.update();
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }
