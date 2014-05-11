@@ -1,3 +1,12 @@
+import java.net.URL;
+import java.util.List;
+import com.google.gdata.client.spreadsheet.*;
+import com.google.gdata.data.*;
+import com.google.gdata.data.spreadsheet.*;
+import com.google.gdata.util.*;
+SpreadsheetService service;
+WorksheetEntry wsEntry;
+
 import ddf.minim.*; //Import audio library
 Minim minim;
 AudioHandler audioHandler;
@@ -12,6 +21,7 @@ PFont SpaceFont;
 Spawner spawner;
 EnemyHandler enemyHandler;
 MenUI menUI;
+Highscores highscores;
 
 //Each game object is stored in an array list associated to that kind of object.
 ArrayList<Player> players = new ArrayList<Player>(); //Player 1 is players.get(0) while Player 2 is players.get(1).
@@ -38,10 +48,10 @@ void draw() {
   background(0);
   textFont(SpaceFont);
   audioHandler.manage();
-  menUI.display();
   if (gameStarted) { 
     displayGameObjects();
   }
+  menUI.display();
   enemyHandler.update();
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }

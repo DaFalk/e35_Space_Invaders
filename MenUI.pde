@@ -191,6 +191,7 @@ class MenUI {
     if (allLifes < 1) {
       showHighscores = true;
       gamePaused = true;
+      highscores = new Highscores();
     }
   }
 
@@ -280,13 +281,19 @@ class MenUI {
           playersAlive++;
         }
       }
-      if (playersAlive > 0) {
+      if (!showHighscores) {
         float menuHeight = labelHeight*4;
         drawBackground(height/2 - menuHeight*1.5, menuHeight*3);
         displayBtns(-menuHeight/2 + labelHeight*0.9, 2);
       }
       else {
+        //Draw highscore screen.
         drawBackground(height*0.65, height*0.625);
+        fill(0);
+        stroke(255);
+        strokeWeight(labelHeight/10);
+        rectMode(CENTER);
+        rect(width/2, height/2, width/3, height/2);
         displayBtns(height/4 + labelHeight*3, 1);
       }
     }

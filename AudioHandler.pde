@@ -3,7 +3,7 @@ class AudioHandler {
   
   AudioHandler() {
     audioBank = new AudioPlayer[13];
-    audioBank[0] = minim.loadFile("theme.mp3");
+    audioBank[0] = minim.loadFile("theme.wav");
     audioBank[1] = minim.loadFile("button.mp3");
     audioBank[2] = minim.loadFile("enemyDeath.wav");
     audioBank[3] = audioBank[2];
@@ -13,7 +13,7 @@ class AudioHandler {
     audioBank[7] = minim.loadFile("weaponType0.wav");
     audioBank[8] = minim.loadFile("weaponType1.wav");
     audioBank[9] = audioBank[7];
-    audioBank[10] = minim.loadFile("weaponType3.mp3");
+    audioBank[10] = minim.loadFile("weaponType3.wav");
     audioBank[11] = minim.loadFile("weaponType4.mp3");
     audioBank[12] = minim.loadFile("enemyWeaponType0.wav");
     for(int i = 1; i < audioBank.length; i++) {

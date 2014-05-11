@@ -99,7 +99,7 @@ class Player {
     if(keyCode == RIGHT) { right = 1; }
     if(keyCode == UP) { attack = true; }
     
-    //testing purpose
+    //for testing purpose only :)
     switch(key) {
     case('0'):
       hasShield = true;
@@ -133,7 +133,7 @@ class Player {
       lastShot = millis();
     break;
     case('e'):
-      adjustLifes();
+      if(!isDead) { adjustLifes(); }
     break;
     }
   }

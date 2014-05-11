@@ -135,8 +135,8 @@ class Shot {
         for(int i = enemies.size() - 1; i > -1; i--) {
           Enemy _enemy = enemies.get(i);
           if(!_enemy.isDead) {
-            if(shotPos.y < _enemy.enemyPos.y + _enemy.eHeight && shotPos.y > _enemy.enemyPos.y - _enemy.eHeight) {
-              if(shotPos.x < _enemy.enemyPos.x + _enemy.eSize && shotPos.x > _enemy.enemyPos.x - _enemy.eSize) {
+            if(shotPos.y > _enemy.enemyPos.y - _enemy.eHeight && shotPos.y < _enemy.enemyPos.y + _enemy.eHeight) {
+              if(shotPos.x > _enemy.enemyPos.x - _enemy.eSize && shotPos.x < _enemy.enemyPos.x + _enemy.eSize) {
                 enemies.get(i).damageEnemy(this);
                 if(type != 1) { return true; }
               }
