@@ -51,7 +51,6 @@ void draw() {
     displayGameObjects();
   }
   menUI.display();
-  if(showHighscores) { highscores.display(); }
   enemyHandler.update();
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }

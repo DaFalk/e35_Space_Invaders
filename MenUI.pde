@@ -20,6 +20,8 @@ class MenUI {
   Block[] blocks;
   int lastMove;
   color c1, c2;
+  
+  boolean loadHighscores = false;
 
   MenUI() {
     btnLabelY = btnLabelY;
@@ -46,7 +48,7 @@ class MenUI {
       displayFloatingPoints();
     }
     //ESC menu
-    if (gamePaused) { 
+    if (gamePaused) {
       displayESCMenu();
     }
   }
@@ -93,9 +95,8 @@ class MenUI {
     noFill();
     int _counter = 0;
     for (int i = 0; i < _height; i++) {
-      if (i > _height/2) {
-        _counter += 2;
-      }
+      if (i > _height/2) { _counter += 2; }
+      
       color c = lerpColor(c1, c2, (i-_counter)/(height/2.75));
       stroke(c);
       line(0, _y + i, width, _y + i);
@@ -114,29 +115,17 @@ class MenUI {
     for (int i = 0; i < numBtns; i++) {
       if (!gameStarted) {
         if (!gamePaused) {
-          if (i == 0) { 
-            btnLabel = "Singleplayer";
-          }
-          if (i == numBtns-1) { 
-            btnLabel = "Multiplayer";
-          }
+          if (i == 0) { btnLabel = "Singleplayer"; }
+          if (i == numBtns-1) { btnLabel = "Multiplayer"; }
         }
         else {
-          if (i == 0) { 
-            btnLabel = "yes";
-          }
-          if (i == numBtns-1) { 
-            btnLabel = "NO";
-          }
+          if (i == 0) { btnLabel = "yes"; }
+          if (i == numBtns-1) { btnLabel = "NO"; }
         }
       }
       else {
-        if (i == 0) { 
-          btnLabel = "Resume";
-        }
-        if (i == numBtns-1) { 
-          btnLabel = "Quit";
-        }
+        if (i == 0) { btnLabel = "Resume"; }
+        if (i == numBtns-1) { btnLabel = "Quit"; }
       }
 
       fill(126, 126, 126);
@@ -150,19 +139,13 @@ class MenUI {
             if (!gameStarted) {
               //Start menu button actions.
               if (!gamePaused) {
-                if (i == 1) { 
-                  isMultiplayer = true;
-                }
+                if (i == 1) { isMultiplayer = true; }
                 spawner.startGame(i + 1);
               }
               //Start menu pause button actions.
               else {
-                if (i == 0) { 
-                  exit();
-                }
-                else if (i == 1) { 
-                  resetGame();
-                }
+                if (i == 0) { exit(); }
+                else if (i == 1) { resetGame(); }
               }
             }
             //In-game pause button actions.
@@ -171,9 +154,7 @@ class MenUI {
                 gamePaused = false;
                 calcAllLifes();
               }
-              if (i == numBtns-1) { 
-                resetGame();
-              }
+              if (i == numBtns-1) { resetGame(); }
             }
             audioHandler.playSFX(1);
           }
@@ -183,33 +164,17 @@ class MenUI {
     }
   }
 
-  void calcAllLifes() {
-    int allLifes = 0;
-    for (int i = players.size()-1; i > -1; i--) {
-      allLifes += players.get(i).lifes;
-    }
-    if (allLifes < 1) {
-      showHighscores = true;
-      gamePaused = true;
-      highscores.updateHighscores();
-    }
-  }
-
   //Display Player's ID, Lifes, Score and players total score.
   void displayPlayerUI() {
-    totalScore = 0;  // Reset total score
+    totalScore = calcTotalScore();
     for (int i = players.size()-1; i > -1; i--) {
       Player _player = players.get(i);
       String numPlayer = "P" + nf(i+1, 0);
       String score = nf(_player.score, 0);
       String lifesLabel = _player.lifesLabel;
 
-      if (_player.lifes > 0) { 
-        fill(255);
-      }
-      else { 
-        fill(255, 0, 0, 220);
-      }
+      if (_player.lifes > 0) { fill(255); }
+      else { fill(255, 0, 0, 220); }
 
       float _x = labelHeight/2;
 
@@ -241,9 +206,7 @@ class MenUI {
         float p2ScoreX = (width - _x + labelHeight/4 - _player.pWidth*1.375)*i;
         text(score, p1ScoreX + p2ScoreX, _player.pWidth - labelHeight*1.25);
       }
-      else {
-        totalScoreLabel = scoreLabel;
-      }
+      else { totalScoreLabel = scoreLabel; }
 
       // Display lifes.
       for (int h = 0; h < _player.lifes; h++) {
@@ -251,9 +214,36 @@ class MenUI {
         float p2LifesX = (width - _x + labelHeight/4 - _player.pWidth*0.75 - _player.pWidth*h)*i;
         _player.drawPlayer(p1LifesX + p2LifesX, _player.pWidth, 0.75, false);
       }
-
-      totalScore += _player.score;  // Recalculate total score.
     }
+  }
+
+  void calcAllLifes() {
+    int allLifes = 0;
+    for (int i = players.size()-1; i > -1; i--) {
+      allLifes += players.get(i).lifes;
+    }
+    if (allLifes < 1) {
+      displayLoadingHighscores();
+      gamePaused = true;
+    }
+  }
+  
+  void displayLoadingHighscores() {
+    fill(0, 200);
+    rectMode(CENTER);
+    textAlign(CENTER, CENTER);
+    rect(width/2, height/2, width, height);
+    fill(255);
+    textSize(labelHeight);
+    text("Loading Highscores...", width/2, height/2);
+  }
+  
+  int calcTotalScore() {
+    totalScore = 0;
+    for(int i = players.size()-1; i> -1; i--) {
+      totalScore += players.get(i).score;
+    }
+    return totalScore;
   }
 
   void displayTotalScore() {
@@ -263,6 +253,7 @@ class MenUI {
     text(totalScoreLabel, width/2, 0);
     textSize(labelHeight*2 + titleSize/10);
     text(totalScore, width/2, labelHeight/2);
+    loadHighscores = true;
   }
 
   void displayFloatingPoints() {
@@ -275,19 +266,18 @@ class MenUI {
     if (gameStarted) {
       rectMode(CENTER);
       fill(0, 255, 0, 70);
-      int playersAlive = 0;
-      for (int i = players.size()-1; i > -1; i--) {
-        if (!players.get(i).isDead) { 
-          playersAlive++;
+      if (!showHighscores) {
+        if(loadHighscores) {
+          displayLoadingHighscores();
+          highscores.updateHighscores();
+        }
+        else {
+          float menuHeight = labelHeight*4;
+          drawBackground(height/2 - menuHeight*1.5, menuHeight*3);
+          displayBtns(-menuHeight/2 + labelHeight*0.9, 2);
         }
       }
-      if (!showHighscores) {
-        float menuHeight = labelHeight*4;
-        drawBackground(height/2 - menuHeight*1.5, menuHeight*3);
-        displayBtns(-menuHeight/2 + labelHeight*0.9, 2);
-      }
-      else {
-      }
+      else { highscores.display(); }
     }
     else {
       fill(180, 0, 0);

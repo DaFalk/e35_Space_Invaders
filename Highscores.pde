@@ -9,36 +9,22 @@ class Highscores extends MenUI {
   ListFeed listFeed;
   List listEntries;
   
-  String[] theNames = new String[10];
-  String[] theScores = new String[10];
+  String[] theNames = new String[11];
+  String[] theScores = new String[11];
+  String acc = "MPGD.Space.Invaders";
+  String pwd = "exercise35";
   String spreadsheet_name = "Space Invaders Highscores";
   int spreadsheet_index = 0;
+  boolean doRowUpdate = false;
   
   Highscores() {
     listFeed = new ListFeed();
     CellFeed cf = new CellFeed();
     wsFeed = new WorksheetFeed();
     service = new SpreadsheetService("test");
-    
-    //Get spreadsheets feed
-    try {
-      service.setUserCredentials("MPGD.Space.Invaders",  "exercise35");
-      URL feedURL = new URL("http://spreadsheets.google.com/feeds/spreadsheets/private/full/");
-      SpreadsheetFeed feed = service.getFeed(feedURL, SpreadsheetFeed.class);
-      for(SpreadsheetEntry entry: feed.getEntries()) {
-        if(entry.getTitle().getPlainText().equals(spreadsheet_name)) {
-          break;  //Break out of this for loop if right sheet was found.
-        }
-        spreadsheet_index += 1;  //Increase index to check if the next sheet is the right one.
-      }
-      SpreadsheetEntry se = feed.getEntries().get(spreadsheet_index);
-      wsEntry = se.getWorksheets().get(0);
-      println("Found worksheet ''" + se.getTitle().getPlainText() + "'' on Google Drive");
-    }
-    catch(Exception e) { println("Couldn't find a worksheet!"); }
   }
   
-  //Returns the content of a cell in the highscores spreadsheet. 
+  //Returns the content of a cell in the highscores spreadsheet.
   String getCellContent(int _col, int _row) {
     ListEntry listEntry = (ListEntry)listEntries.get(_row);    
     Set<String> tags = listEntry.getCustomElements().getTags();
@@ -49,16 +35,45 @@ class Highscores extends MenUI {
   }
   
   //Sets the content of a cell in the highscores spreadsheet.
-  void setCellContet(String tag, int r, String val) {
-    ListEntry le = (ListEntry)listEntries.get(r);    
-    le.getCustomElements().setValueLocal(tag, val);
-    try {
-      ListEntry updatedRow = le.update();
+  void setCellContent(String _tag, int _row, String _content) {
+    ListEntry listEntry = (ListEntry)listEntries.get(_row);
+    listEntry.getCustomElements().setValueLocal(_tag, _content);
+    if(doRowUpdate == true) {
+      try { ListEntry updatedRow = listEntry.update(); }
+      catch (Exception e){ println(e.toString()); }
     }
-    catch (Exception e){ println(e.toString()); }
+    doRowUpdate = !doRowUpdate;
   }
   
+  void sortStringIntArray() {
+    
+    
+  }
+  
+  void insertionSort() {
+    
+  }
   void updateHighscores() {
+    //Get spreadsheets feed
+    try {
+      //Attempt to sign-in to Google.
+      service.setUserCredentials(acc, pwd);
+      URL feedURL = new URL("http://spreadsheets.google.com/feeds/spreadsheets/private/full/");
+      SpreadsheetFeed feed = service.getFeed(feedURL, SpreadsheetFeed.class);
+      for(SpreadsheetEntry entry: feed.getEntries()) {
+        if(entry.getTitle().getPlainText().equals(spreadsheet_name)) {
+          //Break out of the loop if right sheet was found.
+          break;
+        }
+        //Increase index to check if the next sheet is the right one.
+        spreadsheet_index += 1;
+      }
+      SpreadsheetEntry se = feed.getEntries().get(spreadsheet_index);
+      wsEntry = se.getWorksheets().get(0);
+      println("Found worksheet ''" + se.getTitle().getPlainText() + "'' on Google Drive");
+    }
+    catch(Exception e) { println("Could not find a worksheet!"); }
+    
     //Get list feed URL.
     List worksheets = wsFeed.getEntries();
     try {
@@ -70,10 +85,18 @@ class Highscores extends MenUI {
     catch(Exception e) { println(e.toString()); }
     
     listEntries = listFeed.getEntries();
-    for(int i = 0; i < theNames.length; i++) {
+    setCellContent("theScores", 2, nf(calcTotalScore(), 0));
+    setCellContent("theNames", 2, "TFX");
+    
+    // Get content of each name and score cell in the spreadsheet
+    // -1 due to theNames and theScores also hold the game's final score which the spreadsheet don't.
+    for(int i = 0; i < theNames.length-1; i++) {
       theNames[i] = getCellContent(0, i);
       theScores[i] = getCellContent(1, i);
     }
+    
+    loadHighscores = false;
+    showHighscores = true;
   }
   
   void display() {
@@ -89,23 +112,22 @@ class Highscores extends MenUI {
     textAlign(CENTER, CENTER);
     textSize(labelHeight*2);
     fill(0, 255, 0);
-    text("HighScores", width/2 + labelHeight/8, labelHeight*4.5);
+    text("HighScores", width/2 + labelHeight/8, labelHeight*4.6);
     displayBtns(height/4 + labelHeight*3, 1);
-        
-    for(int i = 0; i < theNames.length; i++) {
+    
+    float _x = 0;
+    for(int i = 0; i < theNames.length-1; i++) {
       String _numPlace = nf(i+1, 0) + ". ";
       String _name = theNames[i];
       String _score = " : " + theScores[i];
-      float _x = 0;
       float _y = height/2 - height/4 + labelHeight*0.75 + (labelHeight*1.5)*i;
       
       if(i <= 2) {
-        stroke(255);
         textSize(labelHeight*(1.45 - 0.15*i));
         _x = width/2 + labelHeight*1.5 - textWidth(_numPlace) - textWidth(_name)/2;
         if(i == 0) { fill(255, 215, 0); }
         if(i == 1) { fill(150, 90, 56); }
-        if(i == 2) { fill(148, 148, 148); }
+        if(i == 2) { fill(126, 126, 126); }
       }
       else {
         textSize(labelHeight);
