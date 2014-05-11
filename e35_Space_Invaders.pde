@@ -39,6 +39,7 @@ void setup() {
   enemyHandler = new EnemyHandler();
   SpaceFont = createFont("ca.ttf", 48);
   menUI = new MenUI();
+  highscores = new Highscores();
   ground = new Ground();
 }
 

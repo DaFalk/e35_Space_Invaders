@@ -191,7 +191,7 @@ class MenUI {
     if (allLifes < 1) {
       showHighscores = true;
       gamePaused = true;
-      highscores = new Highscores();
+      highscores.updateHighscores();
     }
   }
 
@@ -287,14 +287,6 @@ class MenUI {
         displayBtns(-menuHeight/2 + labelHeight*0.9, 2);
       }
       else {
-        //Draw highscore screen.
-        drawBackground(height*0.65, height*0.625);
-        fill(0);
-        stroke(255);
-        strokeWeight(labelHeight/10);
-        rectMode(CENTER);
-        rect(width/2, height/2, width/3, height/2);
-        displayBtns(height/4 + labelHeight*3, 1);
       }
     }
     else {
