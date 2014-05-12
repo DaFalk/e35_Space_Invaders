@@ -20,7 +20,6 @@ class Block {
   }
   
   void display() {
-    rectMode(CENTER);
     noStroke();
     fill(bFill, currentAlpha);
     if(deathPos != null) {

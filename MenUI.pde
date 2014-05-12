@@ -237,7 +237,6 @@ class MenUI {
   void displayLoadingScreen(String _string) {
     String _text = _string;
     fill(0, 200);
-    rectMode(CENTER);
     textAlign(CENTER, CENTER);
     rect(width/2, height/2, width, height);
     fill(255);
@@ -272,7 +271,6 @@ class MenUI {
 
   void displayESCMenu() {
     if (gameStarted) {
-      rectMode(CENTER);
       fill(0, 255, 0, 70);
       if (!showHighscores) {
         if(loading) {

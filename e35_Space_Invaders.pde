@@ -33,6 +33,7 @@ void setup() {
   int _width = 800;
   int _height = _width - _width/4;
   size(_width, _height);
+  rectMode(CENTER);
   minim = new Minim(this);
   audioHandler = new AudioHandler();
   spawner = new Spawner();

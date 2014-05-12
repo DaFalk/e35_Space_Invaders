@@ -139,7 +139,6 @@ class Highscores extends MenUI {
   void display() {
     //Draw highscore screen.
     fill(0, 200);
-    rectMode(CENTER);
     rect(width/2, height/2, width, height);  //Draw black transparent overlay background.
     drawBackground(height*0.65, height*0.625);  //Draw bottom glow.
     fill(0, 255);

@@ -52,6 +52,7 @@ class Player {
         ellipse(_x + _pWidth/2, _y + _pHeight/3, _pWidth*1.4, _pWidth*0.85);
       }
     }
+    rectMode(CENTER);
   }
   
 //Keep player within bounds.
