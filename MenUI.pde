@@ -234,18 +234,6 @@ class MenUI {
     }
   }
   
-  void displayLoadingScreen(String _string) {
-    String _text = _string;
-    fill(0, 200);
-    textAlign(CENTER, CENTER);
-    rect(width/2, height/2, width, height);
-    fill(255);
-    textSize(labelHeight); 
-    text(_text + "Highscores...", width/2, height/2);
-    textSize(labelHeight/2);
-    if(_text == upload) { text("^^^^^^" + _text + "^^^^^^", width/2, height - labelHeight*2); }
-  }
-  
   int calcTotalScore() {
     totalScore = 0;
     for(int i = players.size()-1; i> -1; i--) {
@@ -268,14 +256,27 @@ class MenUI {
       floatingTexts.get(i).update();
     }
   }
+  
+  void displayLoadingScreen(String _string) {
+    String _text = _string;
+    fill(0, 200);
+    textAlign(CENTER, CENTER);
+    rect(width/2, height/2, width, height);
+    fill(255);
+    textSize(labelHeight); 
+    text(_text + "Highscores...", width/2, height/2);
+    textSize(labelHeight/2);
+    text("^^^^^^ " + _text + "^^^^^^", width/2, height - labelHeight*2);
+  }
 
   void displayESCMenu() {
     if (gameStarted) {
       fill(0, 255, 0, 70);
       if (!showHighscores) {
         if(loading) {
-          displayLoadingScreen(load);
-          highscores.updateHighscores();
+          displayLoadingScreen(load);  //Called again for smooth transition to highscorelist.
+          highscores.updateHighscores();  //This takes a while to run and freezes the display while running.
+          loading = false;
         }
         else {
           float menuHeight = labelHeight*4;
@@ -283,9 +284,7 @@ class MenUI {
           displayBtns(-menuHeight/2 + labelHeight*0.9, 2);
         }
       }
-      else {
-        highscores.display();
-      }
+      else { highscores.display(); }
     }
     else {
       fill(180, 0, 0);

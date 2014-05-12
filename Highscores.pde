@@ -30,6 +30,8 @@ class Highscores extends MenUI {
   int lastTick;
   int numChars = 0;
   
+  boolean uploading = false;
+  
   Highscores() {
     listFeed = new ListFeed();
     CellFeed cf = new CellFeed();
@@ -107,7 +109,6 @@ class Highscores extends MenUI {
     
     insertionSortArrays();  //Sort the arrays.
     
-    loading = false;
     showHighscores = true;
   }
   
@@ -151,7 +152,7 @@ class Highscores extends MenUI {
     text(wsEntry.getTitle().getPlainText(), width/2 + labelHeight/8, labelHeight*4.6);  //Display the title of the spreadsheet.
     fill(0, 255, 0);
     textSize(labelHeight*2);
-    text("HighScores", width/2 + labelHeight/8, labelHeight*5.6);  //Display "highscores".
+    text("HighScores", width/2 + labelHeight/8, labelHeight*5.6);
     displayBtns(height/4 + labelHeight*3, 1);  //Draw 1 button.
     
     //Display each highscore.
@@ -195,19 +196,17 @@ class Highscores extends MenUI {
       text(_name, _x, _y);
       text(_score, _x + textWidth(_name), _y);
     }
+    if(uploading) {
+      displayLoadingScreen(upload);
+      saveHighscore();
+      uploading = false;
+    }
   }
   
   //On every key input in highscore screen updates the entered highscore name.
   void updateName() {
     for(int i = 0; i < theNames.length-1; i++) {
       if(myName == theNames[i]) {
-        //Pressing ENTER or the Quit button saves the highscorelist
-        if(key == ENTER || mouseButton == LEFT) {
-          if(myName == "") { myName = "???"; }  //If no name is written then "???" is set as the name.
-          theNames[i] = myName;
-          displayLoadingScreen(upload);
-          saveHighscore();
-        }
         //Only enter text if the maximum allowed number of characters hasn't been exeeded.
         if(numChars <= 2 && key != ENTER && key != BACKSPACE) {
           //Check key input agains each character in the allowedKeys.
@@ -218,12 +217,22 @@ class Highscores extends MenUI {
             }
           }
         }
+        
+        //Delete character.
         if(key == BACKSPACE && myName.length() > 0) {
           //Subtract the last characters of myName if BACKSPACE is pressed.
           myName = myName.substring(0, myName.length()-1);
           numChars--;
         }
         theNames[i] = myName;  //Update name.
+        
+        //Pressing ENTER or the Quit button saves the highscorelist
+        if(key == ENTER || mouseClicked) {
+          if(myName == "") { myName = "???"; }  //If no name is written then "???" is set as the name.
+          theNames[i] = myName;
+          displayLoadingScreen(upload);
+          uploading = true;
+        }
       }
     }
   }
@@ -234,6 +243,7 @@ class Highscores extends MenUI {
       setCellContent("theScores", i, theScores[i]);
       setCellContent("theNames", i, theNames[i]);
     }
+    uploading = false;
     resetGame();
   }
 }
