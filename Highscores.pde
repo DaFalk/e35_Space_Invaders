@@ -1,4 +1,7 @@
+// This class manages the highscorelist.
 //
+// Previous data is pulled from a Google spreadsheet to temporary local arrays, sorted, displayed
+// and in the end uploaded back to the correct worksheet in the spreadsheet (multi- or singleplayer).
 // 
 // Spreadsheet references: https://github.com/joshsager/Fancy-Pants-Conference-Info-Wall/blob/master/RandomKittenSpreadsheet/SimpleSpreadsheetManager.pde
 //                       : http://makezine.com/2010/12/10/save-sensor-data-to-google-spreadsh/
@@ -11,12 +14,12 @@ class Highscores extends MenUI {
   ListFeed listFeed;
   List listEntries;
   
-  String allowedKeys = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ123456789._-?&";
+  String allowedKeys = "abcdefghijklmnopqrstuvwxyzæøåABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ123456789._-?&";  //Contains all keys allowed to use when typing name in highscorelist.
   String[] theNames = new String[11];
   String[] theScores = new String[11];
   String acc = "MPGD.Space.Invaders";
   String pwd = "exercise35";
-  String spreadsheet_name = "Space Invaders Highscores";
+  String spreadsheet_name = "Space Invaders Highscores";  //Exact name of spreadsheet (case-sensitive).
   int spreadsheet_index = 0;
   boolean doRowUpdate = false;
   
@@ -36,21 +39,21 @@ class Highscores extends MenUI {
   
   //Returns the content of a cell in the highscores spreadsheet.
   String getCellContent(int _col, int _row) {
-    ListEntry listEntry = (ListEntry)listEntries.get(_row);    
-    Set<String> tags = listEntry.getCustomElements().getTags();
+    ListEntry listEntry = (ListEntry)listEntries.get(_row);  //Store all entries of a single row.
+    Set<String> tags = listEntry.getCustomElements().getTags();  //Get the tags of the cells in the row (theNames and theScores).
     String[] tagArray = new String[tags.size()];
-    tagArray = tags.toArray(tagArray);
+    tagArray = tags.toArray(tagArray);  //Store tags in array.
     
-    return listEntry.getCustomElements().getValue(tagArray[_col]);
+    return listEntry.getCustomElements().getValue(tagArray[_col]);  //Return the content of cell matching the row and tag/column.
   }
   
   //Sets the content of a cell in the highscores spreadsheet.
   void setCellContent(String _tag, int _row, String _content) {
-    ListEntry listEntry = (ListEntry)listEntries.get(_row);
-    listEntry.getCustomElements().setValueLocal(_tag, _content);
-    if(doRowUpdate == true) {
-      try { ListEntry updatedRow = listEntry.update(); }
-      catch (Exception e){ println(e.toString()); }
+    ListEntry listEntry = (ListEntry)listEntries.get(_row);  //Store row.
+    listEntry.getCustomElements().setValueLocal(_tag, _content);  //Set the content of the cell in the row matching the tag.
+    if(doRowUpdate == true) {  //To avoid updating row multiple times the doRowUpdate boolean is used.
+      try { ListEntry updatedRow = listEntry.update(); }  //Try to update row.
+      catch (Exception e){ println("Failed to update row!"); }
     }
     doRowUpdate = !doRowUpdate;
   }
@@ -58,68 +61,77 @@ class Highscores extends MenUI {
   void updateHighscores() {
     //Get spreadsheets feed
     try {
-      //Attempt to sign-in to Google.
-      service.setUserCredentials(acc, pwd);
-      URL feedURL = new URL("http://spreadsheets.google.com/feeds/spreadsheets/private/full/");
-      SpreadsheetFeed feed = service.getFeed(feedURL, SpreadsheetFeed.class);
-      for(SpreadsheetEntry entry: feed.getEntries()) {
-        if(entry.getTitle().getPlainText().equals(spreadsheet_name)) {
-          //Break out of the loop if right sheet was found.
-          break;
+      service.setUserCredentials(acc, pwd);  //Attempt to sign-in to Google.
+      URL feedURL = new URL("http://spreadsheets.google.com/feeds/spreadsheets/private/full/");  //Link to spreadsheets feed.
+      SpreadsheetFeed feed = service.getFeed(feedURL, SpreadsheetFeed.class);  //Store feed of spreadsheets.
+      
+      for(SpreadsheetEntry entry: feed.getEntries()) {  //Check all spreadsheets in feed.
+        if(entry.getTitle().getPlainText().equals(spreadsheet_name)) {  //Check if the current spreasheet from the feed matches the name of the right spreadsheet.
+          break;  //Break out of the for loop if right spreadsheet was found.
         }
-        //Increase index to check if the next sheet is the right one.
-        spreadsheet_index += 1;
+        spreadsheet_index += 1;  //Increase index to check the next sheet.
       }
-      SpreadsheetEntry se = feed.getEntries().get(spreadsheet_index);
-      wsEntry = se.getWorksheets().get(players.size()-1);
+      
+      SpreadsheetEntry se = feed.getEntries().get(spreadsheet_index);  //Store the spreadsheet.
+      wsEntry = se.getWorksheets().get(players.size()-1);  //Get the correct worksheet (single- or multiplayer sheet).
       println("Found worksheet ''" + se.getTitle().getPlainText() + "'' on Google Drive");
     }
     catch(Exception e) { println("Could not find a worksheet!"); }
     
     //Get list feed URL.
-    List worksheets = wsFeed.getEntries();
+    List worksheets = wsFeed.getEntries();  //Store all worksheets in list.
     try {
-      URL listFeedURL = new URL("http://spreadsheets.google.com/feeds/list/1oZZcCmDsuZIvEOVTPXqtqi3vzNukf2B-0aItSb-tXtU/od6/private/full");
-      URL listFeedUrl = wsEntry.getListFeedUrl();
-      ListFeed lf2 = new ListFeed();
-      listFeed = service.getFeed(listFeedUrl, lf2.getClass());
+//      URL listFeedURL = new URL("http://spreadsheets.google.com/feeds/list/1oZZcCmDsuZIvEOVTPXqtqi3vzNukf2B-0aItSb-tXtU/od6/private/full");  //Set feed URL for worksheet.
+      URL listFeedUrl = wsEntry.getListFeedUrl();  //Get feed URL from current worksheet.
+      ListFeed lf2 = new ListFeed();  //New ListFeed to get access to it's class.
+      listFeed = service.getFeed(listFeedUrl, lf2.getClass());  //Store worksheet feed.
       println("Found list feed " + wsEntry.getTitle().getPlainText());
     }
     catch(Exception e) { println(e.toString()); }
     
     listEntries = listFeed.getEntries();
     
-    // Get content of each name and score cell in the spreadsheet
-    // -1 due to theNames and theScores also hold the game's final score which the spreadsheet don't.
+    //Store data from highscorelist in the associated arrays.
+    //The last spot in the arrays are for the local player name and score.
     for(int i = 0; i < theNames.length-1; i++) {
       theNames[i] = getCellContent(0, i);
       theScores[i] = getCellContent(1, i);
     }
+    
+    //Initially set the player name to empty and calculate score.
     theNames[theNames.length-1] = "";
     theScores[theScores.length-1] = nf(calcTotalScore(), 0);
+    //Match myName and myScore with the arrays.
     myName = theNames[theNames.length-1];
     myScore = theScores[theScores.length-1];
     
-    insertionSortArrays();
+    insertionSortArrays();  //Sort the arrays.
     
     loading = false;
     showHighscores = true;
   }
   
-  //Convert theScores string array to int array and sorts both theScores and theNames, the latter based on theScores.
+  //Convert theScores string to int and sorts both theScores and theNames, the latter based on theScores.
   void insertionSortArrays() {
-    for(int i = 1; i < theScores.length; i++) {
+    for(int i = 1; i < theScores.length; i++) {  //Start at 1 since it checks backwards.
+      //Store the data that is potentially moved so it is not overwritten.
       int intToSort = Integer.parseInt(theScores[i]);
       String _name = theNames[i];
+      
+      //Checks if the previous index is smaller than "i".
       int j = i;
-      //Checks if the int on the index before i smaller and swaps if they are.
       while(j > 0 && Integer.parseInt(theScores[j-1]) < intToSort) {
+        //Move previous value to this index.
         theScores[j] = theScores[j-1];
         theNames[j] = theNames[j-1];
-        j--;
+        j--;  //Reduce j to get previous index.
       }
+      
+      //Move this index's original value to previous index.
       theScores[j] = nf(intToSort, 0);
       theNames[j] = _name;
+      
+      //Store player's placement on highscorelist.
       if(myName == theNames[j]) { myPlace = j; }
     }
   }
@@ -128,7 +140,7 @@ class Highscores extends MenUI {
     //Draw highscore screen.
     fill(0, 200);
     rectMode(CENTER);
-    rect(width/2, height/2, width, height);  //Draw transparent highscores background.
+    rect(width/2, height/2, width, height);  //Draw black transparent overlay background.
     drawBackground(height*0.65, height*0.625);  //Draw bottom glow.
     fill(0, 255);
     stroke(255);
@@ -137,12 +149,13 @@ class Highscores extends MenUI {
     textAlign(CENTER, CENTER);
     fill(255);
     textSize(labelHeight);
-    text(wsEntry.getTitle().getPlainText(), width/2 + labelHeight/8, labelHeight*4.6);
+    text(wsEntry.getTitle().getPlainText(), width/2 + labelHeight/8, labelHeight*4.6);  //Display the title of the spreadsheet.
     fill(0, 255, 0);
     textSize(labelHeight*2);
-    text("HighScores", width/2 + labelHeight/8, labelHeight*5.6);
+    text("HighScores", width/2 + labelHeight/8, labelHeight*5.6);  //Display "highscores".
     displayBtns(height/4 + labelHeight*3, 1);  //Draw 1 button.
     
+    //Display each highscore.
     float _x = 0;
     for(int i = 0; i < theNames.length-1; i++) {
       String _numPlace = nf(i+1, 0) + ". ";
@@ -151,6 +164,7 @@ class Highscores extends MenUI {
       float _y = height/2 - height/4 + labelHeight*0.75 + (labelHeight*1.5)*i;
       
       if(i <= 2) {
+        //Display top 3 highscores with individual color and size
         textSize(labelHeight*(1.45 - 0.15*i));
         _x = width/2 + labelHeight*1.5 - textWidth(_numPlace) - textWidth(_name)/2;
         if(i == 0) { fill(255, 215, 0); }
@@ -163,6 +177,7 @@ class Highscores extends MenUI {
         fill(255);
       }
       
+      //Display blinking indicator if one of the names on the highscore list match the temporary empty myName.
       if(myName == theNames[i]) {
         stroke(255);
         if(millis() - lastTick >= 500) {
@@ -174,6 +189,7 @@ class Highscores extends MenUI {
         }
       }
       
+      //Place, name and score
       textAlign(RIGHT, CENTER);
       text(_numPlace, _x, _y);
       textAlign(LEFT, CENTER);
@@ -182,34 +198,39 @@ class Highscores extends MenUI {
     }
   }
   
+  //On every key input in highscore screen updates the entered highscore name.
   void updateName() {
     for(int i = 0; i < theNames.length-1; i++) {
       if(myName == theNames[i]) {
+        //Pressing ENTER or the Quit button saves the highscorelist
         if(key == ENTER || mouseButton == LEFT) {
-          if(myName == "") { myName = "???"; }
+          if(myName == "") { myName = "???"; }  //If no name is written then "???" is set as the name.
           theNames[i] = myName;
           displayLoadingScreen(upload);
           saveHighscore();
         }
+        //Only enter text if the maximum allowed number of characters hasn't been exeeded.
         if(numChars <= 2 && key != ENTER && key != BACKSPACE) {
+          //Check key input agains each character in the allowedKeys.
           for(int k = 0; k < allowedKeys.length(); k++) {
             if(key == allowedKeys.charAt(k)) {
-              myName = myName + key;
+              myName = myName + key;  //if key was allowed then add that character to myName.
               numChars++;
             }
           }
         }
         if(key == BACKSPACE && myName.length() > 0) {
+          //Subtract the last characters of myName if BACKSPACE is pressed.
           myName = myName.substring(0, myName.length()-1);
           numChars--;
         }
-        theNames[i] = myName;
+        theNames[i] = myName;  //Update name.
       }
     }
   }
   
   void saveHighscore() {
-    // Set the new content of each name and score cell in the spreadsheet
+    // Writes the sorted local arrays of names and scores to the Google spreadsheet.
     for(int i = 0; i < theNames.length-1; i++) {
       setCellContent("theScores", i, theScores[i]);
       setCellContent("theNames", i, theNames[i]);
