@@ -109,10 +109,13 @@ void keyReleased() {
 void keyPressed() {
   if(key == 27) {  //Key 27 = ESC
     key = 0;  //Cancel other ESC events(e.g. quit processing).
-    if(!showHighscores && !menUI.loading) { 
-      gamePaused = !gamePaused;
+    if(!showHighscores) {
+      if(!menUI.loading) { gamePaused = !gamePaused; }
     }
-    println(showHighscores, gamePaused, gameStarted);
+    else {
+      highscores.updateName();
+      menUI.resetGame();
+    }
   }
   if(gameStarted) {
     if (key == CODED) { players.get(players.size()-1).keyDown(); }

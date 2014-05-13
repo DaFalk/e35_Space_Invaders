@@ -155,8 +155,10 @@ class MenUI {
                 calcAllLifes();
               }
               if (i == numBtns-1) {
-                if(showHighscores) { highscores.updateName(); }
-                else { resetGame(); }
+                if(showHighscores) {
+                  highscores.updateName();
+                }
+                resetGame();
               }
             }
             audioHandler.playSFX(1);

@@ -163,6 +163,8 @@ class Highscores extends MenUI {
       String _score = " : " + theScores[i];
       float _y = height/2 - height/4 + labelHeight*0.75 + (labelHeight*1.5)*i;
       
+      if(_name == null) { _name = "???"; }
+      
       if(i <= 2) {
         //Display top 3 highscores with individual color and size
         textSize(labelHeight*(1.45 - 0.15*i));
@@ -189,7 +191,7 @@ class Highscores extends MenUI {
         }
       }
       
-      //Place, name and score
+      //Display place, name and score
       textAlign(RIGHT, CENTER);
       text(_numPlace, _x, _y);
       textAlign(LEFT, CENTER);
@@ -207,33 +209,42 @@ class Highscores extends MenUI {
   
   //On every key input in highscore screen updates the entered highscore name.
   void updateName() {
-    for(int i = 0; i < theNames.length-1; i++) {
-      if(myName == theNames[i]) {
-        //Only enter text if the maximum allowed number of characters hasn't been exeeded.
-        if(numChars <= 2 && key != ENTER && key != BACKSPACE) {
-          //Check key input agains each character in the allowedKeys.
-          for(int k = 0; k < allowedKeys.length(); k++) {
-            if(key == allowedKeys.charAt(k)) {
-              myName = myName + key;  //if key was allowed then add that character to myName.
-              numChars++;
+    if(showHighscores) {
+      for(int i = 0; i < theNames.length-1; i++) {
+        if(myName == theNames[i]) {
+          //Only enter text if the maximum allowed number of characters hasn't been exeeded.
+          if(numChars <= 2 && key != ENTER && key != BACKSPACE) {
+            //Check key input agains each character in the allowedKeys.
+            for(int k = 0; k < allowedKeys.length(); k++) {
+              if(key == allowedKeys.charAt(k)) {
+                myName = myName + key;  //if key was allowed then add that character to myName.
+                numChars++;
+              }
             }
           }
-        }
-        
-        //Delete character.
-        if(key == BACKSPACE && myName.length() > 0) {
-          //Subtract the last characters of myName if BACKSPACE is pressed.
-          myName = myName.substring(0, myName.length()-1);
-          numChars--;
-        }
-        theNames[i] = myName;  //Update name.
-        
-        //Pressing ENTER or the Quit button saves the highscorelist
-        if(key == ENTER || mouseClicked) {
-          if(myName == "") { myName = "???"; }  //If no name is written then "???" is set as the name.
-          theNames[i] = myName;
-          displayLoadingScreen(upload);
-          uploading = true;
+          
+          //Delete character.
+          if(key == BACKSPACE && myName.length() > 0) {
+            //Subtract the last characters of myName if BACKSPACE is pressed.
+            myName = myName.substring(0, myName.length()-1);
+            numChars--;
+          }
+          
+          //Delete name.
+          if(key == DELETE) {
+            myName = myName.substring(0, myName.length()-numChars);
+            numChars = 0;
+          }
+          
+          theNames[i] = myName;  //Update name.
+          
+          //Pressing ENTER or the Quit button saves the highscorelist
+          if(key == ENTER || mouseClicked) {
+            if(myName == "") { myName = "???"; }  //If no name is written then "???" is set as the name.
+            theNames[i] = myName;
+            displayLoadingScreen(upload);
+            uploading = true;
+          }
         }
       }
     }
