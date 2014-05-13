@@ -1,11 +1,11 @@
-//
+// This class manages enemy movement, collision, animation and shooting
 //
 // Accesse classes: Enemy, Shot
 
 class EnemyHandler {
-  int dirX;
+  int dirX;  //Determine direction to move(dirX is either 1 or -1).
   int eSize;
-  float moveDist;
+  float moveDist;  //The distance to move (set by the spawner when spawning enemies).
   int lastMove, nextMove;
   int lastShot, shotTimer, nextShot;
   int lastAliveAnim, lastDeadAnim, nextAnim;
@@ -22,24 +22,24 @@ class EnemyHandler {
     dirX = 1;
   }
   
-//Rest
+//Resets enemyhandler when called.
   void reset() {
     enemies.clear();
     deadEnemies.clear();
-    nextMove = 400;
-    shotTimer = 5000;
-    dirX = 1;
+    nextMove = 400;  //Initial nextMove value.
+    shotTimer = 5000;  //Initial shot timer value.
+    dirX = 1;  //Initial direction.
   }
 
   void update() {
     if(!gamePaused) {
-      if (enemies.size() > 0) {
+      if(enemies.size() > 0) {
         if(gameStarted) {
           moveEnemies();
           shoot();
         }
-        lastAliveAnim = animate(enemies, lastAliveAnim);
-        if(deadEnemies.size() > 0) { lastDeadAnim = animate(deadEnemies, lastDeadAnim); }
+        lastAliveAnim = animate(enemies, lastAliveAnim);  //Animate alive enemies.
+        if(deadEnemies.size() > 0) { lastDeadAnim = animate(deadEnemies, lastDeadAnim); }  //Animate dead enimies(i.e. potential death projectiles).
       }
     }
     else {
@@ -49,9 +49,7 @@ class EnemyHandler {
       lastDeadAnim += millis() - lastDeadAnim;
     }
     
-    if (respawnEnemies) { 
-      spawner.respawnEnemies();
-    }
+    if(respawnEnemies) { spawner.respawnEnemies(); }
   }
 
   void moveEnemies() {
@@ -64,19 +62,19 @@ class EnemyHandler {
           }
         }
       }
-      else {  //Move enemies down.
-        for (int i = enemies.size()-1; i > -1; i--) {
-          if (!enemies.get(i).isDead) {
-            enemies.get(i).moveEnemy(0, moveDist);
-          }
+      else {
+        //Move enemies down.
+        for(int i = enemies.size()-1; i > -1; i--) {
+          enemies.get(i).moveEnemy(0, moveDist);
         }
-        dirX *= -1;
+        dirX *= -1;  //Change direction.
       }
       checkEnemiesCollision();
       lastMove = millis();
     }
   }
   
+  //Animate a given array of enemies.
   int animate(ArrayList<Enemy> _enemies, int _lastAnim) {
     int _nextAnim;
     if(_enemies == enemies) { _nextAnim = (nextAnim/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size(); }
@@ -95,9 +93,11 @@ class EnemyHandler {
 //Collision detection
   void checkEnemiesCollision() {
     for (int i = enemies.size()-1; i > -1; i--) {
+      //Check if the enemy's next left and right position is within bounds.
       float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
       float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
       if ((nextRightX > width && dirX > 0) || (nextLeftX < 0 && dirX < 0)) {
+        //If the next move is not within bound then indicate that enemies should move down next.
         moveDown = true;
         return;
       }
@@ -108,14 +108,13 @@ class EnemyHandler {
 //Random enemy shot
   void shoot() {
     if (millis() >= lastShot + nextShot) {
-      int _randomEnemy = floor(random(0, enemies.size()));
-      nextShot = ceil(random(shotTimer/3, shotTimer));
-      Enemy _enemy = enemies.get(_randomEnemy);
-      if (!_enemy.isDead) {
-        Shot s = new Shot(new PVector(_enemy.enemyPos.x, _enemy.enemyPos.y + _enemy.eHeight), 5, 10);
-        shots.add(s);
-        lastShot = millis();
-      }
+      int _randomEnemy = floor(random(0, enemies.size()));  //Chose a random enemy index.
+      nextShot = ceil(random(shotTimer/3, shotTimer));  //Chose random nextShot from limited inteval.
+      Enemy _enemy = enemies.get(_randomEnemy);  //Choose the enemy at the random index as the shooter.
+      //Trigger a shot.
+      Shot s = new Shot(new PVector(_enemy.enemyPos.x, _enemy.enemyPos.y + _enemy.eHeight), 5, 10);
+      shots.add(s);
+      lastShot = millis();
     }
   }
 }

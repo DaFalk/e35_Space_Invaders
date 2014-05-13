@@ -122,10 +122,7 @@ void keyPressed() {
   if(!showHighscores) {
     if(keyCode == ENTER) { spawner.startGame(1); }
   }
-  else {
-    //Update the highscore name whenever there is a key input.
-    highscores.updateName();
-  }
+  else { highscores.updateName(); }  //Update the highscore name whenever there is a key input during highscore screen.
 }
 void mousePressed() {
   mouseClicked = true;  //Register mousePressed as a click (for the buttons).

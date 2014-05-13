@@ -196,6 +196,8 @@ class Highscores extends MenUI {
       text(_name, _x, _y);
       text(_score, _x + textWidth(_name), _y);
     }
+    
+    //Save the name and highscore if uploading is true.
     if(uploading) {
       displayLoadingScreen(upload);
       saveHighscore();
