@@ -74,6 +74,7 @@ class Player {
   void adjustLifes() {
     lifes--;
     weaponType = 0;
+    shotCooldown = 1000;
     if(lifes > 0) { spawner.respawnPlayer(this); }
     else {
       isDead = true;

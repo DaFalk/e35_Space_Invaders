@@ -123,7 +123,7 @@ void keyPressed() {
     
   }
   if(!showHighscores) {
-    if(keyCode == ENTER) { spawner.startGame(1); }
+    if(keyCode == ENTER && !gameStarted) { spawner.startGame(1); }
   }
   else { highscores.updateName(); }  //Update the highscore name whenever there is a key input during highscore screen.
 }

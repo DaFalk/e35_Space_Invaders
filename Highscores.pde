@@ -83,7 +83,6 @@ class Highscores extends MenUI {
     //Get list feed URL.
     List worksheets = wsFeed.getEntries();  //Store all worksheets in list.
     try {
-//      URL listFeedURL = new URL("http://spreadsheets.google.com/feeds/list/1oZZcCmDsuZIvEOVTPXqtqi3vzNukf2B-0aItSb-tXtU/od6/private/full");  //Set feed URL for worksheet.
       URL listFeedUrl = wsEntry.getListFeedUrl();  //Get feed URL from current worksheet.
       ListFeed lf2 = new ListFeed();  //New ListFeed to get access to it's class.
       listFeed = service.getFeed(listFeedUrl, lf2.getClass());  //Store worksheet feed.

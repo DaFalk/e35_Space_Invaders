@@ -212,7 +212,7 @@ class Enemy {
 
   void fade() {
     if (_blockDir > 0) {
-      //      fadeAmount += timeFix(1, fadeStart);
+      fadeAmount += timeFix(1, fadeStart);
       if (fadeAmount > 255) { 
         deadEnemies.remove(this);
       }
@@ -365,8 +365,6 @@ class Enemy {
         blocks.get(30 + half * j).blockPos = new PVector (enemyPos.x + (blockSize*6.5)*flip, enemyPos.y + blockSize);
         blocks.get(31 + half * j).blockPos = new PVector (enemyPos.x + (blockSize*7.5)*flip, enemyPos.y + blockSize);
       }
-
-
       break;
     }
   }
