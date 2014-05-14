@@ -1,6 +1,7 @@
 Need to do:
 ------------
 - fix startscreen performance.
+- loading highscore loading screen does not display when player looses last life.  
 - class headers. 
 - make breakable cover.
 - player losses all lifes when enemies reach the bottom plane of the screen.

@@ -58,7 +58,7 @@ class EnemyHandler {
     if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
       if (!moveDown) {  //Move enemies to the side.
         for (int i = enemies.size()-1; i > -1; i--) {
-          if(enemies.get(i) != boss) {
+          if(enemies.get(i) != boss && !enemies.get(i).isDead) {
             enemies.get(i).moveEnemy((moveDist/2)*dirX, 0);
           }
         }
@@ -66,7 +66,7 @@ class EnemyHandler {
       else {
         //Move enemies down.
         for(int i = enemies.size()-1; i > -1; i--) {
-          if(enemies.get(i) != boss) {
+          if(enemies.get(i) != boss && !enemies.get(i).isDead) {
             enemies.get(i).moveEnemy(0, moveDist);
           }
         }

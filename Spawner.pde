@@ -39,7 +39,7 @@ class Spawner {
         enemies.add(new Enemy(_type, _pos, blockSize));
       }
     }
-    Enemy e = new Enemy(4, new PVector(20, 70), 2);
+    Enemy e = new Enemy(4, new PVector(70, 70), 2);
     enemyHandler.boss = e;
     enemies.add(e);
   }
