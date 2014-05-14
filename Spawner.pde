@@ -39,6 +39,9 @@ class Spawner {
         enemies.add(new Enemy(_type, _pos, blockSize));
       }
     }
+    Enemy e = new Enemy(4, new PVector(20, 70), 2);
+    enemyHandler.boss = e;
+    enemies.add(e);
   }
   
   void spawnPowerUp(PVector _powerUpPos, float _size) {

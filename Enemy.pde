@@ -66,7 +66,7 @@ class Enemy {
     if (type == 1) { return 62; }
     else if (type == 2) { return 48; }
     else if (type == 3) { return 36; }
-//    else if (type == 4) { return 64; }  //Boss
+    else if (type == 4) { return 64; }  //Boss
     else { return 0; }
   }
   
@@ -307,6 +307,12 @@ class Enemy {
           blocks.get(16 + half*i).blockPos = new PVector(_x, enemyPos.y + blockSize/2);
           blocks.get(17 + half*i).blockPos = new PVector(_x, enemyPos.y + blockSize*3.5);
         }
+      break;
+      
+      case(4):
+      for(int i = 0; i < 6; i++) {
+        blocks.get(i).blockPos = new PVector(enemyPos.x + blockSize/2, enemyPos.y - blockSize*3 + blockSize*i);
+      }
       break;
     }
   }
