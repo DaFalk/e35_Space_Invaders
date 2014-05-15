@@ -124,11 +124,8 @@ class EnemyHandler {
           return;
         }
       }
-    }
-    // enemy boss collision detection
-    for (int i = enemies.size()-1; i > -1; i--) {
-      if  (enemies.get(i) == boss) {
-
+      else {
+      // enemy boss collision detection
         float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
         float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
 
