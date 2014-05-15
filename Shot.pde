@@ -1,3 +1,7 @@
+//
+//
+//
+
 class Shot {
   PVector shotPos, shotDir;
   int lastMove, type, owner, damage, lastDmg, nextDmg;

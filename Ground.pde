@@ -1,3 +1,7 @@
+//
+//
+//
+
 class Ground {
   ArrayList<Block> blocks = new ArrayList<Block>();
   int blockSize;

@@ -1,4 +1,5 @@
-//
+// This class draws different types of enemies out of blocks and controls their movement and collision(when dead and projectile).
+// It also handles what happens when enemies are damaged and destroyed and which sounds the enemies play.
 //
 // Accesse classes: Block, spawner, menUI, audioHandler, enemyHandler, players[], enemies[]
 
@@ -40,54 +41,46 @@ class Enemy {
   //Draw enemy type using blocks and display the blocks
   void update() {
     for (int i = blocks.size()-1; i > -1; i--) {
-      blocks.get(i).display();
-      if (isDead) {
+      blocks.get(i).display();  //Display enemy blocks.
+      if (isDead) {  //If dead calculate lowest point from the block positions.
         if (blocks.get(i).blockPos.y > lowestPoint.y) {
           lowestPoint = blocks.get(i).blockPos;
         }
       }
     }
-    if (fadeStart > 0) {
-      fade();
-    }
-    if (checkBlockCollision() && isDead) { 
-      deadEnemies.remove(this);
-    }
+    if(fadeStart > 0) { fade(); }  //Fade when fade amount is set.
+    if(checkBlockCollision() && isDead) { deadEnemies.remove(this); }  //Remove enemy death projectile on impact.
   }
 
+  //Move enemy in formation.
   void moveEnemy(float _amountX, float _amountY) {
+    //Add move distance to enemy position.
     enemyPos.x += _amountX;
     enemyPos.y += _amountY;
+    //Do the same for all blocks.
     for (int i = blocks.size()-1; i > -1; i--) {
       blocks.get(i).blockPos.x += _amountX;
       blocks.get(i).blockPos.y += _amountY;
     }
   }
 
+  //Returns the amount of blocks used to draw the different enemies.
   int setArrayLength() {
-    if (type == 1) { 
-      return 62;
-    }
-    else if (type == 2) { 
-      return 48;
-    }
-    else if (type == 3) { 
-      return 36;
-    }
-    else if (type == 4) { 
-      return 64;
-    }  //Boss
-    else { 
-      return 0;
-    }
+    if (type == 1) { return 62; }
+    else if (type == 2) { return 48; }
+    else if (type == 3) { return 36; }
+    else if (type == 4) { return 64; }  //Boss
+    else { return 0; }
   }
-
+  
+  //Update blocks fill to match enemy color.
   void setBlocksFill() {
     for (int i = 0; i < setArrayLength(); i ++) {
       blocks.get(i).bFill = eFill;
     }
   }
-
+  
+  //Switches specific blocks between two positions based on a move switch.
   void animateEnemy() {
     switch(type) {
       case(1):
@@ -126,18 +119,20 @@ class Enemy {
       }
       break;
     }
-    moveSwitch *= -1;
+    moveSwitch *= -1;  //Switch.
   }
 
   void damageEnemy(Shot _shot) {
     //Deal shot damage to enemy and adjust enemy color according to lifes left.
-    if (lifes > 0) {
+    if(lifes > 0) {
       int _shotDamage = _shot.damage; 
-      if (this != _shot.target && _shot.type == 3) { 
+      if(this != _shot.target && _shot.type == 3) { 
         _shotDamage = _shot.damage/3;
       }
-      lifes -= _shotDamage;
-      if (lifes > 0) {
+      lifes -= _shotDamage;  //Deal damage to lifes.
+      
+      //If enemy is still alive then adjust the enemy color and blocks fill.
+      if(lifes > 0) {
         eFill = color(255, 51*(lifes-1), 51*(lifes-1), 255 - fadeAmount);
         setBlocksFill();
       }
@@ -153,17 +148,15 @@ class Enemy {
 
       //Adjust player score and initialize floating points.
       players.get(_shot.owner).score += points;
-      FloatingText floatingPoints = new FloatingText(new PVector(enemyPos.x, enemyPos.y));
-      floatingPoints.score = points;
-      menUI.floatingTexts.add(floatingPoints);
+      FloatingText floatingPoints = new FloatingText(new PVector(enemyPos.x, enemyPos.y));  //Initialize.
+      floatingPoints.score = points;  //Set value.
+      menUI.floatingTexts.add(floatingPoints);  //Add to floating points array in menUI.
 
-      //Set blocks deathPos to initialize their movement.
-      if (random(0, 100) > 75) { 
-        _blockDir = -1;
-      }
-      else { 
-        doAnimation = false;
-      }
+      //Set blocks deathPos to initialize their behaviour.
+      //Randomly roll how to behave. 75 and above creates projectile from enemy and below explodes enemy.
+      if (random(0, 100) > 75) { _blockDir = -1; }
+      else { doAnimation = false; }  //Projectiles are still animated.
+      //Pass information to blocks.
       for (int i = blocks.size()-1; i > -1; i--) {
         blocks.get(i).blockDir = _blockDir;
         blocks.get(i).deathPos = new PVector(enemyPos.x, enemyPos.y);
@@ -185,23 +178,23 @@ class Enemy {
     }
   }
 
+  //Returns true if there was a collision.
   boolean checkBlockCollision() {
-    //Check if enemy shot collides with a player
+    //Iterate players.
     for (int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
-      if (!_player.isDead) {
-        if (lowestPoint.y > ground.groundY) {
-          ground.damageGround(lowestPoint);
+      if(!_player.isDead) {  //Only check if player if player is alive.
+        if(lowestPoint.y > ground.groundY) {  //Check if it collides with ground.
+          ground.damageGround(lowestPoint);  //Call damage ground and pass in impact position.
           return true;
         }
+        
+        //Check if enemy death projectile collides with a player
         if ((lowestPoint.y > _player.y - _player.pHeight - _player.pHeight/3 && lowestPoint.y < _player.y + _player.pHeight)) {
           if ((lowestPoint.x > _player.x && lowestPoint.x < _player.x + _player.pWidth)) {
-            if (!_player.hasShield) { 
-              _player.adjustLifes();
-            }
-            else { 
-              _player.hasShield = false;
-            }
+            //Deal damage or remove shield if player has it.
+            if (!_player.hasShield) { _player.adjustLifes(); }
+            else { _player.hasShield = false; }
             return true;
           }
         }
@@ -211,26 +204,24 @@ class Enemy {
   }
 
   void fade() {
+    //Fade out if enemy explodes on death.
     if (_blockDir > 0) {
       fadeAmount += timeFix(1, fadeStart);
-      if (fadeAmount > 255) { 
-        deadEnemies.remove(this);
-      }
+      if (fadeAmount > 255) { deadEnemies.remove(this); }
       for (int i = blocks.size()-1; i > -1; i--) {
         blocks.get(i).currentAlpha -= fadeAmount;
       }
     }
-    else {
+    else {  //or change color back to white is enemy implodes on death.
       float _timeElapsed = timeFix(1, fadeStart);
-      if (_timeElapsed > 5) { 
-        _timeElapsed = 5;
-      } 
+      if (_timeElapsed > 5) { _timeElapsed = 5; }
       color curEnemyColor = lerpColor(eFill, color(255), _timeElapsed/5);
       eFill = curEnemyColor;
       setBlocksFill();
     }
   }
 
+  //Reposition half of enemies blocks and then mirrors their positions.
   void setBlockPositions() {
     int flip;
     float _x;

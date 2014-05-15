@@ -1,3 +1,7 @@
+//
+//
+//
+
 class Player {
   String lifesLabel = "LIFES";
   float x, y;
@@ -77,9 +81,9 @@ class Player {
     shotCooldown = 1000;
     if(lifes > 0) { spawner.respawnPlayer(this); }
     else {
+      menUI.calcAllLifes();
       isDead = true;
       lifesLabel = "DEAD";
-      menUI.calcAllLifes();
     }
   }
   
