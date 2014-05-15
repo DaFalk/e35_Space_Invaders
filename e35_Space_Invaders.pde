@@ -29,6 +29,8 @@ ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
 Ground ground;
 
+
+
 void setup() {
   int _width = 800;
   int _height = _width - _width/4;
@@ -61,6 +63,7 @@ void displayGameObjects() {
   for (int i = enemies.size() - 1; i >= 0; i--) {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
+    
   }
   
   //Iterates deadEnemies array list and updates every enemy.
@@ -87,6 +90,8 @@ void displayGameObjects() {
   }
   //Display ground and cover
   ground.display();
+  spawner.spawnEnemyBoss();
+ 
 }
 
 //time fix function (to avoid typo's).

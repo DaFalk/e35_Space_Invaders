@@ -60,13 +60,13 @@ class EnemyHandler {
   }
 
   void moveEnemies() {
-    
+    // move enemy boss
     for (int i = enemies.size()-1; i > -1; i--) {
-      if (enemies.get(i) == boss) {
+      if (enemies.get(i) == boss && !enemies.get(i).isDead) {
         enemies.get(i).moveEnemy((moveDist/2)*bossDirX, 0);
       }
     }
-    
+
     //Enemy nextMove time depends on number of enemies alive.
     if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
       if (!moveDown) {  //Move enemies to the side.
@@ -112,30 +112,35 @@ class EnemyHandler {
 
   //Collision detection
   void checkEnemiesCollision() {
-    
+
     for (int i = enemies.size()-1; i > -1; i--) {
-      if (enemies.get(i) != boss){
-      //Check if the enemy's next left and right position is within bounds.
-      float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
-      float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
-      if ((nextRightX > width && dirX > 0) || (nextLeftX < 0 && dirX < 0)) {
-        //If the next move is not within bound then indicate that enemies should move down next.
-        moveDown = true;
-        return;
+      if (enemies.get(i) != boss) {
+        //Check if the enemy's next left and right position is within bounds.
+        float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
+        float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
+        if ((nextRightX > width && dirX > 0) || (nextLeftX < 0 && dirX < 0)) {
+          //If the next move is not within bound then indicate that enemies should move down next.
+          moveDown = true;
+          return;
+        }
       }
     }
-  }
-  for (int i = enemies.size()-1; i > -1; i--) {
-    if  (enemies.get(i) == boss){
-      if (enemies.get(i).enemyPos.x <= 0 || enemies.get(i).enemyPos.x >= width){
-        bossDirX *= -1;
+    // enemy boss collision detection
+    for (int i = enemies.size()-1; i > -1; i--) {
+      if  (enemies.get(i) == boss) {
+
+        float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
+        float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
+
+        if ((nextRightX > width && bossDirX > 0) || (nextLeftX < 0 && bossDirX < 0)) {
+          bossDirX *= -1;
+        }
+        // if (enemies.get(i).enemyPos.x <= 0 || enemies.get(i).enemyPos.x >= width){
+      }
     }
-    }
-  }
     moveDown = false;
   }
-  
-  
+
   //Random enemy shot
   void shoot() {
     if (millis() >= lastShot + nextShot) {
@@ -149,4 +154,3 @@ class EnemyHandler {
     }
   }
 }
-
