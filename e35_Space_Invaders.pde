@@ -64,14 +64,13 @@ void displayGameObjects() {
   for (int i = enemies.size() - 1; i >= 0; i--) {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
-    
   }
-  
+
   //Iterates deadEnemies array list and updates every enemy.
   for (int i = deadEnemies.size()-1; i > -1; i--) {
     deadEnemies.get(i).update();
   }
-  
+
   //Iterate shots array list and updates every shot. 
   for (int i = shots.size() - 1; i >= 0; i--) {
     Shot _shot = shots.get(i);
@@ -92,7 +91,6 @@ void displayGameObjects() {
   //Display ground and cover
   ground.display();
   spawner.spawnEnemyBoss();
- 
 }
 
 //time fix function (to avoid typo's).
@@ -107,8 +105,8 @@ float dynamicValue(float _value) {
 }
 
 boolean collisionCheck(PVector _pos1, PVector _pos2, float _offsetX, float _offsetY) {
-  if(_pos1.x > _pos2.x - _offsetX && _pos1.x < _pos2.x + _offsetX) {
-    if(_pos1.y > _pos2.y - _offsetY && _pos1.y < _pos2.y + _offsetY) {
+  if (_pos1.x > _pos2.x - _offsetX && _pos1.x < _pos2.x + _offsetX) {
+    if (_pos1.y > _pos2.y - _offsetY && _pos1.y < _pos2.y + _offsetY) {
       return true;
     }
   }
@@ -127,25 +125,34 @@ void keyReleased() {
   }
 }
 void keyPressed() {
-  if(key == 27) {  //Key 27 = ESC
+  if (key == 27) {  //Key 27 = ESC
     key = 0;  //Cancel other ESC events(e.g. quit processing).
-    if(!showHighscores) {
-      if(!menUI.loading) { gamePaused = !gamePaused; }
+    if (!showHighscores) {
+      if (!menUI.loading) { 
+        gamePaused = !gamePaused;
+      }
     }
     else {
       highscores.updateName();
       menUI.resetGame();
     }
   }
-  if(gameStarted) {
-    if (key == CODED) { players.get(players.size()-1).keyDown(); }
-    if (key != CODED) { players.get(0).keyDown(); }
-    
+  if (gameStarted) {
+    if (key == CODED) { 
+      players.get(players.size()-1).keyDown();
+    }
+    if (key != CODED) { 
+      players.get(0).keyDown();
+    }
   }
-  if(!showHighscores) {
-    if(keyCode == ENTER && !gameStarted) { spawner.startGame(1); }
+  if (!showHighscores) {
+    if (keyCode == ENTER && !gameStarted) { 
+      spawner.startGame(1);
+    }
   }
-  else { highscores.updateName(); }  //Update the highscore name whenever there is a key input during highscore screen.
+  else { 
+    highscores.updateName();
+  }  //Update the highscore name whenever there is a key input during highscore screen.
 }
 void mousePressed() {
   mouseClicked = true;  //Register mousePressed as a click (for the buttons).
