@@ -3,7 +3,7 @@
 // Access classes: Enemy, Player, FloatingText
 
 class MenUI {
-  float titleSize = 0.15*width;
+  float titleSize = dynamicValue(120);
   int lastTick = 0;
   int nextTick = 2000;
 
@@ -11,7 +11,7 @@ class MenUI {
   ArrayList<FloatingText> floatingTexts = new ArrayList<FloatingText>();
   String scoreLabel = "SCORE";
   String totalScoreLabel = "TOTAL SCORE";
-  float labelHeight = 0.025*width;
+  float labelHeight = dynamicValue(20);
 
   String btnLabel;
   float btnLabelY;

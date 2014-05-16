@@ -6,7 +6,7 @@ class PowerUp {
   PVector powerUpPos;
   String name;
   float size;
-  float speed = 0.0625*width;
+  float speed = dynamicValue(50);
   int lastMove, type, shotCooldown;
   
   PowerUp(PVector _pos, float _size) {
@@ -32,10 +32,10 @@ class PowerUp {
     fill(0, 255, 0);
     triangle(powerUpPos.x - size/2, powerUpPos.y - size/2, powerUpPos.x + size/2, powerUpPos.y - size/2, powerUpPos.x, powerUpPos.y + size/2);
     stroke(0, 255, 0);
-    strokeWeight(0.0025*width);
+    strokeWeight(dynamicValue(2));
     noFill();
     ellipse(powerUpPos.x, powerUpPos.y, size, size);
-    strokeWeight(0.00375*width);
+    strokeWeight(dynamicValue(3));
     switch(type) {
       case(0):
         stroke(255, 100);

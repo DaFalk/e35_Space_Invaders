@@ -9,8 +9,8 @@ class Block {
   int blockDir = 1;
   int lastMove;
   float speed;
-  float velocity = 0.0125*width;
-  float gravity = 0.025*width;
+  float velocity = dynamicValue(10);
+  float gravity = dynamicValue(20);
   float currentAlpha = 255;
   color bFill;
   

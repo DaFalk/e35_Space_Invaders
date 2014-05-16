@@ -57,7 +57,7 @@ class Shot {
   
 //Draw shot related to the owner's weapon type.
   void drawShot() {
-    strokeWeight(0.0025*width);
+    strokeWeight(dynamicValue(2));
     switch(type) {
       case(0):  //Default shot.
         stroke(255, 255, 255);
@@ -101,11 +101,11 @@ class Shot {
             }
             noFill();
             stroke(10, 210, 210, random(20, 100));
-            strokeWeight(0.003125*width);
+            strokeWeight(dynamicValue(2.5));
             if(target != null) {
               bezier(player.x, player.y, player.x, player.y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
               stroke(110, 255, 255, random(0, 75));
-              strokeWeight(random(0.005, 0.01)*width);
+              strokeWeight(random(dynamicValue(4), dynamicValue(8));
               bezier(player.x, player.y, player.x, player.y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
             }
           }
@@ -113,7 +113,7 @@ class Shot {
       break;
       
       case(5):  //Enemy type 0 shot.
-        strokeWeight(0.001875*width);
+        strokeWeight(dynamicValue(1.5));
         float offset = shotSize/5;
         int flip;
         for(int i = 0; i < 5; i++) {
@@ -199,23 +199,23 @@ class Shot {
     this.shotDir = new PVector(0, -1);
     switch(type) {
       case(0):
-        shotSize = 0.00625*width;  //0.00625 = speed (5) divided by the original width (800)
-        speed = 0.625*width;
+        shotSize = dynamicValue(5);
+        speed = dynamicValue(500);
         damage = 6;
       break;
       case(1):
-        shotSize = 0.01875*width;
-        speed = 0.625*width;
+        shotSize = dynamicValue(15);
+        speed = dynamicValue(500);
         damage = 6;
       break;
       case(2):
-        shotSize = 0.00625*width;
-        speed = 0.75*width;
+        shotSize = dynamicValue(5);
+        speed = dynamicValue(600);
         damage = 2;
       break;
       case(3):
-        shotSize = 0.01875*width;
-        speed = 0.375*width;
+        shotSize = dynamicValue(15);
+        speed = dynamicValue(300);
         damage = 6;
       break;
       case(4):
@@ -225,8 +225,8 @@ class Shot {
       break;
       case(5):
         shotDir = new PVector(0, 1);
-        shotSize = 0.01875*width;
-        speed = 0.375*width;
+        shotSize = dynamicValue(15);
+        speed = dynamicValue(300);
         damage = 0;
         shotPos.y += shotSize;
       break;

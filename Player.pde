@@ -9,9 +9,9 @@ class Player {
   int weaponType, powerUpStartTime, powerUpDuration;
   int lifes = 3;
   int score = 0;
-  float pWidth = 0.05*width;
-  float pHeight = 0.0125*width;
-  float speed = 0.1875*width;
+  float pWidth = dynamicValue(40);
+  float pHeight = dynamicValue(10);
+  float speed = dynamicValue(150);
   boolean attack = false;
   boolean isDead = false;
   boolean hasShield = false;

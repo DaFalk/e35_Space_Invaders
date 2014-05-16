@@ -44,6 +44,7 @@ void setup() {
   menUI = new MenUI();
   highscores = new Highscores();
   ground = new Ground();
+  println(dynamicValue(10));
 }
 
 void draw() {
@@ -98,6 +99,11 @@ void displayGameObjects() {
 float timeFix(float _amount, int _lastTick) {
   float amount = _amount*(millis()-_lastTick)*0.001;
   return amount;
+}
+
+float dynamicValue(float _value) {
+  float value = (_value/800)*width;
+  return value;
 }
 
 boolean collisionCheck(PVector _pos1, PVector _pos2, float _offsetX, float _offsetY) {

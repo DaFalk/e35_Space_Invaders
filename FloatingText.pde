@@ -9,7 +9,7 @@ class FloatingText {
   String textToDisplay;
   int lastMove, startTime;
   int duration = 3000;
-  float speed = 0.025*width;
+  float speed = dynamicValue(20);
   float size;
   
   FloatingText(PVector _textPos) {
