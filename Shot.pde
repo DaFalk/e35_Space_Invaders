@@ -67,14 +67,14 @@ class Shot {
       case(1):  //Piercing shot.
         noStroke();
         fill(0, 0, 255);
-        triangle(shotPos.x - shotSize/2, shotPos.y, shotPos.x + shotSize/2, shotPos.y, shotPos.x, shotPos.y + shotSize);
+        triangle(shotPos.x - shotSize/2, shotPos.y, shotPos.x + shotSize/2, shotPos.y - shotSize/2, shotPos.x, shotPos.y + shotSize);
       break;
       
       case(2):  //Rapid fire
         stroke(126, 126, 126);
         float angle = atan2(staticTarget.y - shotPos.y, staticTarget.x - shotPos.x);
         shotDir = new PVector(cos(angle), sin(angle));
-        line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(angle), shotPos.y + abs(shotSize*sin(angle)));
+        line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(angle), shotPos.y + abs((shotSize)*sin(angle)));
       break;
       
       case(3):  //Homeseeking missile.
@@ -86,7 +86,7 @@ class Shot {
             float _angle = atan2(target.enemyPos.y - shotPos.y, target.enemyPos.x - shotPos.x);
             shotDir = new PVector(cos(_angle), sin(_angle));
             stroke(126, 0, 0);
-            line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(_angle), shotPos.y + abs(shotSize*sin(_angle)));
+            line(shotPos.x, shotPos.y, shotPos.x - shotSize*cos(_angle), shotPos.y + abs((shotSize)*sin(_angle)));
           }
         }
       break;
@@ -105,7 +105,7 @@ class Shot {
             if(target != null) {
               bezier(player.x, player.y, player.x, player.y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
               stroke(110, 255, 255, random(0, 75));
-              strokeWeight(random(dynamicValue(4), dynamicValue(8));
+              strokeWeight(random(dynamicValue(4), dynamicValue(8)));
               bezier(player.x, player.y, player.x, player.y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
             }
           }
@@ -133,8 +133,10 @@ class Shot {
       return true;
     }
     
-    if(shotDir.y < 0) {  //Check if player shot collides with an enemy
+    //Check if player shot collides with an enemy or enemy shot.
+    if(shotDir.y < 0) {
       if(type < 3) {
+        //Check if player shot collides with an enemy.
         for(int i = enemies.size() - 1; i > -1; i--) {
           Enemy _enemy = enemies.get(i);
           if(!_enemy.isDead) {
@@ -144,14 +146,15 @@ class Shot {
             }
           }
         }
+        //Check if player shot collides with an enemy shot.
         for(int i = shots.size()-1; i > -1; i--) {
           Shot _shot = shots.get(i);
-          if(_shot != this) {
-            if(shotPos.x > _shot.shotPos.x - _shot.shotSize && shotPos.x < _shot.shotPos.x + _shot.shotSize) {
-              if(shotPos.y > _shot.shotPos.y - _shot.shotSize && shotPos.y < _shot.shotPos.y) {
+          if(_shot != this && collisionCheck(shotPos, _shot.shotPos, _shot.shotSize/2, _shot.shotSize/2)) {
+//            if(shotPos.x > _shot.shotPos.x - _shot.shotSize/2 && shotPos.x < _shot.shotPos.x + _shot.shotSize/2) {
+//              if(shotPos.y > _shot.shotPos.y - _shot.shotSize/2 && shotPos.y < _shot.shotPos.y + _shot.shotSize/2) {
                 _shot.destroy = true;
                 return true;
-              }
+//              }
             }
           }
         }
