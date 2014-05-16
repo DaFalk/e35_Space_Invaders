@@ -141,6 +141,11 @@ class Enemy {
     //Kill enemy if lifes goes below zero.
     if (lifes <= 0 && !isDead) {
       isDead = true;
+      if (this == enemyHandler.boss ){
+        
+        spawner.bossAlive = false;
+        spawner.time = millis();
+      }
       audioHandler.playSFX(2);
 
       //Check if enemy should spawn a powerup.

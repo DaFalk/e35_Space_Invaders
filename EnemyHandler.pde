@@ -15,7 +15,7 @@ class EnemyHandler {
   Enemy boss;
 
   EnemyHandler() {
-    nextMove = 400;
+    nextMove = 200;
     shotTimer = 5000;
     nextShot = shotTimer;
     nextAnim = nextMove;
@@ -29,7 +29,7 @@ class EnemyHandler {
   void reset() {
     enemies.clear();
     deadEnemies.clear();
-    nextMove = 400;  //Initial nextMove value.
+    nextMove = 200;  //Initial nextMove value.
     shotTimer = 5000;  //Initial shot timer value.
     dirX = 1;  //Initial direction.
   }
@@ -80,7 +80,7 @@ class EnemyHandler {
         //Move enemies down.
         for (int i = enemies.size()-1; i > -1; i--) {
           if (enemies.get(i) != boss && !enemies.get(i).isDead) {
-            enemies.get(i).moveEnemy(0, moveDist);
+            enemies.get(i).moveEnemy(0, moveDist*1.2);
           }
         }
         dirX *= -1;  //Change direction.

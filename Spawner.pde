@@ -5,11 +5,11 @@ class Spawner {
   int enemySize;
   float enemyStepX;
   boolean respawnEnemies = false;
+  boolean bossAlive = false;
 
-  //timer variables
+  //timer variables for the enemyBoss function
   int time = millis();
-  int wait = 10000;
-  boolean tick;
+  int wait = 10000; // wait 10 seconds. Used to time the boss spawn
 
   Spawner() {
     enemySize = blockSize*12;
@@ -52,13 +52,12 @@ class Spawner {
     }
   }
   void spawnEnemyBoss() {
-    if (millis() - time >= wait ) { // something a'la && enemyBoss is dead / not spawned (or kill existing boss and replace with new)
+    if (millis() - time >= wait && !bossAlive) { // something a'la && enemyBoss is dead / not spawned (or kill existing boss and replace with new)
       Enemy e = new Enemy(4, new PVector(70, 70), 2);
       enemyHandler.boss = e;
       enemies.add(e);
-
-      println(tick);
-      tick = !tick;
+      bossAlive = true;
+      enemyHandler.bossDirX = 1;
       time = millis();
     }
   }
@@ -77,8 +76,8 @@ class Spawner {
     if (!audioHandler.audioBank[6].isPlaying()) {
       enemies.clear();
       enemyHandler.dirX = 1;
-      enemyHandler.nextMove -= 25;
-      enemyHandler.shotTimer -= 50;
+      enemyHandler.nextMove -= 50;
+      enemyHandler.shotTimer -= 100;
       spawnEnemies();
       enemyHandler.respawnEnemies = false;
     }
