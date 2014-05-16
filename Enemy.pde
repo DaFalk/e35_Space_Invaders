@@ -18,6 +18,8 @@ class Enemy {
   color eFill;
   int fadeStart = 0;
   float fadeAmount = 0;
+  boolean isProjectile = false;
+  boolean destroy = false;
 
   Enemy(int _type, PVector _pos, int _blockSize) {
     type = _type;
@@ -49,7 +51,9 @@ class Enemy {
       }
     }
     if(fadeStart > 0) { fade(); }  //Fade when fade amount is set.
-    if(checkBlockCollision() && isDead) { deadEnemies.remove(this); }  //Remove enemy death projectile on impact.
+    if(isDead) {
+      if(checkBlockCollision() || destroy) { deadEnemies.remove(this); }  //Remove enemy death projectile on impact.
+    }
   }
 
   //Move enemy in formation.
@@ -155,7 +159,10 @@ class Enemy {
 
       //Set blocks deathPos to initialize their behaviour.
       //Randomly roll how to behave. 75 and above creates projectile from enemy and below explodes enemy.
-      if(random(0, 100) > 75) { _blockDir = -1; }
+      if(random(0, 100) > 75) {
+        _blockDir = -1;
+        isProjectile = true;
+      }
       else { doAnimation = false; }  //Projectiles are still animated.
       //Pass information to blocks.
       for(int i = blocks.size()-1; i > -1; i--) {

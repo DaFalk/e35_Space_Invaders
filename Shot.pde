@@ -156,6 +156,15 @@ class Shot {
             return true;
           }
         }
+        //Check if player shot collides with an enemy death projectiles.
+        for(int i = deadEnemies.size()-1; i > -1; i--) {
+          Enemy _deathShot = deadEnemies.get(i);
+          if(collisionCheck(shotPos, _deathShot.lowestPoint, dynamicValue(5), dynamicValue(5)) && _deathShot.isProjectile) {
+            _deathShot.destroy = true;  //Destroy collided shot.
+            menUI.addFloatingText(players.get(owner), shotPos, nf(points, 0));  //Add floating points
+            return true;
+          }
+        }
       }
     }
     else {  //Check if enemy shot collides with a player
