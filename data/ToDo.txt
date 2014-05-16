@@ -1,23 +1,29 @@
 Need to do:
 ------------
 - fix startscreen performance.
-- loading highscore loading screen does not display when player looses last life.  
 - class headers. 
-- make breakable cover.
+
+
 - player losses all lifes when enemies reach the bottom plane of the screen.
-- the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
+
 - add comments to all code.
+- autotargeting weapons should not target boss
+
+- make it so that the boss doesnt affect the respawn when the last enemy dies
+
+- the speed from lvl 4 and onwards should be constrained
+- the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
 
 Nice to do:
 ------------
+- boss spawn sound
+- boss die sound
+- loading highscore loading screen does not display when player looses last life.  
 - Sounds are not compressed. Compress sounds.
-- MP competition. survival mode.
 - different looking enemy shoots. 
-- make a power up that increase how mny points the player get when killing enemies. 
+- double points power up
 - freeze time power up.
-- make it possible to shoot the enemies shot (shots collide with shots).
 - "shoot on shot" collision animation.
-- the "machine gun" power'up could use a small "buff".
 - Points should be based on the amount of life taken from the enemy.
 - change enemy shot collision to color collision (for precision).
 
@@ -25,11 +31,15 @@ Nice to do:
 
 In progress
 ---------------
-- make a boss.
+- make breakable cover.
 
 
 Done
 ---------------
+- the enemies still move dwon continuosly on the Y axis sometimes. 
+- the boss spawns as a "regular" enemy (has to do with the timer)
+- the "machine gun" power'up could use a small "buff".
+- make a boss.
 - Enemy block stuck on left sketch edge when spawning. (sometimes they also get stuck in mid-air) / (is caused by the "+ millis()-lastMove" in the enemy handler class - fixed by removing the "lastmove" correction in the timefix.
 - make a variable that moves the enemies fster depending on how many enemies left.
 - Sync enemy animation.
