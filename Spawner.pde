@@ -53,6 +53,7 @@ class Spawner {
     }
   }
   void spawnEnemyBoss() {
+    
     if (millis() - time >= wait && !bossAlive) { // something a'la && enemyBoss is dead / not spawned (or kill existing boss and replace with new)
       Enemy e = new Enemy(4, new PVector(70, 70), 2);
       enemyHandler.boss = e;
@@ -61,6 +62,7 @@ class Spawner {
       enemyHandler.bossDirX = 1;
       time = millis();
     }
+    
   }
 
   void spawnPowerUp(PVector _powerUpPos, float _size) {

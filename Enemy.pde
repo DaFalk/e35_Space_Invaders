@@ -127,7 +127,7 @@ class Enemy {
     if(lifes > 0) {
       int _shotDamage = _shot.damage; 
       if(this != _shot.target && _shot.type == 3) { 
-        _shotDamage = _shot.damage/3;
+        _shotDamage = _shot.damage/2;
       }
       lifes -= _shotDamage;  //Deal damage to lifes.
       
@@ -144,7 +144,8 @@ class Enemy {
       if(this == enemyHandler.boss ){
         spawner.bossAlive = false;
         spawner.time = millis();
-      }
+        }
+       
       audioHandler.playSFX(2);
 
       //Check if enemy should spawn a powerup.
@@ -192,6 +193,7 @@ class Enemy {
           ground.damageGround(lowestPoint);  //Call damage ground and pass in impact position.
           return true;
         }
+       
         
         //Check if enemy death projectile collides with a player
         if(collisionCheck(lowestPoint, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
