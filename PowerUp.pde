@@ -71,9 +71,7 @@ class PowerUp {
           _player.hasShield = true;
           audioHandler.playSFX(5);
         }
-        FloatingText floatingText = new FloatingText(powerUpPos);
-        floatingText.textToDisplay = name;
-        menUI.floatingTexts.add(floatingText);
+        menUI.addFloatingText(null, powerUpPos, name);
         return true;
       }
     }

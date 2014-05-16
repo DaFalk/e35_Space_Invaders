@@ -127,7 +127,7 @@ class Enemy {
     if(lifes > 0) {
       int _shotDamage = _shot.damage; 
       if(this != _shot.target && _shot.type == 3) { 
-        _shotDamage = _shot.damage/2;
+        _shotDamage = _shot.damage/3;
       }
       lifes -= _shotDamage;  //Deal damage to lifes.
       
@@ -144,18 +144,14 @@ class Enemy {
       if(this == enemyHandler.boss ){
         spawner.bossAlive = false;
         spawner.time = millis();
-        }
-       
+      }
       audioHandler.playSFX(2);
 
       //Check if enemy should spawn a powerup.
       spawner.spawnPowerUp(new PVector(enemyPos.x, enemyPos.y), (float)eSize);
 
       //Adjust player score and initialize floating points.
-      players.get(_shot.owner).score += points;
-      FloatingText floatingPoints = new FloatingText(new PVector(enemyPos.x, enemyPos.y));  //Initialize.
-      floatingPoints.score = points;  //Set value.
-      menUI.floatingTexts.add(floatingPoints);  //Add to floating points array in menUI.
+      menUI.addFloatingText(players.get(_shot.owner), enemyPos, nf(points, 0));
 
       //Set blocks deathPos to initialize their behaviour.
       //Randomly roll how to behave. 75 and above creates projectile from enemy and below explodes enemy.
@@ -193,7 +189,6 @@ class Enemy {
           ground.damageGround(lowestPoint);  //Call damage ground and pass in impact position.
           return true;
         }
-       
         
         //Check if enemy death projectile collides with a player
         if(collisionCheck(lowestPoint, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {

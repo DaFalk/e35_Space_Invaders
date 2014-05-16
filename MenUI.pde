@@ -250,6 +250,16 @@ class MenUI {
     textSize(labelHeight*2 + titleSize/10);
     text(totalScore, width/2, labelHeight/2);
   }
+  
+  void addFloatingText(Player _owner, PVector _pos, String _text) {
+    FloatingText floatingText = new FloatingText(_pos);  //Initialize.
+    if(_owner != null) {
+      _owner.score += Integer.parseInt(_text);
+      floatingText.score = Integer.parseInt(_text);
+    }
+    floatingText.textToDisplay = _text;  //Set value.
+    floatingTexts.add(floatingText);  //Add to floating points array in menUI.
+  }
 
   void displayFloatingPoints() {
     for (int i = floatingTexts.size()-1; i > -1; i--) {

@@ -152,11 +152,7 @@ class Shot {
           Shot _shot = shots.get(i);
           if(_shot != this && collisionCheck(shotPos, _shot.shotPos, _shot.shotSize/2, _shot.shotSize/2)) {
             _shot.destroy = true;  //Destroy collided shot.
-            //Adjust player score and initialize floating points.
-            players.get(owner).score += points;
-            FloatingText floatingPoints = new FloatingText(new PVector(shotPos.x, shotPos.y));  //Initialize.
-            floatingPoints.score = points;  //Set value.
-            menUI.floatingTexts.add(floatingPoints);  //Add to floating points array in menUI.
+            menUI.addFloatingText(players.get(owner), shotPos, nf(points, 0));  //Add floating points
             return true;
           }
         }
