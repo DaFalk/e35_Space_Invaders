@@ -215,8 +215,8 @@ class MenUI {
 
       // Display lifes.
       for (int h = 0; h < _player.lifes; h++) {
-        float p1LifesX = (_x + _player.pWidth*h)*(1-i);
-        float p2LifesX = (width - _x + labelHeight/4 - _player.pWidth*0.75 - _player.pWidth*h)*i;
+        float p1LifesX = (_x + _player.pWidth/3 + _player.pWidth*h)*(1-i);
+        float p2LifesX = (width - _x - _player.pWidth/4 - _player.pWidth*h)*i;
         _player.drawPlayer(p1LifesX + p2LifesX, _player.pWidth, 0.75, false);
       }
     }

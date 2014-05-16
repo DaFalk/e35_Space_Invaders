@@ -100,6 +100,15 @@ float timeFix(float _amount, int _lastTick) {
   return amount;
 }
 
+boolean collisionCheck(PVector _pos1, PVector _pos2, float _offsetX, float _offsetY) {
+  if(_pos1.x > _pos2.x - _offsetX && _pos1.x < _pos2.x + _offsetX) {
+    if(_pos1.y > _pos2.y - _offsetY && _pos1.y < _pos2.y + _offsetY) {
+      return true;
+    }
+  }
+  return false;
+}
+
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
 void keyReleased() {
   if (gameStarted) {

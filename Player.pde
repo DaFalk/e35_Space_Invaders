@@ -38,25 +38,21 @@ class Player {
   
 //Draw player and shield if this drawn player is active.
   void drawPlayer(float _x, float _y, float _scale, boolean _active) {
-    rectMode(CORNER);
     noStroke();
     float _pWidth = pWidth*_scale;
     float _pHeight = pHeight*_scale;
     fill(0, 255, 0);
     //Body
-    rect(_x, _y, _pWidth, _pHeight);
-    rect(_x + (_pWidth - _pWidth*0.85)/2, _y - _pHeight/3, _pWidth*0.85, _pHeight/3);
+    rect(_x, _y + _pHeight/2, _pWidth, _pHeight);
+    rect(_x, _y - _pHeight/6, _pWidth*0.85, _pHeight/3);
     //Canon
-    rect(_x + _pWidth/2.5, _y - _pWidth/5, _pWidth/5, _pWidth/5);
-    rect(_x + _pWidth*(0.5 - (0.075/2)), _y - _pWidth/3.5, _pWidth*0.075, _pWidth/3.5);
+    rect(_x, _y - _pWidth/5 + _pHeight/2, _pWidth/5, _pWidth/5);
+    rect(_x, _y - _pWidth/3.5 + _pHeight/2, _pWidth*0.075, _pWidth/3.5);
     
-    if(_active) {
-      if(hasShield) {
-        fill(200, 200, 255,100);
-        ellipse(_x + _pWidth/2, _y + _pHeight/3, _pWidth*1.4, _pWidth*0.85);
-      }
+    if(_active && hasShield) {
+      fill(200, 200, 255,100);
+      ellipse(_x, _y, _pWidth*1.4, _pWidth*0.85);
     }
-    rectMode(CENTER);
   }
   
 //Keep player within bounds.
@@ -68,7 +64,7 @@ class Player {
 //Trigger a shot of current weapon type.
   void shoot() {
     if(millis() - lastShot >= shotCooldown) {
-      Shot s = new Shot(new PVector(x + pWidth/2, y - pHeight), weaponType, players.indexOf(this));
+      Shot s = new Shot(new PVector(x, y - pHeight), weaponType, players.indexOf(this));
       shots.add(s);
       lastShot = millis();
     }

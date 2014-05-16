@@ -9,6 +9,7 @@ class Shot {
   Player player;
   Enemy target;
   PVector staticTarget;
+  boolean destroy = false;
 
   Shot(PVector _shotPos, int _type, int _owner) {
     owner = _owner;
@@ -36,7 +37,7 @@ class Shot {
         lastMove = millis();
       }
       //Destroy shot if it triggers a collision.
-      if(checkCollision()) { shots.remove(this); }
+      if(shotCollision() || destroy) { shots.remove(this); }
     }
     else {
       //Adjust lastMove in order to pause shot.
@@ -101,13 +102,11 @@ class Shot {
             noFill();
             stroke(10, 210, 210, random(20, 100));
             strokeWeight(0.003125*width);
-            float _x = player.x + player.pWidth/2;
-            float _y = player.y - player.pHeight/2;
             if(target != null) {
-              bezier(_x, _y, _x, _y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
+              bezier(player.x, player.y, player.x, player.y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
               stroke(110, 255, 255, random(0, 75));
               strokeWeight(random(0.005, 0.01)*width);
-              bezier(_x, _y, _x, _y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
+              bezier(player.x, player.y, player.x, player.y - (height-target.enemyPos.y), target.enemyPos.x, target.enemyPos.y + target.eSize*2, target.enemyPos.x, target.enemyPos.y);
             }
           }
         } 
@@ -127,7 +126,7 @@ class Shot {
     }
   }
   
-  boolean checkCollision() {
+  boolean shotCollision() {
    //Remove shot if out of bounds
     if(shotPos.y < 0 || shotPos.y >= ground.groundY || shotPos.x < 0 || shotPos.x > width) {
       if(shotPos.y >= ground.groundY) { ground.damageGround(shotPos); }
@@ -139,10 +138,19 @@ class Shot {
         for(int i = enemies.size() - 1; i > -1; i--) {
           Enemy _enemy = enemies.get(i);
           if(!_enemy.isDead) {
-            if(shotPos.y > _enemy.enemyPos.y - _enemy.eHeight && shotPos.y < _enemy.enemyPos.y + _enemy.eHeight) {
-              if(shotPos.x > _enemy.enemyPos.x - _enemy.eSize && shotPos.x < _enemy.enemyPos.x + _enemy.eSize) {
-                enemies.get(i).damageEnemy(this);
-                if(type != 1) { return true; }
+            if(type != 1 && collisionCheck(shotPos, _enemy.enemyPos, _enemy.eSize, _enemy.eHeight)) {
+              _enemy.damageEnemy(this);
+              return true;
+            }
+          }
+        }
+        for(int i = shots.size()-1; i > -1; i--) {
+          Shot _shot = shots.get(i);
+          if(_shot != this) {
+            if(shotPos.x > _shot.shotPos.x - _shot.shotSize && shotPos.x < _shot.shotPos.x + _shot.shotSize) {
+              if(shotPos.y > _shot.shotPos.y - _shot.shotSize && shotPos.y < _shot.shotPos.y) {
+                _shot.destroy = true;
+                return true;
               }
             }
           }
@@ -152,14 +160,10 @@ class Shot {
     else {  //Check if enemy shot collides with a player
       for(int i = players.size() - 1; i > -1; i--) {
         Player _player = players.get(i);
-        if(!_player.isDead) {
-          if((shotPos.y > _player.y - _player.pHeight - _player.pHeight/3 && shotPos.y < _player.y + _player.pHeight)) {
-            if((shotPos.x > _player.x && shotPos.x < _player.x + _player.pWidth)) {
-              if(_player.hasShield) { _player.hasShield = false; }
-              else { _player.adjustLifes(); }
-              return true;
-            }
-          }
+        if(!_player.isDead && collisionCheck(shotPos, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
+          if(_player.hasShield) { _player.hasShield = false; }
+          else { _player.adjustLifes(); }
+          return true;
         }
       }
     }
@@ -168,18 +172,14 @@ class Shot {
       if(!target.isDead) {
         switch(type) {
           case(3):
-            if(shotPos.y < target.enemyPos.y + target.eHeight && shotPos.y > target.enemyPos.y - target.eHeight) {
-              if(shotPos.x < target.enemyPos.x + target.eSize && shotPos.x > target.enemyPos.x - target.eSize) {
-                for(int i = enemies.size()-1; i > -1; i--) {
-                  if(enemies.get(i).enemyPos.y < shotPos.y + spawner.enemyStepX*1.5 && enemies.get(i).enemyPos.y > shotPos.y - spawner.enemyStepX*1.5) {
-                    if(enemies.get(i).enemyPos.x < shotPos.x + spawner.enemyStepX*1.5 && enemies.get(i).enemyPos.x > shotPos.x - spawner.enemyStepX*1.5) {
-                      enemies.get(i).damageEnemy(this);
-                    }
-                  }
+            if(collisionCheck(shotPos, target.enemyPos, target.eSize, target.eHeight)) {
+              for(int i = enemies.size()-1; i > -1; i--) {
+                if(collisionCheck(enemies.get(i).enemyPos, shotPos, spawner.enemyStepX*1.5, spawner.enemyStepX*1.5)) {
+                  enemies.get(i).damageEnemy(this);
                 }
-                audioHandler.audioBank[7+type].pause();
-                return true;
               }
+              audioHandler.audioBank[7+type].pause();
+              return true;
             }
           break;
           case(4):

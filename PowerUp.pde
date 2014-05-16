@@ -62,23 +62,19 @@ class PowerUp {
   boolean checkCollision() {
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
-      if(!_player.isDead) {
-        if((powerUpPos.y > _player.y - (_player.pHeight/3)*2 && powerUpPos.y < _player.y + _player.pHeight)) {
-          if((powerUpPos.x > _player.x && powerUpPos.x < _player.x + _player.pWidth)) {
-            if(type > 0) {
-              setWeaponTimers(_player, type);
-              audioHandler.playSFX(4);
-            }
-            else {
-              _player.hasShield = true;
-              audioHandler.playSFX(5);
-            }
-            FloatingText floatingText = new FloatingText(powerUpPos);
-            floatingText.textToDisplay = name;
-            menUI.floatingTexts.add(floatingText);
-            return true;
-          }
+      if(!_player.isDead && collisionCheck(powerUpPos, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
+        if(type > 0) {
+          setWeaponTimers(_player, type);
+          audioHandler.playSFX(4);
         }
+        else {
+          _player.hasShield = true;
+          audioHandler.playSFX(5);
+        }
+        FloatingText floatingText = new FloatingText(powerUpPos);
+        floatingText.textToDisplay = name;
+        menUI.floatingTexts.add(floatingText);
+        return true;
       }
     }
     return false;
