@@ -140,9 +140,9 @@ class Shot {
         for(int i = enemies.size() - 1; i > -1; i--) {
           Enemy _enemy = enemies.get(i);
           if(!_enemy.isDead) {
-            if(type != 1 && collisionCheck(shotPos, _enemy.enemyPos, _enemy.eSize, _enemy.eHeight)) {
+            if(collisionCheck(shotPos, _enemy.enemyPos, _enemy.eSize, _enemy.eHeight)) {
               _enemy.damageEnemy(this);
-              return true;
+              if(type != 1) { return true; }
             }
           }
         }
