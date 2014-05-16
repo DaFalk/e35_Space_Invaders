@@ -27,29 +27,40 @@ class Ground {
   }
 
   void spawnCover() {
-   
-   for (int _x = 0; _x < 10; _x++){
-      for (int _y = 0; _y < 10; _y++) {
-        Block block = new Block(new PVector(100 + blockSize*_y + blockSize*_x, height-80 + blockSize *_y ), blockSize);
-        blocks.add(block);
-        block.bFill = color(0, 255, 0);
-     }
-     }
-     for (int _x = 0; _x < 10; _x++){
-       for (int _y = 0; _y < 5; _y++) {
-        Block block = new Block(new PVector(95 + blockSize + blockSize*_x, height-90 + blockSize *_y ), blockSize);
-        blocks.add(block);
-        block.bFill = color(0, 255, 0);
-     }
-     }
-          for (int _x = 0; _x < 10; _x++){   
-       for (int _y = 0; _y < 5; _y++) {
-        Block block = new Block(new PVector(105 + blockSize + blockSize*_x, height-70 + blockSize *_y ), blockSize);
-        blocks.add(block);
-        block.bFill = color(0, 255, 0);
-     }
-     }
-     
+    for (int seed = 0; seed < 4; seed++) {
+      
+      float indent = width/5;
+      indent += indent*seed;
+
+      for (int i = 0; i < 2; i++) {
+
+        int flip = 1 - i*2;
+
+        for (int _x = 0; _x < 9; _x++) {
+          for (int _y = 0; _y < 6; _y++) {
+            Block block = new Block(new PVector(indent + (blockSize*_x) *flip, height-112 + (blockSize *_y) ), blockSize);
+            blocks.add(block);
+            block.bFill = color(0, 255, 0);
+          }
+        }
+        
+        for (int _x = 0; _x < 10; _x++) {
+          for (int _y = 0; _y < 8; _y++) {
+            Block block = new Block(new PVector(indent + (blockSize*_y)*flip + (blockSize*_x)*flip, height-110 + blockSize *_y ), blockSize);
+            blocks.add(block);
+            block.bFill = color(0, 255, 0);
+          }
+        }
+
+        for (int _x = 0; _x < 10; _x++) {   
+          for (int _y = 0; _y < 12; _y++) {
+            Block block = new Block(new PVector(indent + (blockSize*8 + blockSize*_x) *flip, height-94 + (blockSize *_y) ), blockSize);
+            blocks.add(block);
+            block.bFill = color(0, 255, 0);
+          }
+        }
+      }
+    }
   }
 
   void display() {

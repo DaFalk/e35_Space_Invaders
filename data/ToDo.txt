@@ -2,6 +2,7 @@ Need to do:
 ------------
 - fix startscreen performance.
 - class headers. 
+- "piercer" shot is broken
 
 
 - player losses all lifes when enemies reach the bottom plane of the screen.
