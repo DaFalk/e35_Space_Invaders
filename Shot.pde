@@ -5,6 +5,7 @@
 class Shot {
   PVector shotPos, shotDir;
   int lastMove, type, owner, damage, lastDmg, nextDmg;
+  int points = 2;
   float shotSize, speed;
   Player player;
   Enemy target;
@@ -150,12 +151,13 @@ class Shot {
         for(int i = shots.size()-1; i > -1; i--) {
           Shot _shot = shots.get(i);
           if(_shot != this && collisionCheck(shotPos, _shot.shotPos, _shot.shotSize/2, _shot.shotSize/2)) {
-//            if(shotPos.x > _shot.shotPos.x - _shot.shotSize/2 && shotPos.x < _shot.shotPos.x + _shot.shotSize/2) {
-//              if(shotPos.y > _shot.shotPos.y - _shot.shotSize/2 && shotPos.y < _shot.shotPos.y + _shot.shotSize/2) {
-                _shot.destroy = true;
-                return true;
-//              }
-//            }
+            _shot.destroy = true;  //Destroy collided shot.
+            //Adjust player score and initialize floating points.
+            players.get(owner).score += points;
+            FloatingText floatingPoints = new FloatingText(new PVector(shotPos.x, shotPos.y));  //Initialize.
+            floatingPoints.score = points;  //Set value.
+            menUI.floatingTexts.add(floatingPoints);  //Add to floating points array in menUI.
+            return true;
           }
         }
       }
