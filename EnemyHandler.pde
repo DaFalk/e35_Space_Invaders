@@ -63,7 +63,7 @@ class EnemyHandler {
     // move enemy boss
     for (int i = enemies.size()-1; i > -1; i--) {
       if (enemies.get(i) == boss && !enemies.get(i).isDead) {
-        enemies.get(i).moveEnemy((moveDist/2)*bossDirX, 0);
+        enemies.get(i).moveEnemy((moveDist/4)*bossDirX, 0);
       }
     }
 
@@ -125,11 +125,10 @@ class EnemyHandler {
         }
       }
       else {
-      // enemy boss collision detection
-        if ((nextRightX > width && bossDirX > 0) || (nextLeftX < 0 && bossDirX < 0)) {
+      // enemy boss edge collision detection
+        if ((nextRightX > width*random(1.5 ,2) && bossDirX > 0) || (nextLeftX  < -width* random(0.5, 1) && bossDirX < 0)) {
           bossDirX *= -1;
         }
-        // if (enemies.get(i).enemyPos.x <= 0 || enemies.get(i).enemyPos.x >= width){
       }
     }
     moveDown = false;
