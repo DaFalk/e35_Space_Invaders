@@ -194,13 +194,11 @@ class Enemy {
         }
         
         //Check if enemy death projectile collides with a player
-        if((lowestPoint.y > _player.y - _player.pHeight - _player.pHeight/3 && lowestPoint.y < _player.y + _player.pHeight)) {
-          if((lowestPoint.x > _player.x && lowestPoint.x < _player.x + _player.pWidth)) {
+        if(collisionCheck(lowestPoint, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
             //Deal damage or remove shield if player has it.
             if(!_player.hasShield) { _player.adjustLifes(); }
             else { _player.hasShield = false; }
             return true;
-          }
         }
       }
     }
