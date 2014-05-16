@@ -114,10 +114,10 @@ class EnemyHandler {
   void checkEnemiesCollision() {
 
     for (int i = enemies.size()-1; i > -1; i--) {
+      //Check if the enemy's next left and right position is within bounds.
+      float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
+      float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
       if (enemies.get(i) != boss) {
-        //Check if the enemy's next left and right position is within bounds.
-        float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
-        float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
         if ((nextRightX > width && dirX > 0) || (nextLeftX < 0 && dirX < 0)) {
           //If the next move is not within bound then indicate that enemies should move down next.
           moveDown = true;
@@ -126,9 +126,6 @@ class EnemyHandler {
       }
       else {
       // enemy boss collision detection
-        float nextLeftX = enemies.get(i).enemyPos.x - eSize/2 - moveDist;
-        float nextRightX = enemies.get(i).enemyPos.x + eSize/2 + moveDist;
-
         if ((nextRightX > width && bossDirX > 0) || (nextLeftX < 0 && bossDirX < 0)) {
           bossDirX *= -1;
         }
