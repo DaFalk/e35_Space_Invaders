@@ -155,7 +155,7 @@ class Shot {
                 _shot.destroy = true;
                 return true;
 //              }
-            }
+//            }
           }
         }
       }
