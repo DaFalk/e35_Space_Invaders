@@ -5,10 +5,18 @@ class Ground {
 
   float groundHeight = height/30;
   float groundY;
+  float coverY;
+  float coverWidth;
+  float coverHeight;
   int half;
 
   Ground() {
     groundY = height - groundHeight;
+    coverY = height - dynamicValue(112);
+    
+    coverWidth =  20*blockSize;
+    coverHeight = 36*blockSize;
+    
     blockSize = spawner.blockSize;
   }
 
@@ -35,7 +43,7 @@ class Ground {
 
         for (int _x = 0; _x < 9; _x++) {
           for (int _y = 0; _y < 6; _y++) {
-            Block block = new Block(new PVector(indent + (blockSize*_x) *flip, height-112 + (blockSize *_y) ), blockSize);
+            Block block = new Block(new PVector(indent + (blockSize*_x) *flip, coverY + (blockSize *_y) ), blockSize);
             blocks.add(block);
             block.bFill = color(0, 255, 0);
           }
@@ -43,7 +51,7 @@ class Ground {
         
         for (int _x = 0; _x < 10; _x++) {
           for (int _y = 0; _y < 8; _y++) {
-            Block block = new Block(new PVector(indent + (blockSize*_y)*flip + (blockSize*_x)*flip, height-110 + blockSize *_y ), blockSize);
+            Block block = new Block(new PVector(indent + (blockSize*_y)*flip + (blockSize*_x)*flip, coverY + blockSize + blockSize *_y ), blockSize);
             blocks.add(block);
             block.bFill = color(0, 255, 0);
           }
@@ -51,7 +59,7 @@ class Ground {
 
         for (int _x = 0; _x < 10; _x++) {   
           for (int _y = 0; _y < 12; _y++) {
-            Block block = new Block(new PVector(indent + (blockSize*8 + blockSize*_x) *flip, height-94 + (blockSize *_y) ), blockSize);
+            Block block = new Block(new PVector(indent + (blockSize*8 + blockSize*_x) *flip, coverY + (blockSize*9) + (blockSize *_y) ), blockSize);
             blocks.add(block);
             block.bFill = color(0, 255, 0);
           }
