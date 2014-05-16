@@ -1,7 +1,7 @@
 class Spawner {
   int enemyCols = 9;
   int enemyRows = 5;
-  int blockSize = (int)(0.0025*width);
+  int blockSize = (int)dynamicValue(2);
   int enemySize;
   float enemyStepX;
   boolean respawnEnemies = false;
@@ -22,6 +22,7 @@ class Spawner {
     spawnEnemies();
     gameStarted = true;
     ground.spawnGround();
+    ground.spawnCover();
   }
 
   void spawnPlayers(int numPlayers) {
@@ -46,7 +47,7 @@ class Spawner {
             _type = 1;
           }
         }
-        PVector _pos = new PVector(enemySize/2 + col*enemyStepX, row*enemyStepX + 0.125*width);
+        PVector _pos = new PVector(enemySize/2 + col*enemyStepX, row*enemyStepX + dynamicValue(100));
         enemies.add(new Enemy(_type, _pos, blockSize));
       }
     }
