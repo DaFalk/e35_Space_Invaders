@@ -11,27 +11,28 @@ class Enemy {
   int blockSize;
   int type, lifes, points;
   int moveSwitch = 1;
-  boolean isDead = false;
-  boolean doAnimation = true;
-  int _blockDir = 1;
-  PVector lowestPoint = new PVector(0, 0);
-  color eFill;
+  int blockDir = 1;
   int fadeStart = 0;
+  float timeElapsed = 0;
   float fadeAmount = 0;
-  boolean isProjectile = false;
-  boolean destroy = false;
+  color eFill = color(255);
+  boolean doAnimation = true;
   boolean inCoverRange = false;
+  boolean destroy = false;
+  boolean isDead = false;
+  boolean isProjectile = false;
+  PVector lowestPoint = new PVector(0, 0);
 
   Enemy(int _type, PVector _pos, int _blockSize) {
     type = _type;
     points = type*5;
     lifes = 6;
     enemyPos = _pos;
-    eFill = color(255);
     blocks = new ArrayList<Block>();
     blockSize = _blockSize;
     eSize = 6*blockSize;
     eHeight = 4*blockSize;
+    
     half = ceil(setArrayLength()/2);
     for(int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(enemyPos, blockSize));
@@ -163,19 +164,19 @@ class Enemy {
       //Set blocks deathPos to initialize their behaviour.
       //Randomly roll how to behave. 75 and above creates projectile from enemy and below explodes enemy.
       if(random(0, 100) > 75) {
-        _blockDir = -1;
+        blockDir = -1;
         isProjectile = true;
       }
       else { doAnimation = false; }  //Projectiles are still animated.
       //Pass information to blocks.
       for(int i = blocks.size()-1; i > -1; i--) {
-        blocks.get(i).blockDir = _blockDir;
+        blocks.get(i).blockDir = blockDir;
         blocks.get(i).deathPos = new PVector(enemyPos.x, enemyPos.y);
         blocks.get(i).lastMove = millis();
       }
 
       //Respawn enemies if this enemy was the last.
-      if((enemies.size() == 1 && this != enemyHandler.boss) || (enemies.size() == 2 && !enemyHandler.boss.isDead)) {
+      if((enemies.size() == 1 && (enemyHandler.boss == null || enemyHandler.boss.isDead)) || (enemies.size() == 2 && enemyHandler.boss != null && !enemyHandler.boss.isDead)) {
         audioHandler.playSFX(6);
         enemyHandler.respawnEnemies = true;
       }
@@ -245,18 +246,22 @@ class Enemy {
   }
 
   void fade() {
-    //Fade out if enemy explodes on death.
-    if (_blockDir > 0) {
+    timeElapsed += timeFix(1, fadeStart);
+    //Fade out and to black if enemy explodes on death.
+    if (blockDir > 0) {
+      if (timeElapsed > 500) { timeElapsed = 500; }
+      color curEnemyColor = lerpColor(eFill, color(0), timeElapsed/500);  //Fade to white in half a second.
+      eFill = curEnemyColor;
+      setBlocksFill();
       fadeAmount += timeFix(1, fadeStart);
       if (fadeAmount > 255) { deadEnemies.remove(this); }
       for (int i = blocks.size()-1; i > -1; i--) {
         blocks.get(i).currentAlpha -= fadeAmount;
       }
     }
-    else {  //or change color back to white is enemy implodes on death.
-      float _timeElapsed = timeFix(1, fadeStart);
-      if (_timeElapsed > 5) { _timeElapsed = 5; }
-      color curEnemyColor = lerpColor(eFill, color(255), _timeElapsed/5);
+    else {  //or fade to white if enemy implodes on death.
+      if (timeElapsed > 500) { timeElapsed = 500; }
+      color curEnemyColor = lerpColor(eFill, color(255), timeElapsed/500);  //Fade to white in half a second.
       eFill = curEnemyColor;
       setBlocksFill();
     }
