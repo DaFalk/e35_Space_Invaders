@@ -12,6 +12,7 @@ class EnemyHandler {
   int lastAliveAnim, lastDeadAnim, nextAnim;
   boolean moveDown = false;
   boolean respawnEnemies = false;
+  boolean bossAlive = false;
   Enemy boss;
 
   EnemyHandler() {
@@ -53,10 +54,10 @@ class EnemyHandler {
       lastAliveAnim += millis() - lastAliveAnim;
       lastDeadAnim += millis() - lastDeadAnim;
     }
-
-    if(respawnEnemies) { 
-      spawner.respawnEnemies();
-    }
+    
+    //Check if enemies or boss should respawn.
+    if(respawnEnemies) { spawner.respawnEnemies(); }
+    if(!bossAlive) { spawner.spawnEnemyBoss(); }
   }
 
   void moveEnemies() {
@@ -140,9 +141,8 @@ class EnemyHandler {
       int _randomEnemy = floor(random(0, enemies.size()));  //Chose a random enemy index.
       nextShot = ceil(random(shotTimer/3, shotTimer));  //Chose random nextShot from limited inteval.
       Enemy _enemy = enemies.get(_randomEnemy);  //Choose the enemy at the random index as the shooter.
-      //Trigger a shot.
-      Shot s = new Shot(new PVector(_enemy.enemyPos.x, _enemy.enemyPos.y + _enemy.eHeight), 5, 10);
-      shots.add(s);
+      //Spawn a shot with the enemy position, weapon type and "not-player" index.
+      spawner.spawnShot(new PVector(_enemy.enemyPos.x, _enemy.enemyPos.y + _enemy.eHeight), 5, 10);
       lastShot = millis();
     }
   }

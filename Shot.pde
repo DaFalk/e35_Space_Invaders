@@ -198,7 +198,7 @@ class Shot {
           if(_shot != this && collisionCheck(shotPos, _shot.shotPos, _shot.shotSize/2, _shot.shotSize/2)) {
             _shot.destroy = true;  //Destroy collided shot.
             menUI.addFloatingText(players.get(owner), shotPos, nf(points, 0));  //Add floating points
-            return true;
+            if(type != 1) { return true; }
           }
         }
         //Check if player shot collides with an enemy death projectiles.
@@ -207,7 +207,7 @@ class Shot {
           if(collisionCheck(shotPos, _deathShot.lowestPoint, dynamicValue(5), dynamicValue(5)) && _deathShot.isProjectile) {
             _deathShot.destroy = true;  //Destroy collided shot.
             menUI.addFloatingText(players.get(owner), shotPos, nf(points, 0));  //Add floating points
-            return true;
+            if(type != 1) { return true; }
           }
         }
       }

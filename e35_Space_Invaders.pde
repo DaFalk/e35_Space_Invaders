@@ -93,9 +93,7 @@ void displayGameObjects() {
   }
   
   //Display ground and cover
-  ground.display();
-  //Manage boss respawn.
-  spawner.spawnEnemyBoss();
+  ground.display();;
 }
 
 //time fix function (to avoid typo's).

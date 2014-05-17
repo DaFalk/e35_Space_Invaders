@@ -18,7 +18,7 @@ class MenUI {
   String btnLabel;
   float btnLabelY;
 
-  Block[] blocks;  //Used for start menu stars.
+  Block[] starBlocks;  //Used for start menu stars.
   int lastMove;
   color c1 = color(0, 0, 0, 0);
   color c2 = color(70, 115, 120);  //Gradient color.
@@ -107,9 +107,9 @@ class MenUI {
 //Move and display start menu background stars.
   void displayStars() {
     fill(255);
-    for(int i = 0; i < blocks.length; i++) {
-      blocks[i].moveBlock();
-      blocks[i].display();
+    for(int i = 0; i < starBlocks.length; i++) {
+      starBlocks[i].moveBlock();
+      starBlocks[i].display();
     }
   }
 
@@ -336,32 +336,15 @@ class MenUI {
   }
   
   void resetStartMenu() {
-    //reset blocks
-    blocks = new Block[50];
-    for(int i = 0; i < blocks.length; i++) {
-      blocks[i] = new Block(new PVector(0, 0), 2);
-      blocks[i].bFill = color(255, 150);
+    //reset starBlocks.
+    starBlocks = new Block[50];
+    for(int i = 0; i < starBlocks.length; i++) {
+      starBlocks[i] = new Block(new PVector(0, 0), 2);
+      starBlocks[i].bFill = color(255, 150);
     }
-    
-    //Add start menu enemies
-    enemyHandler.reset();
-    int _blockSize = (int)labelHeight/5;
-    float _eOffset = _blockSize*18;
-    for(int h = 4; h > -1; h--) {
-      for(int i = 0; i < 3; i++) {
-        PVector _pos = new PVector((width/8)*3 - _eOffset - _eOffset*(h-1), height/2 + _eOffset - _eOffset*i);
-        Enemy enemy = new Enemy(1+i, _pos, _blockSize);
-        enemies.add(enemy);
-        enemy.eFill = color(255, 255 - h*48);
-        enemy.setBlocksFill();
-      }
-    }
-    
-    //Add start menu boss.
-    Enemy boss = new Enemy(10, new PVector(width - width/7, height/2), _blockSize);
-    enemies.add(boss);
-    boss.eFill = color(255);
-    boss.setBlocksFill();
+        
+    //Spawn start menu enemies and boss.
+    spawner.spawnStartMenuEnemies();
   }
 }
 

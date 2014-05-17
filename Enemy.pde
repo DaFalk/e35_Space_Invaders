@@ -150,7 +150,7 @@ class Enemy {
     if(lifes <= 0 && !isDead) {
       isDead = true;
       if(this == enemyHandler.boss ){
-        spawner.bossAlive = false;
+        enemyHandler.bossAlive = false;
         spawner.time = millis();
       }
       audioHandler.playSFX(2);

@@ -66,9 +66,8 @@ class Player {
 //Trigger a shot of current weapon type.
   void shoot() {
     if(millis() - lastShot >= shotCooldown) {
-      //Initialize a shot with position, type and owner index.
-      Shot s = new Shot(new PVector(x, y - pHeight), weaponType, players.indexOf(this));
-      shots.add(s);
+      //Spawn a shot with player position, weapon type and player index.
+      spawner.spawnShot(new PVector(x, y - pHeight), weaponType, players.indexOf(this));
       lastShot = millis();
     }
   }
