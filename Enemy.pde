@@ -20,6 +20,7 @@ class Enemy {
   float fadeAmount = 0;
   boolean isProjectile = false;
   boolean destroy = false;
+  boolean inCoverRange = false;
 
   Enemy(int _type, PVector _pos, int _blockSize) {
     type = _type;
@@ -50,6 +51,7 @@ class Enemy {
         }
       }
     }
+    if(inCoverRange) { checkCoverCollision(); }
     if(fadeStart > 0) { fade(); }  //Fade when fade amount is set.
     if(isDead) {
       if(checkBlockCollision() || destroy) { deadEnemies.remove(this); }  //Remove enemy death projectile on impact.
@@ -66,6 +68,7 @@ class Enemy {
       blocks.get(i).blockPos.x += _amountX;
       blocks.get(i).blockPos.y += _amountY;
     }
+    if(enemyPos.y + eHeight >= ground.coverY) { inCoverRange = true; }
   }
 
   //Returns the amount of blocks used to draw the different enemies.
@@ -183,6 +186,19 @@ class Enemy {
 
       //Start fading by raising fadeStart above 0.
       fadeStart = millis();
+    }
+  }
+  
+  void checkCoverCollision() {
+    //Check if enemy collides with a cover.
+    for(int i = 1; i < 5; i++) {
+      if(collisionCheck(enemyPos, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+        for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
+          if(collisionCheck(ground.coverBlocks.get(j).blockPos, enemyPos, eSize, eSize)) {
+            ground.damageGround(ground.coverBlocks, enemyPos, eSize, 100);
+          }
+        }
+      }
     }
   }
 
