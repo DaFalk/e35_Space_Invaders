@@ -86,7 +86,6 @@ class Block {
     if(blockPos.x < -1) {
       blockPos.x = random(width+2, width*2);
     }
-    display();
   }
   
   //Random position likely on the screen (buffer to avoid patterned space).
