@@ -54,7 +54,7 @@ class EnemyHandler {
       lastDeadAnim += millis() - lastDeadAnim;
     }
 
-    if (respawnEnemies) { 
+    if(respawnEnemies) { 
       spawner.respawnEnemies();
     }
   }

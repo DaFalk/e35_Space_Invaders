@@ -172,7 +172,7 @@ class Enemy {
       }
 
       //Respawn enemies if this enemy was the last.
-      if(enemies.size() == 1) {
+      if((enemies.size() == 1 && this != enemyHandler.boss) || (enemies.size() == 2 && !enemyHandler.boss.isDead)) {
         audioHandler.playSFX(6);
         enemyHandler.respawnEnemies = true;
       }
@@ -188,36 +188,43 @@ class Enemy {
 
   //Returns true if there was a collision.
   boolean checkBlockCollision() {
-    //Iterate players.
+    //Check if enemy death projectile collides with a player
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
       if(!_player.isDead) {  //Only check if player if player is alive.
-        if(lowestPoint.y > ground.groundY) {  //Check if it collides with ground.
-          ground.damageGround(ground.groundBlocks, lowestPoint, ground.blockSize*3, 50);  //Call damage ground and pass in impact position.
-          return true;
-        }
-        
-        //Check if enemy death projectile collides with a cover.
-        for(int c = 1; c < 5; c++) {
-          if(collisionCheck(lowestPoint, new PVector((width/5)*c, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
-            for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
-              if(collisionCheck(lowestPoint, ground.coverBlocks.get(j).blockPos, 4, 4)) {
-                ground.damageGround(ground.coverBlocks, lowestPoint, ground.blockSize*3, 50);
-                return true;
-              }
-            }
-          }
-        }
-        
-        //Check if enemy death projectile collides with a player
         if(collisionCheck(lowestPoint, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
-            //Deal damage or remove shield if player has it.
-            if(!_player.hasShield) { _player.adjustLifes(); }
-            else { _player.hasShield = false; }
-            return true;
+          //Deal damage or remove shield if player has it.
+          if(!_player.hasShield) { _player.adjustLifes(); }
+          else { _player.hasShield = false; }
+          
+          return true;
         }
       }
     }
+    
+    //Check if enemy death projectile collides with the ground.
+    if(lowestPoint.y > ground.groundY) {
+      for(int j = ground.groundBlocks.size()-1; j > -1; j--) {
+        if(collisionCheck(lowestPoint, ground.groundBlocks.get(j).blockPos, 4, 4)) {
+          ground.damageGround(ground.groundBlocks, lowestPoint, ground.blockSize*3, 50);  //Call damage ground and pass in impact position.
+          return true;
+        }
+      }
+    }
+    
+    //Check if enemy death projectile collides with a cover.
+    for(int c = 1; c < 5; c++) {
+      if(collisionCheck(lowestPoint, new PVector((width/5)*c, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+        for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
+          if(collisionCheck(lowestPoint, ground.coverBlocks.get(j).blockPos, 4, 4)) {
+            ground.damageGround(ground.coverBlocks, lowestPoint, ground.blockSize*3, 75);
+            return true;
+          }
+        }
+      }
+    }
+    
+    //No collision
     return false;
   }
 

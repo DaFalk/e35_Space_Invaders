@@ -139,6 +139,7 @@ class Shot {
       return true;
     }
     
+    //Check if shot collides with the ground.
     if(shotPos.y >= ground.groundY) {
       for(int j = ground.groundBlocks.size()-1; j > -1; j--) {
         if(collisionCheck(shotPos, ground.groundBlocks.get(j).blockPos, 4, 4)) {
@@ -151,20 +152,22 @@ class Shot {
     //Check if shot collides with a cover and trigger ground impact.
     for(int i = 1; i < 5; i++) {
       if(collisionCheck(shotPos, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+        //Check each cover block.
         for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
           if(collisionCheck(shotPos, ground.coverBlocks.get(j).blockPos, 4, 4)) {
-            float range = ground.blockSize*3;
-            int pct = 50;
+            float range = ground.blockSize*3;  //The range within to affect blocks.
+            int pct = 75;  //Procentage chance for blocks to be affected.
             if(type == 1) {
               range = ground.blockSize*5;
               pct = 100;
             }
             if(type == 3) {
-              range = ground.blockSize*12;
+              range = ground.blockSize*15;
               pct = 85;
             }
+            
             ground.damageGround(ground.coverBlocks, new PVector(shotPos.x, shotPos.y - (shotSize/2)*(shotDir.y-1)), range, pct);
-            if(type != 1) { return true; }
+            if(type != 1) { return true; }  //Let weapon type 1 pierce through.
           }
         }
       }
