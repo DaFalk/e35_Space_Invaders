@@ -174,12 +174,8 @@ class Enemy {
         blocks.get(i).deathPos = new PVector(enemyPos.x, enemyPos.y);
         blocks.get(i).lastMove = millis();
       }
-
-      //Respawn enemies if this enemy was the last.
-      if((enemies.size() == 1 && (enemyHandler.boss == null || enemyHandler.boss.isDead)) || (enemies.size() == 2 && enemyHandler.boss != null && !enemyHandler.boss.isDead)) {
-        audioHandler.playSFX(6);
-        enemyHandler.respawnEnemies = true;
-      }
+      
+      respawnCheck();
 
       //Add to new arraylist and remove from the old (to avoid interfering with shot targetting  and animation).
       deadEnemies.add(this);
@@ -190,13 +186,23 @@ class Enemy {
     }
   }
   
+  void respawnCheck() {
+    //Respawn enemies if this enemy was the last.
+    if((enemies.size() == 1 && (enemyHandler.boss == null || enemyHandler.boss.isDead)) || (enemies.size() == 2 && enemyHandler.boss != null && !enemyHandler.boss.isDead)) {
+      audioHandler.playSFX(6);
+      enemyHandler.respawnEnemies = true;
+    }
+  }
+  
   void checkCoverCollision() {
     //Check if enemy collides with a cover.
     for(int i = 1; i < 5; i++) {
-      if(collisionCheck(enemyPos, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+      if(collisionCheck(enemyPos, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2 + eHeight)) {
         for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
           if(collisionCheck(ground.coverBlocks.get(j).blockPos, enemyPos, eSize, eSize)) {
-            ground.damageGround(ground.coverBlocks, enemyPos, eSize, 100);
+            ground.damageGround(ground.coverBlocks, enemyPos, eSize*2, 100);
+            respawnCheck();
+            enemies.remove(this);
           }
         }
       }
