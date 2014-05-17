@@ -1,15 +1,15 @@
-// This class draws a single block that can be affected in different ways.
-// The ground and the enemies are made out of these blocks to add impact effects.
+// This class draws a single block that can be affected in different ways on impact.
+// The ground, covers and the enemies are made out of these blocks to add impact effects.
 //
 
 class Block {
   PVector blockPos, deathPos;
   Enemy owner;
-  ArrayList<Block> home;
+  ArrayList<Block> home;  //The array list to remove from.
   int blockSize;
   int blockDir = 1;
   int lastMove;
-  float speed;
+  float speed = 200;
   float velocity = dynamicValue(10);
   float gravity = dynamicValue(20);
   float currentAlpha = 255;
@@ -18,9 +18,7 @@ class Block {
   Block(PVector _blockPos, int _blockSize) {
     blockPos = _blockPos;
     blockSize = _blockSize;
-    deathPos = deathPos;
-    speed = 200;
-    if(!gameStarted) { this.blockPos = randomStarPos(); }
+    if(!gameStarted) { this.blockPos = randomStarPos(); }  //Random position for the start menu stars.
   }
   
   void display() {
@@ -83,9 +81,8 @@ class Block {
   void moveBlock() {
     blockPos.x -= timeFix(400, lastMove);
     lastMove = millis();
-    if(blockPos.x < -1) {
-      blockPos.x = random(width+2, width*2);
-    }
+    //If block goes off screen to the left give it a random off screen position to the right. 
+    if(blockPos.x < -1) { blockPos.x = random(width+2, width*2); }
   }
   
   //Random position likely on the screen (buffer to avoid patterned space).

@@ -1,4 +1,4 @@
-//
+// This class draws a player and manages the player's movement, death, powerup effects and lifes.
 //
 //
 
@@ -19,11 +19,12 @@ class Player {
   Player(float xPos) {
     x = xPos;
     y = height - pWidth;
-    weaponType = 0;
-    shotCooldown = 1000;
+    weaponType = 0;  //Set default weapon type.
+    shotCooldown = 1000;  //Set default shot cooldown.
   }
   
   void update() {
+    //Draw player if alive and manage movement, collision, shooting and powerup effects if game is also unpaused.
     if(!isDead) {
       if(!gamePaused) {
         x += (right - left) * timeFix(speed, lastMove);
@@ -36,7 +37,6 @@ class Player {
     }
   }
   
-//Draw player and shield if this drawn player is active.
   void drawPlayer(float _x, float _y, float _scale, boolean _active) {
     noStroke();
     float _pWidth = pWidth*_scale;
@@ -49,6 +49,8 @@ class Player {
     rect(_x, _y - _pWidth/5 + _pHeight/2, _pWidth/5, _pWidth/5);
     rect(_x, _y - _pWidth/3.5 + _pHeight/2, _pWidth*0.075, _pWidth/3.5);
     
+   
+    //Draw shield if player is active(ie. not UI) and shield powerup has been optained.
     if(_active && hasShield) {
       fill(200, 200, 255,100);
       ellipse(_x, _y, _pWidth*1.4, _pWidth*0.85);
@@ -64,27 +66,31 @@ class Player {
 //Trigger a shot of current weapon type.
   void shoot() {
     if(millis() - lastShot >= shotCooldown) {
+      //Initialize a shot with position, type and owner index.
       Shot s = new Shot(new PVector(x, y - pHeight), weaponType, players.indexOf(this));
       shots.add(s);
       lastShot = millis();
     }
   }
   
-//Subtract life and check if player is dead.
+//Subtract life, reset weapon type and check if player has lifes left or is dead.
   void adjustLifes() {
     lifes--;
     weaponType = 0;
     shotCooldown = 1000;
+    //If player has lifes left then respawn player.
     if(lifes > 0) { spawner.respawnPlayer(this); }
     else {
+      //Check the total amount of player lifes in case of multiple players.
       menUI.calcAllLifes();
       isDead = true;
-      lifesLabel = "DEAD";
+      lifesLabel = "DEAD";  //Change lifes label.
     }
   }
   
 //Manage powerup duration and ajdust weapon type.
   void handlePowerUp() {
+    //If the weapon type isn't default then reset to default once powerup runs out.
     if(weaponType != 0) {
       if(millis() >= powerUpStartTime + powerUpDuration) {
         weaponType = 0;
@@ -93,6 +99,7 @@ class Player {
     }
   }
   
+  //Set direction or attack on key input.
   void keyDown() {
     if(key == 'a' || key == 'A') { left = 1; }
     if(key == 'd' || key == 'D') { right = 1; }
@@ -140,6 +147,7 @@ class Player {
     }
   }
   
+  //Reset direction or attack when releasing key.
   void keyUp() {
     if(key == 'a' || key == 'A') { left = 0; }
     if(key == 'd' || key == 'D') { right = 0; }
