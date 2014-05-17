@@ -1,3 +1,8 @@
+// MPGD: Exercise 35: Space Invaders
+// Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+//
+//
+
 import java.net.URL;
 import java.util.*;
 import com.google.gdata.client.spreadsheet.*;

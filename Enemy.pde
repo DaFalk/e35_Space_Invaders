@@ -131,7 +131,7 @@ class Enemy {
     if(lifes > 0) {
       int _shotDamage = _shot.damage; 
       if(this != _shot.target && _shot.type == 3) { 
-        _shotDamage = _shot.damage/3;
+        _shotDamage = _shot.damage/2;
       }
       lifes -= _shotDamage;  //Deal damage to lifes.
       
@@ -193,8 +193,20 @@ class Enemy {
       Player _player = players.get(i);
       if(!_player.isDead) {  //Only check if player if player is alive.
         if(lowestPoint.y > ground.groundY) {  //Check if it collides with ground.
-          ground.damageGround(lowestPoint);  //Call damage ground and pass in impact position.
+          ground.damageGround(ground.groundBlocks, lowestPoint, ground.blockSize*3, 50);  //Call damage ground and pass in impact position.
           return true;
+        }
+        
+        //Check if enemy death projectile collides with a cover.
+        for(int c = 1; c < 5; c++) {
+          if(collisionCheck(lowestPoint, new PVector((width/5)*c, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+            for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
+              if(collisionCheck(lowestPoint, ground.coverBlocks.get(j).blockPos, 4, 4)) {
+                ground.damageGround(ground.coverBlocks, lowestPoint, ground.blockSize*3, 50);
+                return true;
+              }
+            }
+          }
         }
         
         //Check if enemy death projectile collides with a player

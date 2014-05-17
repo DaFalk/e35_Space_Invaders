@@ -49,8 +49,14 @@ class Shot {
   
 //Target new random enemy or remove shot.
   void getEnemyTarget() {
-    if(enemies.size() > 0) { target = enemies.get(floor(random(0, enemies.size()))); }
-    else if(type == 4) {
+    if(enemies.size() > 0) {
+      target = enemies.get(floor(random(0, enemies.size())));
+      if((type == 4 || type == 3) && target == enemyHandler.boss) {
+        audioHandler.audioBank[7+type].pause();
+        target = null;
+      }
+    }
+    else if(type == 4 || type == 3) {
       audioHandler.audioBank[7+type].pause();
       shots.remove(this);
     }
@@ -128,10 +134,46 @@ class Shot {
   }
   
   boolean shotCollision() {
-   //Remove shot if out of bounds
-    if(shotPos.y < 0 || shotPos.y >= ground.groundY || shotPos.x < 0 || shotPos.x > width) {
-      if(shotPos.y >= ground.groundY) { ground.damageGround(shotPos); }
+   //Remove shot if out of display bounds.
+    if(shotPos.y < 0 + shotSize || shotPos.y > height + shotSize || shotPos.x < 0 - shotSize || shotPos.x > width + shotSize) {
       return true;
+    }
+    
+    if(shotPos.y >= ground.groundY) {
+      for(int j = ground.groundBlocks.size()-1; j > -1; j--) {
+        if(collisionCheck(shotPos, ground.groundBlocks.get(j).blockPos, 4, 4)) {
+          ground.damageGround(ground.groundBlocks, shotPos, ground.blockSize*3, 50);
+          return true;
+        }
+      }
+    }
+    
+    //Check if shot collides with a cover and trigger ground impact.
+    for(int i = 1; i < 5; i++) {
+      if(collisionCheck(shotPos, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+        for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
+          if(collisionCheck(shotPos, ground.coverBlocks.get(j).blockPos, 4, 4)) {
+            float range = ground.blockSize*3;
+            int pct = 50;
+            if(type == 1) {
+              range = ground.blockSize*5;
+              pct = 100;
+            }
+            if(type == 3) {
+              range = ground.blockSize*12;
+              pct = 85;
+            }
+            ground.damageGround(ground.coverBlocks, new PVector(shotPos.x, shotPos.y - (shotSize/2)*(shotDir.y-1)), range, pct);
+            if(type != 1) { return true; }
+          }
+        }
+      }
+      
+      if(type == 4) {
+        if(players.get(owner).x > (width/5)*(1+i) - ground.coverWidth/2 && players.get(owner).x < (width/5)*(1+i) + ground.coverWidth/2) {
+          target = null;
+        }
+      }
     }
     
     //Check if player shot collides with an enemy or enemy shot.
@@ -167,7 +209,8 @@ class Shot {
         }
       }
     }
-    else {  //Check if enemy shot collides with a player
+    else {
+      //Check if enemy shot collides with a player
       for(int i = players.size() - 1; i > -1; i--) {
         Player _player = players.get(i);
         if(!_player.isDead && collisionCheck(shotPos, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {

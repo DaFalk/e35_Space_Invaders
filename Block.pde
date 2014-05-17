@@ -5,6 +5,7 @@
 class Block {
   PVector blockPos, deathPos;
   Enemy owner;
+  ArrayList<Block> home;
   int blockSize;
   int blockDir = 1;
   int lastMove;
@@ -37,7 +38,7 @@ class Block {
         
         //Remove ground blocks when they are above height.
         if(owner == null) {
-          if(blockPos.y > height) { ground.blocks.remove(this); }
+          if(blockPos.y > height) { home.remove(this); }
         }
       }
       else { lastMove += millis() - lastMove; }  //Adjust lastMove to pause blocks.
