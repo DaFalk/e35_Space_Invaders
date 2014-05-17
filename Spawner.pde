@@ -32,20 +32,15 @@ class Spawner {
   }
 
   void spawnEnemies() {
-
     enemyHandler.eSize = enemySize;
     enemyHandler.moveDist = enemyStepX/2;
 
     for (int row = 0; row < enemyRows; row++) {
       for (int col = 0; col < enemyCols; col++) {
         int _type = 3;
-
         if (row >= 1) {
           _type = 2;
-
-          if (row >= 3) {
-            _type = 1;
-          }
+          if (row >= 3) { _type = 1; }
         }
         PVector _pos = new PVector(enemySize/2 + col*enemyStepX, row*enemyStepX + dynamicValue(100));
         enemies.add(new Enemy(_type, _pos, blockSize));
@@ -53,16 +48,14 @@ class Spawner {
     }
   }
   void spawnEnemyBoss() {
-    
     if (millis() - time >= wait && !bossAlive) { 
-      Enemy e = new Enemy(4, new PVector(70, 70), 2);
+      Enemy e = new Enemy(10, new PVector(70, 70), 2);
       enemyHandler.boss = e;
       enemies.add(e);
       bossAlive = true;
       enemyHandler.bossDirX = 1;
       time = millis(); 
     }
-    
   }
 
   void spawnPowerUp(PVector _powerUpPos, float _size) {
@@ -79,8 +72,8 @@ class Spawner {
     if (!audioHandler.audioBank[6].isPlaying()) {
       enemies.clear();
       enemyHandler.dirX = 1;
-      enemyHandler.nextMove -= 50;
-      enemyHandler.shotTimer -= 100;
+      if(enemyHandler.nextMove > 50) { enemyHandler.nextMove -= 45; }
+      if(enemyHandler.shotTimer > 200) { enemyHandler.shotTimer -= 400; }
       spawnEnemies();
       enemyHandler.respawnEnemies = false;
     }

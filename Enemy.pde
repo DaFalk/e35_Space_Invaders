@@ -73,7 +73,7 @@ class Enemy {
     if(type == 1) { return 62; }
     else if(type == 2) { return 48; }
     else if(type == 3) { return 36; }
-    else if(type == 4) { return 64; }  //Boss
+    else if(type == 10) { return 64; }  //Boss
     else { return 0; }
   }
   
@@ -344,7 +344,7 @@ class Enemy {
       }
       break;
 
-      case(4):
+      case(10):
       for(int j = 0; j < 2; j++) {
         flip = 1 - j*2;
         for(int i = 0; i < 6; i++) {

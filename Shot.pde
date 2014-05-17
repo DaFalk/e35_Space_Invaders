@@ -170,7 +170,7 @@ class Shot {
       }
       
       if(type == 4) {
-        if(players.get(owner).x > (width/5)*(1+i) - ground.coverWidth/2 && players.get(owner).x < (width/5)*(1+i) + ground.coverWidth/2) {
+        if(players.get(owner).x > (width/5)*i - ground.coverWidth/2 && players.get(owner).x < (width/5)*i + ground.coverWidth/2) {
           target = null;
         }
       }
