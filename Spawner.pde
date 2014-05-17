@@ -42,7 +42,7 @@ class Spawner {
           _type = 2;
           if (row >= 3) { _type = 1; }
         }
-        PVector _pos = new PVector(enemySize/2 + col*enemyStepX, row*enemyStepX + dynamicValue(100));
+        PVector _pos = new PVector(enemySize + col*enemyStepX, row*enemyStepX + dynamicValue(100));
         enemies.add(new Enemy(_type, _pos, blockSize));
       }
     }
