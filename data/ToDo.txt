@@ -1,19 +1,8 @@
 Need to do:
 ------------
-- fix startscreen performance.
-- class headers. 
-- "piercer" shot is broken
 
 
-- player losses all lifes when enemies reach the bottom plane of the screen.
 
-- add comments to all code.
-- autotargeting weapons should not target boss
-
-- make it so that the boss doesnt affect the respawn when the last enemy dies
-
-- the speed from lvl 4 and onwards should be constrained
-- the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
 
 Nice to do:
 ------------
@@ -24,7 +13,6 @@ Nice to do:
 - different looking enemy shoots. 
 - double points power up
 - freeze time power up.
-- "shoot on shot" collision animation.
 - Points should be based on the amount of life taken from the enemy.
 - change enemy shot collision to color collision (for precision).
 
@@ -32,11 +20,23 @@ Nice to do:
 
 In progress
 ---------------
-- make breakable cover.
+
 
 
 Done
 ---------------
+- "shoot on shot" collision animation.
+- add comments to all code.
+- autotargeting weapons should not target boss
+
+- make it so that the boss doesnt affect the respawn when the last enemy dies
+
+- the speed from lvl 4 and onwards should be constrained
+- the increase of enemy speed needs to decrease in the end (so the last couple of enemies doesn't get ridiculous speed)
+- make breakable cover.
+- fix startscreen performance.
+- class headers. 
+- "piercer" shot is broken
 - the enemies still move dwon continuosly on the Y axis sometimes. 
 - the boss spawns as a "regular" enemy (has to do with the timer)
 - the "machine gun" power'up could use a small "buff".
