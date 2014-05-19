@@ -14,6 +14,7 @@ class Block {
   float gravity = dynamicValue(20);
   float currentAlpha = 255;
   color bFill;
+  boolean broken = false;
   
   Block(PVector _blockPos, int _blockSize) {
     blockPos = _blockPos;

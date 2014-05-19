@@ -109,9 +109,9 @@ float dynamicValue(float _value) {
 }
 
 //Check collision between two objects.
-boolean collisionCheck(PVector _pos1, PVector _pos2, float _offsetX, float _offsetY) {
-  if (_pos1.x > _pos2.x - _offsetX && _pos1.x < _pos2.x + _offsetX) {
-    if (_pos1.y > _pos2.y - _offsetY && _pos1.y < _pos2.y + _offsetY) {
+boolean collisionCheck(PVector _pos1, float _offset1X, float _offset1Y, PVector _pos2, float _offset2X, float _offset2Y) {
+  if (_pos1.x + _offset1X> _pos2.x - _offset2X && _pos1.x - _offset1X < _pos2.x + _offset2X) {
+    if (_pos1.y + _offset1Y > _pos2.y - _offset2Y && _pos1.y - _offset1Y < _pos2.y + _offset2Y) {
       return true;
     }
   }

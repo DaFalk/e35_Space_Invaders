@@ -142,7 +142,7 @@ class Shot {
     //Check if shot collides with the ground.
     if(shotPos.y >= ground.groundY) {
       for(int j = ground.groundBlocks.size()-1; j > -1; j--) {
-        if(collisionCheck(shotPos, ground.groundBlocks.get(j).blockPos, 4, 4)) {
+        if(collisionCheck(shotPos, 0, 0, ground.groundBlocks.get(j).blockPos, 4, 4)) {
           ground.damageGround(ground.groundBlocks, shotPos, ground.blockSize*3, 50);
           return true;
         }
@@ -151,10 +151,10 @@ class Shot {
     
     //Check if shot collides with a cover and trigger ground impact.
     for(int i = 1; i < 5; i++) {
-      if(collisionCheck(shotPos, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+      if(collisionCheck(shotPos, 0, 0, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
         //Check each cover block.
         for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
-          if(collisionCheck(shotPos, ground.coverBlocks.get(j).blockPos, 4, 4)) {
+          if(collisionCheck(shotPos, 0, 0, ground.coverBlocks.get(j).blockPos, 4, 4)) {
             float range = ground.blockSize*3;  //The range within to affect blocks.
             int pct = 75;  //Procentage chance for blocks to be affected.
             if(type == 1) {
@@ -186,7 +186,7 @@ class Shot {
         for(int i = enemies.size() - 1; i > -1; i--) {
           Enemy _enemy = enemies.get(i);
           if(!_enemy.isDead) {
-            if(collisionCheck(shotPos, _enemy.enemyPos, _enemy.eSize, _enemy.eHeight)) {
+            if(collisionCheck(shotPos, 0, 0, _enemy.enemyPos, _enemy.eSize, _enemy.eHeight)) {
               _enemy.damageEnemy(this);
               if(type != 1) { return true; }
             }
@@ -195,7 +195,7 @@ class Shot {
         //Check if player shot collides with an enemy shot.
         for(int i = shots.size()-1; i > -1; i--) {
           Shot _shot = shots.get(i);
-          if(_shot != this && collisionCheck(shotPos, _shot.shotPos, _shot.shotSize/2, _shot.shotSize/2)) {
+          if(_shot != this && collisionCheck(shotPos, 0, 0, _shot.shotPos, _shot.shotSize/2, _shot.shotSize/2)) {
             _shot.destroy = true;  //Destroy collided shot.
             menUI.addFloatingText(players.get(owner), shotPos, nf(points, 0));  //Add floating points
             if(type != 1) { return true; }
@@ -204,7 +204,7 @@ class Shot {
         //Check if player shot collides with an enemy death projectiles.
         for(int i = deadEnemies.size()-1; i > -1; i--) {
           Enemy _deathShot = deadEnemies.get(i);
-          if(collisionCheck(shotPos, _deathShot.lowestPoint, dynamicValue(5), dynamicValue(5)) && _deathShot.isProjectile) {
+          if(collisionCheck(shotPos, 0, 0, _deathShot.lowestPoint, dynamicValue(5), dynamicValue(5)) && _deathShot.isProjectile) {
             _deathShot.destroy = true;  //Destroy collided shot.
             menUI.addFloatingText(players.get(owner), shotPos, nf(points, 0));  //Add floating points
             if(type != 1) { return true; }
@@ -216,7 +216,7 @@ class Shot {
       //Check if enemy shot collides with a player
       for(int i = players.size() - 1; i > -1; i--) {
         Player _player = players.get(i);
-        if(!_player.isDead && collisionCheck(shotPos, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
+        if(!_player.isDead && collisionCheck(shotPos, 0, 0, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
           if(_player.hasShield) { _player.hasShield = false; }
           else { _player.adjustLifes(); }
           return true;
@@ -228,9 +228,9 @@ class Shot {
       if(!target.isDead) {
         switch(type) {
           case(3):
-            if(collisionCheck(shotPos, target.enemyPos, target.eSize, target.eHeight)) {
+            if(collisionCheck(shotPos, 0, 0, target.enemyPos, target.eSize, target.eHeight)) {
               for(int i = enemies.size()-1; i > -1; i--) {
-                if(collisionCheck(enemies.get(i).enemyPos, shotPos, spawner.enemyStepX*1.5, spawner.enemyStepX*1.5)) {
+                if(collisionCheck(enemies.get(i).enemyPos, 0, 0, shotPos, spawner.enemyStepX*1.5, spawner.enemyStepX*1.5)) {
                   enemies.get(i).damageEnemy(this);
                 }
               }

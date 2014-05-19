@@ -62,7 +62,7 @@ class PowerUp {
   boolean checkCollision() {
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
-      if(!_player.isDead && collisionCheck(powerUpPos, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
+      if(!_player.isDead && collisionCheck(powerUpPos, size, size, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
         if(type > 0) {
           setWeaponTimers(_player, type);
           audioHandler.playSFX(4);

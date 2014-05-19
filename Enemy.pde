@@ -17,7 +17,6 @@ class Enemy {
   float fadeAmount = 0;
   color eFill = color(255);
   boolean doAnimation = true;
-  boolean inCoverRange = false;
   boolean destroy = false;
   boolean isDead = false;
   boolean isProjectile = false;
@@ -52,7 +51,6 @@ class Enemy {
         }
       }
     }
-    if(inCoverRange) { checkCoverCollision(); }
     if(fadeStart > 0) { fade(); }  //Fade when fade amount is set.
     if(isDead) {
       if(checkBlockCollision() || destroy) { deadEnemies.remove(this); }  //Remove enemy death projectile on impact.
@@ -69,7 +67,7 @@ class Enemy {
       blocks.get(i).blockPos.x += _amountX;
       blocks.get(i).blockPos.y += _amountY;
     }
-    if(enemyPos.y + eHeight >= ground.coverY) { inCoverRange = true; }
+    checkCollision();
   }
 
   //Returns the amount of blocks used to draw the different enemies.
@@ -157,7 +155,6 @@ class Enemy {
 
       //Check if enemy should spawn a powerup.
       spawner.spawnPowerUp(new PVector(enemyPos.x, enemyPos.y), (float)eSize);
-
       //Adjust player score and initialize floating points.
       menUI.addFloatingText(players.get(_shot.owner), enemyPos, nf(points, 0));
 
@@ -180,7 +177,6 @@ class Enemy {
       //Add to new arraylist and remove from the old (to avoid interfering with shot targetting  and animation).
       deadEnemies.add(this);
       enemies.remove(this);
-
       //Start fading by raising fadeStart above 0.
       fadeStart = millis();
     }
@@ -194,19 +190,54 @@ class Enemy {
     }
   }
   
-  void checkCoverCollision() {
+  void checkCollision() {
     //Check if enemy collides with a cover.
-    for(int i = 1; i < 5; i++) {
-      if(collisionCheck(enemyPos, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2 + eHeight)) {
-        for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
-          if(collisionCheck(ground.coverBlocks.get(j).blockPos, enemyPos, eSize, eSize)) {
-            ground.damageGround(ground.coverBlocks, enemyPos, eSize*2, 100);
-            respawnCheck();
-            enemies.remove(this);
+    if(enemyPos.y + eHeight >= ground.coverY) {
+      for(int i = 1; i < 5; i++) {
+        if(collisionCheck(enemyPos, eSize, eHeight, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+          for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
+            //Check if enemy collides with any ground blocks that isn't already broken.
+            if(collisionCheck(ground.coverBlocks.get(j).blockPos, blockSize, blockSize, enemyPos, eSize, eHeight) && !ground.groundBlocks.get(j).broken) {
+              ground.groundBlocks.get(j).broken = true;
+              ground.damageGround(ground.coverBlocks, enemyPos, eSize*3, 100);
+              enemies.remove(this);
+              respawnCheck();
+            }
           }
         }
       }
     }
+    
+    if(enemyPos.y > ground.coverY + ground.coverHeight) {
+      for(int i = players.size()-1; i > -1; i--) {
+        if(collisionCheck(enemyPos, eSize, eHeight, new PVector(players.get(i).x, players.get(i).y), players.get(i).pWidth/2, players.get(i).pHeight)) {
+          players.get(i).adjustLifes();
+          enemies.remove(this);
+          respawnCheck();
+        }
+      }
+    }
+    
+    //Check if enemy collides with the ground.
+    if(enemyPos.y + eHeight >= ground.groundY) {
+      //Damage ground.
+      if(collisionCheck(enemyPos, eSize, eHeight, new PVector(width/2, ground.groundY + ground.groundHeight/2), width/2, ground.groundHeight/2)) {
+        for(int i = ground.groundBlocks.size()-1; i > -1; i--) {
+          //Check if enemy collides with any ground blocks that isn't already broken.
+          if(collisionCheck(ground.groundBlocks.get(i).blockPos, blockSize, blockSize, enemyPos, eSize, eHeight) && !ground.groundBlocks.get(i).broken) {
+            ground.groundBlocks.get(i).broken = true;
+            ground.damageGround(ground.groundBlocks, enemyPos, eSize*4, 100);
+            enemies.remove(this);
+            respawnCheck();
+          }
+        }
+        //Subtract lifes from both players.
+        for(int i = players.size()-1; i > -1; i--) {
+          if(players.get(i).lifes > 0) { players.get(i).adjustLifes(); }
+        }
+      }
+    }
+    
   }
 
   //Returns true if there was a collision.
@@ -214,12 +245,11 @@ class Enemy {
     //Check if enemy death projectile collides with a player
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
-      if(!_player.isDead) {  //Only check if player if player is alive.
-        if(collisionCheck(lowestPoint, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
+      if(!_player.isDead) {  //Only check if the player is alive.
+        if(collisionCheck(lowestPoint, blockSize/2, blockSize/2, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
           //Deal damage or remove shield if player has it.
           if(!_player.hasShield) { _player.adjustLifes(); }
           else { _player.hasShield = false; }
-          
           return true;
         }
       }
@@ -228,7 +258,7 @@ class Enemy {
     //Check if enemy death projectile collides with the ground.
     if(lowestPoint.y > ground.groundY) {
       for(int j = ground.groundBlocks.size()-1; j > -1; j--) {
-        if(collisionCheck(lowestPoint, ground.groundBlocks.get(j).blockPos, 4, 4)) {
+        if(collisionCheck(lowestPoint, blockSize/2, blockSize/2, ground.groundBlocks.get(j).blockPos, 4, 4)) {
           ground.damageGround(ground.groundBlocks, lowestPoint, ground.blockSize*3, 50);  //Call damage ground and pass in impact position.
           return true;
         }
@@ -237,9 +267,9 @@ class Enemy {
     
     //Check if enemy death projectile collides with a cover.
     for(int c = 1; c < 5; c++) {
-      if(collisionCheck(lowestPoint, new PVector((width/5)*c, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+      if(collisionCheck(lowestPoint, blockSize/2, blockSize/2, new PVector((width/5)*c, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
         for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
-          if(collisionCheck(lowestPoint, ground.coverBlocks.get(j).blockPos, 4, 4)) {
+          if(collisionCheck(lowestPoint, blockSize/2, blockSize/2, ground.coverBlocks.get(j).blockPos, 4, 4)) {
             ground.damageGround(ground.coverBlocks, lowestPoint, ground.blockSize*3, 75);
             return true;
           }

@@ -65,7 +65,7 @@ class Spawner {
       
       //Decrease enemy movement tick timer and shoot cooldown.
       if(enemyHandler.nextMove > 50) { enemyHandler.nextMove -= 45; }
-      if(enemyHandler.shotTimer > 200) { enemyHandler.shotTimer -= 400; }
+      if(enemyHandler.shotTimer > 200) { enemyHandler.shotTimer -= 800; }
       
       //Spawn enemies.
       spawnEnemies();

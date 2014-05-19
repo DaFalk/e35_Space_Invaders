@@ -25,7 +25,7 @@ class Ground {
     //Setup ground blocks.
     for(int _y = 0; _y < groundHeight/blockSize; _y++) {
       for(int _x = 0; _x < width/blockSize; _x++) {
-        Block block = new Block(new PVector(_x + blockSize/2 + (blockSize/2)*_x, height - groundHeight + blockSize/2 + blockSize*_y), blockSize);
+        Block block = new Block(new PVector(_x + blockSize/2 + (blockSize/2)*_x, groundY + blockSize/2 + blockSize*_y), blockSize);
         groundBlocks.add(block);
         block.bFill = groundColor;
       }
