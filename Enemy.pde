@@ -1,12 +1,11 @@
-// This class draws different types of enemies out of blocks and controls their movement and collision(when dead and projectile).
+// This class creates different types of enemies out of blocks and controls their movement and collision(when dead and projectile).
 // It also handles what happens when enemies are damaged and destroyed and which sounds the enemies play.
 //
-// Accesse classes: Block, spawner, menUI, audioHandler, enemyHandler, players[], enemies[]
 
 class Enemy {
   ArrayList<Block> blocks;
   PVector enemyPos;
-  float eSize, eHeight;
+  float eWidth, eHeight;
   int half;  //Half the size of the blocks arraylist (to be able to draw half the blocks and mirror them).
   int blockSize;
   int type, lifes, points;
@@ -20,24 +19,26 @@ class Enemy {
   boolean destroy = false;
   boolean isDead = false;
   boolean isProjectile = false;
-  PVector lowestPoint = new PVector(0, 0);
+  PVector lowestPoint = new PVector(0, 0);  //Used to check impact if enemy turns to projectile.
 
   Enemy(int _type, PVector _pos, int _blockSize) {
     type = _type;
-    points = type*5;
+    points = type*5;  //Points depend on enemy type.
     lifes = 6;
     enemyPos = _pos;
-    blocks = new ArrayList<Block>();
+    blocks = new ArrayList<Block>();  //Initialize enemy block array.
     blockSize = _blockSize;
-    eSize = 6*blockSize;
+    eWidth = 6*blockSize;
     eHeight = 4*blockSize;
     
     half = ceil(setArrayLength()/2);
+    //Add the amount of blocks for this enemy.
     for(int i = 0; i < setArrayLength(); i ++) {
       blocks.add(new Block(enemyPos, blockSize));
-      blocks.get(i).bFill = eFill;
+      blocks.get(i).bFill = eFill;  //Set fill to match.
       blocks.get(i).owner = this;
     }
+    //Setup block positions.
     setBlockPositions();
   }
 
@@ -67,6 +68,7 @@ class Enemy {
       blocks.get(i).blockPos.x += _amountX;
       blocks.get(i).blockPos.y += _amountY;
     }
+    //Check cover, player and ground collision.
     checkCollision();
   }
 
@@ -125,13 +127,14 @@ class Enemy {
       }
       break;
     }
-    moveSwitch *= -1;  //Switch.
+    moveSwitch *= -1;  //Switch (1 or -1).
   }
 
   void damageEnemy(Shot _shot) {
     //Deal shot damage to enemy and adjust enemy color according to lifes left.
     if(lifes > 0) {
-      int _shotDamage = _shot.damage; 
+      int _shotDamage = _shot.damage;
+      //Speciel treatment for weapon type 3 (missiles, AOE).
       if(this != _shot.target && _shot.type == 3) { 
         _shotDamage = _shot.damage/2;
       }
@@ -146,7 +149,7 @@ class Enemy {
 
     //Kill enemy if lifes goes below zero.
     if(lifes <= 0 && !isDead) {
-      isDead = true;
+      //If it is the boss, set the boss spawn timer.
       if(this == enemyHandler.boss ){
         enemyHandler.bossAlive = false;
         spawner.time = millis();
@@ -154,7 +157,7 @@ class Enemy {
       audioHandler.playSFX(2);
 
       //Check if enemy should spawn a powerup.
-      spawner.spawnPowerUp(new PVector(enemyPos.x, enemyPos.y), (float)eSize);
+      spawner.spawnPowerUp(new PVector(enemyPos.x, enemyPos.y), (float)eWidth);
       //Adjust player score and initialize floating points.
       menUI.addFloatingText(players.get(_shot.owner), enemyPos, nf(points, 0));
 
@@ -177,6 +180,7 @@ class Enemy {
       //Add to new arraylist and remove from the old (to avoid interfering with shot targetting  and animation).
       deadEnemies.add(this);
       enemies.remove(this);
+      isDead = true;
       //Start fading by raising fadeStart above 0.
       fadeStart = millis();
     }
@@ -194,12 +198,12 @@ class Enemy {
     //Check if enemy collides with a cover.
     if(enemyPos.y + eHeight >= ground.coverY) {
       for(int i = 1; i < 5; i++) {
-        if(collisionCheck(enemyPos, eSize, eHeight, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
+        if(collisionCheck(enemyPos, eWidth, eHeight, new PVector((width/5)*i, ground.coverY + ground.coverHeight/2), ground.coverWidth/2, ground.coverHeight/2)) {
           for(int j = ground.coverBlocks.size()-1; j > -1; j--) {
-            //Check if enemy collides with any ground blocks that isn't already broken.
-            if(collisionCheck(ground.coverBlocks.get(j).blockPos, blockSize, blockSize, enemyPos, eSize, eHeight) && !ground.groundBlocks.get(j).broken) {
-              ground.groundBlocks.get(j).broken = true;
-              ground.damageGround(ground.coverBlocks, enemyPos, eSize*3, 100);
+            //Check if enemy collides with any ground blocks that isn't "dead".
+            if(collisionCheck(ground.coverBlocks.get(j).blockPos, blockSize/2, blockSize/2, enemyPos, eWidth, eHeight) && ground.groundBlocks.get(j).deathPos == null) {
+              //Impact cover blocks and destroy enemy and check for respawn.
+              ground.damageGround(ground.coverBlocks, enemyPos, eWidth*3, 100);
               enemies.remove(this);
               respawnCheck();
             }
@@ -208,9 +212,12 @@ class Enemy {
       }
     }
     
+    //Check if enemy is in range of potential player collision.
     if(enemyPos.y > ground.coverY + ground.coverHeight) {
       for(int i = players.size()-1; i > -1; i--) {
-        if(collisionCheck(enemyPos, eSize, eHeight, new PVector(players.get(i).x, players.get(i).y), players.get(i).pWidth/2, players.get(i).pHeight)) {
+        //Check if enemy collides with player.
+        if(collisionCheck(enemyPos, eWidth, eHeight, new PVector(players.get(i).x, players.get(i).y), players.get(i).pWidth/2, players.get(i).pHeight)) {
+          //Deal damage to player and detroy enemy and check for respawn.
           players.get(i).adjustLifes();
           enemies.remove(this);
           respawnCheck();
@@ -221,12 +228,12 @@ class Enemy {
     //Check if enemy collides with the ground.
     if(enemyPos.y + eHeight >= ground.groundY) {
       //Damage ground.
-      if(collisionCheck(enemyPos, eSize, eHeight, new PVector(width/2, ground.groundY + ground.groundHeight/2), width/2, ground.groundHeight/2)) {
+      if(collisionCheck(enemyPos, eWidth, eHeight, new PVector(width/2, ground.groundY + ground.groundHeight/2), width/2, ground.groundHeight/2)) {
         for(int i = ground.groundBlocks.size()-1; i > -1; i--) {
-          //Check if enemy collides with any ground blocks that isn't already broken.
-          if(collisionCheck(ground.groundBlocks.get(i).blockPos, blockSize, blockSize, enemyPos, eSize, eHeight) && !ground.groundBlocks.get(i).broken) {
-            ground.groundBlocks.get(i).broken = true;
-            ground.damageGround(ground.groundBlocks, enemyPos, eSize*4, 100);
+          //Check if enemy collides with any ground blocks that isn't "dead".
+          if(collisionCheck(ground.groundBlocks.get(i).blockPos, blockSize/2, blockSize/2, enemyPos, eWidth, eHeight) && ground.groundBlocks.get(i).deathPos == null) {
+            //Impact ground blocks and destroy enemy and check for respawn.
+            ground.damageGround(ground.groundBlocks, enemyPos, eWidth*4, 100);
             enemies.remove(this);
             respawnCheck();
           }
@@ -304,8 +311,9 @@ class Enemy {
   }
 
   //Reposition half of enemies blocks and then mirrors their positions.
+  //Each block is given and new PVector point (x and y).
   void setBlockPositions() {
-    int flip;
+    int flip;  //Only half the blocks are postioned manually the other half is mirrored.
     float _x;
     switch(type) {
       case(1):

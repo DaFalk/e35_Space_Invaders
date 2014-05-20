@@ -1,18 +1,18 @@
-//
+//  This class creates the 4 covers and the ground out of blocks and manages the shot and enemy impacts on these.
 //
 //
 
 class Ground {
   ArrayList<Block> groundBlocks = new ArrayList<Block>();
   ArrayList<Block> coverBlocks = new ArrayList<Block>();
+  
   int blockSize;
   float groundHeight = height/30;
   float groundY;
   float coverY = height - dynamicValue(115);
-  float coverWidth;
-  float coverHeight;
+  float coverWidth, coverHeight;
+  
   color groundColor = color(0, 255, 0);
-  int half;
 
   Ground() {
     groundY = height - groundHeight;
@@ -22,44 +22,45 @@ class Ground {
   }
 
   void spawnGround() {
-    //Setup ground blocks.
-    for(int _y = 0; _y < groundHeight/blockSize; _y++) {
-      for(int _x = 0; _x < width/blockSize; _x++) {
-        Block block = new Block(new PVector(_x + blockSize/2 + (blockSize/2)*_x, groundY + blockSize/2 + blockSize*_y), blockSize);
+    //Setup ground blocks in a rectangular grid.
+    for(int row = 0; row < groundHeight/blockSize; row++) {
+      for(int col = 0; col < width/blockSize; col++) {
+        Block block = new Block(new PVector(col + blockSize/2 + (blockSize/2)*col, groundY + blockSize/2 + blockSize*row), blockSize);
         groundBlocks.add(block);
-        block.bFill = groundColor;
+        block.bFill = groundColor;  //Match ground color.
       }
     }
   }
 
   void spawnCover() {
-    for(int seed = 0; seed < 4; seed++) {
-      float indent = width/5 + blockSize/2;
-      indent += indent*seed;
-      for(int i = 0; i < 2; i++) {
-        int flip = 1 - i*2;
-        //Draw the top.
-        for(int _x = 0; _x < 9; _x++) {
-          for(int _y = 0; _y < 6; _y++) {
-            Block block = new Block(new PVector(indent + (blockSize*_x)*flip, coverY + (blockSize*_y)), blockSize);
+    //Create 4 covers.
+    for(int i = 0; i < 4; i++) {
+      float indent = width/5 + blockSize/2;  //Amount to indent covers.
+      indent += indent*i;  //Increase amount per iteration.
+      for(int _x = 0; _x < 2; _x++) {
+        int flip = 1 - _x*2;  //Only half the blocks are postioned manually the other half is mirrored.
+        //Create the top.
+        for(int col = 0; col < 9; col++) {
+          for(int row = 0; row < 6; row++) {
+            Block block = new Block(new PVector(indent + (blockSize*col)*flip, coverY + (blockSize*row)), blockSize);
             coverBlocks.add(block);
             block.bFill = groundColor;
           }
         }
         
-        //Draw the slopes.
-        for(int _x = 0; _x < 10; _x++) {
-          for(int _y = 0; _y < 8; _y++) {
-            Block block = new Block(new PVector(indent + (blockSize*_y)*flip + (blockSize*_x)*flip, coverY + blockSize + blockSize*_y ), blockSize);
+        //Create the slopes.
+        for(int col = 0; col < 10; col++) {
+          for(int row = 0; row < 8; row++) {
+            Block block = new Block(new PVector(indent + (blockSize*row)*flip + (blockSize*col)*flip, coverY + blockSize + blockSize*row ), blockSize);
             coverBlocks.add(block);
             block.bFill = groundColor;
           }
         }
         
-        //Draw the "legs".
-        for(int _x = 0; _x < 10; _x++) {   
-          for(int _y = 0; _y < 12; _y++) {
-            Block block = new Block(new PVector(indent + (blockSize*8 + blockSize*_x)*flip, coverY + blockSize*9 + blockSize*_y ), blockSize);
+        //create the bottom.
+        for(int col = 0; col < 10; col++) {   
+          for(int row = 0; row < 12; row++) {
+            Block block = new Block(new PVector(indent + (blockSize*8 + blockSize*col)*flip, coverY + blockSize*9 + blockSize*row), blockSize);
             coverBlocks.add(block);
             block.bFill = groundColor;
           }
@@ -76,14 +77,15 @@ class Ground {
       coverBlocks.get(i).display();
     }
   }
-
+  
+  //Receives the block array that was hit, the impact position, the range of "explosion" and percentage chance that blocks are affected.
   void damageGround(ArrayList<Block> _blocks, PVector _shotPos, float _range, int _pct) {
     for(int i = _blocks.size()-1; i > -1; i--) {
       if(_blocks.get(i).blockPos.dist(_shotPos) < _range) {
         if(random(0, 100) > 100 - _pct) {
           _blocks.get(i).deathPos = new PVector(_shotPos.x, _shotPos.y + 10);
           _blocks.get(i).lastMove = millis();
-          _blocks.get(i).home = _blocks;
+          _blocks.get(i).home = _blocks;  //Set block home so block can remove it self once out of bounds.
         }
       }
     }

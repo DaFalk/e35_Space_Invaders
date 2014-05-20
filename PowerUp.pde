@@ -1,13 +1,13 @@
+//  This class draws a powerup icon with ellipses colored according to type and moves it downwards and checks player collision.
 //
 //
-// Accesses Player class
 
 class PowerUp {
   PVector powerUpPos;
-  String name;
+  String name;  //Name of powerup for player collision floating text.
   float size;
   float speed = dynamicValue(50);
-  int lastMove, type, shotCooldown;
+  int lastMove, type;
   
   PowerUp(PVector _pos, float _size) {
     powerUpPos = _pos;
@@ -58,26 +58,30 @@ class PowerUp {
     ellipse(powerUpPos.x, powerUpPos.y, size*2, size*2);
   }
   
-//Check if powerup collides with a player.
+//Check if powerup collides with an alive player.
   boolean checkCollision() {
     for(int i = players.size() - 1; i > -1; i--) {
       Player _player = players.get(i);
       if(!_player.isDead && collisionCheck(powerUpPos, size, size, new PVector(_player.x, _player.y), _player.pWidth/2, _player.pHeight)) {
+        //If powerup is not a shield.
         if(type > 0) {
+          //Set players weapon type.
           setWeaponTimers(_player, type);
           audioHandler.playSFX(4);
         }
         else {
+          //Give player a shield.
           _player.hasShield = true;
           audioHandler.playSFX(5);
         }
-        menUI.addFloatingText(null, powerUpPos, name);
+        menUI.addFloatingText(null, powerUpPos, name);  //Display floating text with name of powerup.
         return true;
       }
     }
     return false;
   }
   
+  //Set powerup name based on type.
   void namePowerUp() {
     switch(type) {
       case(0):
@@ -98,7 +102,7 @@ class PowerUp {
     }
   }
   
-//Set the stats of the current weapon type.
+//Set the player's weapon type, shot duration and powerup duration according to this powerup type.
   void setWeaponTimers(Player _player, int _weaponType) {
     _player.weaponType = _weaponType;
     _player.powerUpStartTime = millis();

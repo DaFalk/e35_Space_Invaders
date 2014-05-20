@@ -14,7 +14,6 @@ class Block {
   float gravity = dynamicValue(20);
   float currentAlpha = 255;
   color bFill;
-  boolean broken = false;
   
   Block(PVector _blockPos, int _blockSize) {
     blockPos = _blockPos;
@@ -29,7 +28,7 @@ class Block {
     //When blocks are given a death position, a "death" behaviour is triggered.
     if(deathPos != null) {
       if(!gamePaused) {
-        //BlockDir controls how the block will behave.
+        //BlockDir controls how the block will behave (explode and disappear or implode and become a projectile).
         if(blockDir < 0) { implode(); }
         else { explode(); }
         
@@ -48,6 +47,7 @@ class Block {
    
 //Move towards deathPos x and affect deathPos y by gravity (forms a new projectile).
   void implode() {
+    //Calculate the angle between current position and original position.
     float angle = atan2(blockPos.y - deathPos.y, blockPos.x - deathPos.x);
     
     //Add velocity to block position and adjust velocity and gravity.

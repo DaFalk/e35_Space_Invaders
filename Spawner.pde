@@ -1,5 +1,5 @@
-// This class controls everthing related to spawning game objects
-// such as players, enemies, shots and powerups.
+// This class controls everthing related to spawning game objects such as players, enemies, shots and powerups.
+//
 //
 
 class Spawner {
@@ -8,9 +8,8 @@ class Spawner {
   int blockSize = (int)dynamicValue(2);
   int enemySize;
   float enemyStepX;
-
-  //timer variables for the enemyBoss function
-  int time = millis();
+  
+  int time = millis();  //Timer variables for the enemyBoss function.
   int wait = 15000; // wait for seconds. Used to time the boss spawn
 
   Spawner() {
@@ -31,17 +30,19 @@ class Spawner {
   //Player spawn and respawn.
   void spawnPlayers(int numPlayers) {
     for(int i = 0; i < numPlayers; i++) {
+      //Spawn player at position depending on number of players.
       players.add(new Player(width/(2+i) - ((width/2 - width/3)*(numPlayers-1))*(1-i) + (width/(2+i))*i));
     }
   }
   void respawnPlayer(Player player) {
+    //Move player at position depending on number of players.
     player.x = width/(2+players.indexOf(player)) - ((width/2 - width/3)*(players.size()-1))*(1-players.indexOf(player)) + (width/(2+players.indexOf(player)))*players.indexOf(player);
   }
   
   //Enemies spawn and respawn.
   void spawnEnemies() {
     //Set enemyHandler values for enemies size and move distance.
-    enemyHandler.eSize = enemySize;
+    enemyHandler.eWidth = enemySize;
     enemyHandler.moveDist = enemyStepX/2;
     
     //Spawn enemies in a grid making their type dependent on spawn position.
@@ -61,7 +62,7 @@ class Spawner {
   }
   void respawnEnemies() {
     if(!audioHandler.audioBank[6].isPlaying()) {
-      enemyHandler.dirX = 1;  //Reset move direction.
+      enemyHandler.enemyDirX = 1;  //Reset move direction.
       
       //Decrease enemy movement tick timer and shoot cooldown.
       if(enemyHandler.nextMove > 50) { enemyHandler.nextMove -= 45; }
@@ -116,7 +117,7 @@ class Spawner {
     shots.add(s);
   }
 
-  //Initialize a powerup with position and size.
+  //Initialize a powerup with position and size if a high enough random number is "rolled".
   void spawnPowerUp(PVector _powerUpPos, float _size) {
     if (random(0, 100) > 90) {
       powerUps.add(new PowerUp(_powerUpPos, _size));

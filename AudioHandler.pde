@@ -1,4 +1,4 @@
-// This class stores and handles all auidio in the game.
+// This class stores and handles all auidio in the game (play, loop, pause and rewind).
 //
 //
 

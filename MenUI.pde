@@ -1,7 +1,6 @@
 // This class manage all menu and UI elements.
 // It also controls the game state and resetsetting of the different array lists and booleans.
 //
-// Access classes: Enemy, EnemyHandler, Player, FloatingText, Ground, PowerUp, Shot, Highscores, AudioHandler and Spawner.
 
 class MenUI {
   float titleSize = dynamicValue(120);

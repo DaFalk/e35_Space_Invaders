@@ -12,7 +12,7 @@ class Player {
   float pWidth = dynamicValue(40);
   float pHeight = dynamicValue(10);
   float speed = dynamicValue(150);
-  boolean attack = false;
+  boolean attack = false;  //Can the player attack or not.
   boolean isDead = false;
   boolean hasShield = false;
   
@@ -57,13 +57,13 @@ class Player {
     }
   }
   
-//Keep player within bounds.
+  //Keep player within bounds.
   void checkCollision() {
     if(x <= 0) { x = 0; }
     if(x >= width - pWidth) { x = width - pWidth; }
   }
   
-//Trigger a shot of current weapon type.
+  //Trigger a shot of current weapon type.
   void shoot() {
     if(millis() - lastShot >= shotCooldown) {
       //Spawn a shot with player position, weapon type and player index.
@@ -72,7 +72,7 @@ class Player {
     }
   }
   
-//Subtract life, reset weapon type and check if player has lifes left or is dead.
+  //Subtract life, reset weapon type and check if player has lifes left or is dead.
   void adjustLifes() {
     lifes--;
     weaponType = 0;
@@ -87,7 +87,7 @@ class Player {
     }
   }
   
-//Manage powerup duration and ajdust weapon type.
+  //Manage powerup duration and ajdust weapon type.
   void handlePowerUp() {
     //If the weapon type isn't default then reset to default once powerup runs out.
     if(weaponType != 0) {
@@ -106,44 +106,6 @@ class Player {
     if(keyCode == LEFT) { left = 1; }
     if(keyCode == RIGHT) { right = 1; }
     if(keyCode == UP) { attack = true; }
-    
-    //for testing purpose only :)
-    switch(key) {
-    case('0'):
-      hasShield = true;
-    break;
-    case('1'):
-      weaponType = 1;
-      shotCooldown = 2000;
-      powerUpDuration = 5000;
-      powerUpStartTime = millis();
-      lastShot = millis();
-    break;
-    case('2'):
-      weaponType = 2;
-      shotCooldown = 100;
-      powerUpDuration = 4000;
-      powerUpStartTime = millis();
-      lastShot = millis();
-    break;
-    case('3'):
-      weaponType = 3;
-      shotCooldown = 1000;
-      powerUpDuration = 4000;
-      powerUpStartTime = millis();
-      lastShot = millis();
-    break;
-    case('4'):
-      weaponType = 4;
-      shotCooldown = 500;
-      powerUpDuration = 4000;
-      powerUpStartTime = millis();
-      lastShot = millis();
-    break;
-    case('e'):
-      if(!isDead) { players.get(0).adjustLifes(); if(isMultiplayer) {players.get(1).adjustLifes();} }
-    break;
-    }
   }
   
   //Reset direction or attack when releasing key.

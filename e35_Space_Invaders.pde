@@ -1,16 +1,22 @@
-// MPGD: Exercise 35: Space Invaders
-// Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+//  MPGD: Exercise 35: Space Invaders
+//  Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
 //
+//  This program is a clone of the classic game "Space Invaders" with a few addons,
+//  which includes various weapon types, shield and online highscore lists for single- and multiplayer.
 //
+//  Computer runnnig program should preferably be connected to the internet.
 
+//Import java libraries.
 import java.net.URL;
 import java.util.*;
+//Import Google spreadsheet libraries.
 import com.google.gdata.client.spreadsheet.*;
 import com.google.gdata.data.*;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.*;
+//Import audio library
+import ddf.minim.*;
 
-import ddf.minim.*; //Import audio library
 Minim minim;
 AudioHandler audioHandler;
 
@@ -19,6 +25,7 @@ boolean gamePaused = false;
 boolean showHighscores = false;
 boolean isMultiplayer = false;
 boolean mouseClicked = false;
+
 PFont SpaceFont;
 
 Spawner spawner;
@@ -27,7 +34,7 @@ MenUI menUI;
 Highscores highscores;
 
 //Each game object is stored in an array list associated to that kind of object.
-ArrayList<Player> players = new ArrayList<Player>(); //Player 1 is players.get(0) while Player 2 is players.get(1).
+ArrayList<Player> players = new ArrayList<Player>();
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
@@ -40,7 +47,10 @@ void setup() {
   int _width = 800;
   int _height = _width - _width/4;
   size(_width, _height);
+  
   rectMode(CENTER);
+  
+  //Initialize the main classes.
   minim = new Minim(this);
   audioHandler = new AudioHandler();
   spawner = new Spawner();
@@ -49,7 +59,6 @@ void setup() {
   menUI = new MenUI();
   highscores = new Highscores();
   ground = new Ground();
-  println(dynamicValue(10));
 }
 
 void draw() {
@@ -57,8 +66,8 @@ void draw() {
   textFont(SpaceFont);
   audioHandler.manage();
   if(gameStarted) { displayGameObjects(); }
-  menUI.display();
-  enemyHandler.update();
+  menUI.display();  //Display menu, UI or highscores.
+  enemyHandler.update();  //Manage enemies (both in menu and in-game).
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
 }
 
@@ -108,7 +117,7 @@ float dynamicValue(float _value) {
   return value;
 }
 
-//Check collision between two objects.
+//Check collision between two objects (function takes the position and half the width and height of each object).
 boolean collisionCheck(PVector _pos1, float _offset1X, float _offset1Y, PVector _pos2, float _offset2X, float _offset2Y) {
   if (_pos1.x + _offset1X> _pos2.x - _offset2X && _pos1.x - _offset1X < _pos2.x + _offset2X) {
     if (_pos1.y + _offset1Y > _pos2.y - _offset2Y && _pos1.y - _offset1Y < _pos2.y + _offset2Y) {
@@ -121,27 +130,36 @@ boolean collisionCheck(PVector _pos1, float _offset1X, float _offset1Y, PVector 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
 void keyReleased() {
   if(gameStarted) {
+    //Affect player 1 if in singleplayer
+    //If in multiplayer, CODED keys affect player 2
     if(key == CODED) { players.get(players.size()-1).keyUp(); }
+    //and non-CODED keys affect player 1.
     if(key != CODED) { players.get(0).keyUp(); }
   }
 }
 void keyPressed() {
   if(key == 27) {  //Key 27 = ESC
     key = 0;  //Cancel other ESC events(e.g. quit processing).
+    //If not in highscore screen pause/unpause the game
     if(!showHighscores) {
       if(!menUI.loading) { gamePaused = !gamePaused; }
     }
     else {
+      //if not save highscore list (if any changes has been made) and quit to main menu.
       highscores.updateName();
       menUI.resetGame();
     }
   }
   if(gameStarted) {
+    //Affect player 1 if in singleplayer
+    //If in multiplayer, CODED keys affect player 2
     if(key == CODED) { players.get(players.size()-1).keyDown(); }
-    if (key != CODED) { players.get(0).keyDown(); }
+    //and non-CODED keys affect player 1.
+    if(key != CODED) { players.get(0).keyDown(); }
   }
-  if (!showHighscores) {
-    if (keyCode == ENTER && !gameStarted) { spawner.startGame(1); }
+  if(!showHighscores) {
+    //In start menu ENTER starts singplayer mode.
+    if(keyCode == ENTER && !gameStarted) { spawner.startGame(1); }
   }
   else { highscores.updateName(); }  //Update the highscore name whenever there is a key input during highscore screen.
 }
