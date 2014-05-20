@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class draws a player and manages the player's movement, death, powerup effects and lifes.
  */
 
@@ -15,6 +18,7 @@ class Player {
   boolean attack = false;  //Can the player attack or not.
   boolean isDead = false;
   boolean hasShield = false;
+  color weaponColor = color(0, 255, 0);
 
   Player(float xPos) {
     x = xPos;
@@ -44,10 +48,20 @@ class Player {
     float _pWidth = pWidth*_scale;
     float _pHeight = pHeight*_scale;
     fill(0, 255, 0);
+    
+    // in multiplayer mode the players spaceships have different colors
+    if (isMultiplayer){
+      if (this == players.get(1)){
+        fill(255, 255, 0);
+      }
+    }
+    
     //Body
     rect(_x, _y + _pHeight/2, _pWidth, _pHeight);
     rect(_x, _y - _pHeight/6, _pWidth*0.85, _pHeight/3);
+    
     //Canon
+    fill(weaponColor);
     rect(_x, _y - _pWidth/5 + _pHeight/2, _pWidth/5, _pWidth/5);
     rect(_x, _y - _pWidth/3.5 + _pHeight/2, _pWidth*0.075, _pWidth/3.5);
 
@@ -101,6 +115,7 @@ class Player {
     if (weaponType != 0) {
       if (millis() >= powerUpStartTime + powerUpDuration) {
         weaponType = 0;
+        weaponColor = color(0, 255, 0);
         shotCooldown = 1000;
       }
     }

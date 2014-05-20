@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class manages enemy movement, collision, animation and shooting
  */
 

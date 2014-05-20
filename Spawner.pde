@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class controls everthing related to spawning game objects such as players, enemies, shots and powerups.
  */
 

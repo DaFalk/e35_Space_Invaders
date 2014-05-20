@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class creates the 4 covers and the ground out of blocks and manages the shot and enemy impacts on these.
  */
 

@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class draws a powerup icon with ellipses colored according to type and moves it downwards and checks player collision.
  */
 
@@ -8,6 +11,7 @@ class PowerUp {
   float size;
   float speed = dynamicValue(50);
   int lastMove, type;
+  color  powerUpColor;
 
   PowerUp(PVector _pos, float _size) {
     powerUpPos = _pos;
@@ -38,23 +42,28 @@ class PowerUp {
     noFill();
     ellipse(powerUpPos.x, powerUpPos.y, size, size);
     strokeWeight(dynamicValue(3));
+    powerUpColor = color(255);
+    
     switch(type) {
       case(0):
       stroke(255, 100);
       ellipse(powerUpPos.x, powerUpPos.y, size*3, size*3);
-      stroke(255, 155);
+      stroke(powerUpColor, 155);
       break;
       case(1):
-      stroke(70, 110, 255, 155);
+      powerUpColor = color(70, 110, 255);
+      stroke(powerUpColor, 155);
       break;
       case(2):
-      stroke(255, 155);
+      stroke(powerUpColor, 155);
       break;
       case(3):
+      powerUpColor = color(255, 70, 110);
       stroke(255, 70, 110, 155);
       break;
       case(4):
-      stroke(0, 255, 0, 155);
+      powerUpColor = color(0, 255, 0);
+      stroke(powerUpColor, 155);
       break;
     }
     ellipse(powerUpPos.x, powerUpPos.y, size*2, size*2);
@@ -68,6 +77,7 @@ class PowerUp {
         //If powerup is not a shield.
         if (type > 0) {
           //Set players weapon type.
+          _player.weaponColor = powerUpColor;
           setWeaponTimers(_player, type);
           audioHandler.playSFX(4);
         }

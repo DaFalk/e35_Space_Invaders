@@ -1,4 +1,7 @@
 /*  
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
  This class draws a text at a requested position and moves it upwards while enlarging the text and decreasing alpha.
  */
 

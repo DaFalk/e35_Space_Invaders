@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class draws one of multiple shot types and manages it's behaviour, collision and damage depending on type.
  */
 

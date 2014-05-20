@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class manage all menu and UI elements.
 It also controls the game state and resetsetting of the different array lists and booleans.
  */

@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class draws a single block that can be affected in different ways on impact.
 The ground, covers and the enemies are made out of these blocks to add impact effects.
  */

@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class creates different types of enemies out of blocks and controls their movement and collision(when dead and projectile).
 It also handles what happens when enemies are damaged and destroyed and which sounds the enemies play.
  */

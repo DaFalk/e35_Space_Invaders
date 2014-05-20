@@ -1,4 +1,7 @@
 /*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
 This class manages the highscorelist.
 
 Previous data is pulled from a Google spreadsheet to temporary local arrays, sorted, displayed
