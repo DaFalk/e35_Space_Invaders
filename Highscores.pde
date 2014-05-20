@@ -1,11 +1,16 @@
-// This class manages the highscorelist.
-//
-// Previous data is pulled from a Google spreadsheet to temporary local arrays, sorted, displayed
-// and in the end uploaded back to the correct worksheet in the spreadsheet (multi- or singleplayer).
-//
-// Spreadsheet references: https://github.com/joshsager/Fancy-Pants-Conference-Info-Wall/blob/master/RandomKittenSpreadsheet/SimpleSpreadsheetManager.pde
-//                       : http://makezine.com/2010/12/10/save-sensor-data-to-google-spreadsh/
-// Insertion sort reference: http://www.journaldev.com/585/insertion-sort-in-java-algorithm-and-code-with-example
+/*
+This class manages the highscorelist.
+
+Previous data is pulled from a Google spreadsheet to temporary local arrays, sorted, displayed
+and in the end uploaded back to the correct worksheet in the spreadsheet (multi- or singleplayer).
+
+Spreadsheet references: 
+https://github.com/joshsager/Fancy-Pants-Conference-Info-Wall/blob/master/RandomKittenSpreadsheet/SimpleSpreadsheetManager.pde
+http://makezine.com/2010/12/10/save-sensor-data-to-google-spreadsh/
+
+Insertion sort reference: 
+http://www.journaldev.com/585/insertion-sort-in-java-algorithm-and-code-with-example
+*/
 
 class Highscores extends MenUI {
   SpreadsheetService service;

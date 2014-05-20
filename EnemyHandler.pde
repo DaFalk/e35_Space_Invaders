@@ -1,6 +1,6 @@
-// This class manages enemy movement, collision, animation and shooting
-//
-//
+/*
+This class manages enemy movement, collision, animation and shooting
+ */
 
 class EnemyHandler {
   int enemyDirX;  //The direction to move enemies (1 or -1).
@@ -38,16 +38,16 @@ class EnemyHandler {
 
   void update() {
     //As long as there's enemies alive and game is unpaused check to move and shoot.
-    if(!gamePaused) {
-      if(enemies.size() > 0) {
-        if(gameStarted) {
+    if (!gamePaused) {
+      if (enemies.size() > 0) {
+        if (gameStarted) {
           moveEnemies();
           shoot();
         }
         //Animate alive enemies.
         lastAliveAnim = animate(enemies, lastAliveAnim);
         //Animate dead enimies(i.e. potential death projectiles).
-        if(deadEnemies.size() > 0) { 
+        if (deadEnemies.size() > 0) { 
           lastDeadAnim = animate(deadEnemies, lastDeadAnim);
         }
       }
@@ -58,34 +58,38 @@ class EnemyHandler {
       lastAliveAnim += millis() - lastAliveAnim;
       lastDeadAnim += millis() - lastDeadAnim;
     }
-    
+
     //Check if enemies or boss should respawn.
-    if(respawnEnemies) { spawner.respawnEnemies(); }
-    if(!bossAlive) { spawner.spawnEnemyBoss(); }
+    if (respawnEnemies) { 
+      spawner.respawnEnemies();
+    }
+    if (!bossAlive) { 
+      spawner.spawnEnemyBoss();
+    }
   }
 
   void moveEnemies() {
     //Find boss and move it.
-    for(int i = enemies.size()-1; i > -1; i--) {
-      if(enemies.get(i) == boss) {
+    for (int i = enemies.size()-1; i > -1; i--) {
+      if (enemies.get(i) == boss) {
         enemies.get(i).moveEnemy((moveDist/4)*bossDirX, 0);
       }
     }
-    
+
     //Enemy nextMove time depends on number of enemies alive.
-    if(millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
-      if(!moveDown) {
+    if (millis() - lastMove >= (nextMove/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size()) {
+      if (!moveDown) {
         //Move enemies to the side except the boss.
-        for(int i = enemies.size()-1; i > -1; i--) {
-          if(enemies.get(i) != boss) {
+        for (int i = enemies.size()-1; i > -1; i--) {
+          if (enemies.get(i) != boss) {
             enemies.get(i).moveEnemy((moveDist/2)*enemyDirX, 0);
           }
         }
       }
       else {
         //Move enemies down except the boss.
-        for(int i = enemies.size()-1; i > -1; i--) {
-          if(enemies.get(i) != boss) {
+        for (int i = enemies.size()-1; i > -1; i--) {
+          if (enemies.get(i) != boss) {
             enemies.get(i).moveEnemy(0, moveDist*1.2);
           }
         }
@@ -105,8 +109,10 @@ class EnemyHandler {
       //Animate speed of alive enemies is based on number of enemies left.
       _nextAnim = (nextAnim/((spawner.enemyRows*spawner.enemyCols)/4))*enemies.size();
     }
-    else {  _nextAnim = nextAnim; };
-     
+    else {  
+      _nextAnim = nextAnim;
+    };
+
     if (millis() - _lastAnim >= _nextAnim) {
       for (int i = _enemies.size()-1; i > -1; i--) {
         //If it is time to do an the animations, then animate each enemy.
@@ -125,7 +131,7 @@ class EnemyHandler {
       //Check if the enemy's next left and right position is within bounds.
       float nextLeftX = enemies.get(i).enemyPos.x - eWidth/2 - moveDist;
       float nextRightX = enemies.get(i).enemyPos.x + eWidth/2 + moveDist;
-      
+
       //collision for non-boss type enemies.
       if (enemies.get(i) != boss) {
         if ((nextRightX > width && enemyDirX > 0) || (nextLeftX < 0 && enemyDirX < 0)) {
@@ -135,8 +141,8 @@ class EnemyHandler {
         }
       }
       else {
-      //Enemy boss edge collision detection.
-        if ((nextRightX > width*random(1.5 ,2) && bossDirX > 0) || (nextLeftX  < -width* random(0.5, 1) && bossDirX < 0)) {
+        //Enemy boss edge collision detection.
+        if ((nextRightX > width*random(1.5, 2) && bossDirX > 0) || (nextLeftX  < -width* random(0.5, 1) && bossDirX < 0)) {
           bossDirX *= -1;
         }
       }
@@ -156,3 +162,4 @@ class EnemyHandler {
     }
   }
 }
+

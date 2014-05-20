@@ -1,10 +1,10 @@
-// This class stores and handles all auidio in the game (play, loop, pause and rewind).
-//
-//
+/*
+This class stores and handles all auidio in the game (play, loop, pause and rewind).
+*/
 
 class AudioHandler {
   AudioPlayer[] audioBank;
-  
+
   AudioHandler() {
     //Audioplayer array (1 audio player for each sound).
     audioBank = new AudioPlayer[13];
@@ -23,31 +23,37 @@ class AudioHandler {
     audioBank[11] = minim.loadFile("weaponType4.mp3");
     audioBank[12] = minim.loadFile("enemyWeaponType0.wav");
     //Adjust volume of the different sounds.
-    for(int i = 1; i < audioBank.length; i++) {
+    for (int i = 1; i < audioBank.length; i++) {
       audioBank[i].setGain(-18);
-      if(i == 2) { audioBank[i].setGain(0); }
+      if (i == 2) { 
+        audioBank[i].setGain(0);
+      }
     }
   }
-  
+
   void manage() {
     playThemeSong();
     //Adjust sound when pausing the game.
-    if(gamePaused) { audioBank[0].setGain(-20); }
-    else { audioBank[0].setGain(-15); }
+    if (gamePaused) { 
+      audioBank[0].setGain(-20);
+    }
+    else { 
+      audioBank[0].setGain(-15);
+    }
   }
-  
+
   //Play theme song in a loop.
   void playThemeSong() {
-    if(!audioBank[0].isPlaying()) {
+    if (!audioBank[0].isPlaying()) {
       audioBank[0].rewind();
       audioBank[0].play();
     }
   }
-  
+
   //playSFX is called from other classes and plays and rewinds the requested sounds accordingly.
   void playSFX(int SFXIndex) {
-    if(SFXIndex < audioBank.length) {
-      if(SFXIndex == 11 && audioBank[11].isPlaying()) {
+    if (SFXIndex < audioBank.length) {
+      if (SFXIndex == 11 && audioBank[11].isPlaying()) {
         return;
       }
       else {
@@ -57,3 +63,4 @@ class AudioHandler {
     }
   }
 }
+

@@ -1,19 +1,44 @@
-//  MPGD: Exercise 35: Space Invaders
-//  Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
-//
-//  This program is a clone of the classic game "Space Invaders" with a few addons,
-//  which includes various weapon types, shield and online highscore lists for single- and multiplayer.
-//
-//  Computer runnnig program should preferably be connected to the internet.
+/*
+ MPGD: Exercise 35: Space Invaders
+ Jimmie Gustafsson (jgus) & Troels Falkenberg (tfal)
+ 
+ INFO:
+ This program is a clone of the classic game "Space Invaders" with a few addons, 
+ which includes various weapon types, shield and online highscore lists for single- 
+ and multiplayer. 
+ 
+ Computer runnnig program should preferably be connected to the internet.
+ 
+ CONTROLS:
+ 
+ SINGLEPLAYER:
+ 
+   Pause menu = "ESC".
+   Move = "LEFT" and "RIGHT" . 
+   Shoot = "UP" or "SPACE". 
+ 
+ 
+ MULTIPLAYER:
+ 
+   Pause menu = "ESC".
+   Player 1: 
+     Move = "A" and "D". 
+     Shoot = "SPACE".     
+   Player 2: 
+     Move = "LEFT" and "RIGHT". 
+     Shoot = "UP".
+ */
 
 //Import java libraries.
 import java.net.URL;
 import java.util.*;
+
 //Import Google spreadsheet libraries.
 import com.google.gdata.client.spreadsheet.*;
 import com.google.gdata.data.*;
 import com.google.gdata.data.spreadsheet.*;
 import com.google.gdata.util.*;
+
 //Import audio library
 import ddf.minim.*;
 
@@ -28,10 +53,12 @@ boolean mouseClicked = false;
 
 PFont SpaceFont;
 
+// the classes that is called by the main program.
 Spawner spawner;
 EnemyHandler enemyHandler;
 MenUI menUI;
 Highscores highscores;
+Ground ground;
 
 //Each game object is stored in an array list associated to that kind of object.
 ArrayList<Player> players = new ArrayList<Player>();
@@ -39,23 +66,20 @@ ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 ArrayList<Enemy> deadEnemies = new ArrayList<Enemy>();
 ArrayList<Shot> shots = new ArrayList<Shot>();
 ArrayList<PowerUp> powerUps = new ArrayList<PowerUp>();
-Ground ground;
-
-
 
 void setup() {
   int _width = 800;
   int _height = _width - _width/4;
   size(_width, _height);
-  
+
+  SpaceFont = createFont("ca.ttf", 48);
   rectMode(CENTER);
-  
+
   //Initialize the main classes.
   minim = new Minim(this);
   audioHandler = new AudioHandler();
   spawner = new Spawner();
   enemyHandler = new EnemyHandler();
-  SpaceFont = createFont("ca.ttf", 48);
   menUI = new MenUI();
   highscores = new Highscores();
   ground = new Ground();
@@ -65,7 +89,11 @@ void draw() {
   background(0);
   textFont(SpaceFont);
   audioHandler.manage();
-  if(gameStarted) { displayGameObjects(); }
+
+  if (gameStarted) { 
+    displayGameObjects();
+  }
+
   menUI.display();  //Display menu, UI or highscores.
   enemyHandler.update();  //Manage enemies (both in menu and in-game).
   mouseClicked = false;  //At the end of draw() to register a single mousebutton input.
@@ -73,36 +101,35 @@ void draw() {
 
 void displayGameObjects() {
   //Iterates enemies array list and updates every enemy. 
-  for(int i = enemies.size() - 1; i >= 0; i--) {
+  for (int i = enemies.size() - 1; i >= 0; i--) {
     Enemy _enemy = enemies.get(i);
     _enemy.update();
   }
 
   //Iterates deadEnemies array list and updates every enemy.
-  for(int i = deadEnemies.size()-1; i > -1; i--) {
+  for (int i = deadEnemies.size()-1; i > -1; i--) {
     deadEnemies.get(i).update();
   }
 
   //Iterate shots array list and updates every shot. 
-  for(int i = shots.size() - 1; i >= 0; i--) {
+  for (int i = shots.size() - 1; i >= 0; i--) {
     Shot _shot = shots.get(i);
     _shot.update();
   }
 
   //Iterates players array list and updates every player.
-  for(int i = players.size() - 1; i >= 0; i--) {
+  for (int i = players.size() - 1; i >= 0; i--) {
     Player _player = players.get(i);
     _player.update();
   }
 
   //Iterates powerUps array list and updates every powerup. 
-  for(int i = powerUps.size() - 1; i >= 0; i--) {
+  for (int i = powerUps.size() - 1; i >= 0; i--) {
     PowerUp _powerUp = powerUps.get(i);
     _powerUp.update();
   }
-  
   //Display ground and cover
-  ground.display();;
+  ground.display();
 }
 
 //time fix function (to avoid typo's).
@@ -129,20 +156,26 @@ boolean collisionCheck(PVector _pos1, float _offset1X, float _offset1Y, PVector 
 
 //keyReleased and keyPressed checks if keys are coded or not in case there is multiple players.
 void keyReleased() {
-  if(gameStarted) {
+  if (gameStarted) {
     //Affect player 1 if in singleplayer
     //If in multiplayer, CODED keys affect player 2
-    if(key == CODED) { players.get(players.size()-1).keyUp(); }
+    if (key == CODED) { 
+      players.get(players.size()-1).keyUp();
+    }
     //and non-CODED keys affect player 1.
-    if(key != CODED) { players.get(0).keyUp(); }
+    if (key != CODED) { 
+      players.get(0).keyUp();
+    }
   }
 }
 void keyPressed() {
-  if(key == 27) {  //Key 27 = ESC
+  if (key == 27) {  //Key 27 = ESC
     key = 0;  //Cancel other ESC events(e.g. quit processing).
     //If not in highscore screen pause/unpause the game
-    if(!showHighscores) {
-      if(!menUI.loading) { gamePaused = !gamePaused; }
+    if (!showHighscores) {
+      if (!menUI.loading) { 
+        gamePaused = !gamePaused;
+      }
     }
     else {
       //if not save highscore list (if any changes has been made) and quit to main menu.
@@ -150,18 +183,26 @@ void keyPressed() {
       menUI.resetGame();
     }
   }
-  if(gameStarted) {
+  if (gameStarted) {
     //Affect player 1 if in singleplayer
     //If in multiplayer, CODED keys affect player 2
-    if(key == CODED) { players.get(players.size()-1).keyDown(); }
+    if (key == CODED) { 
+      players.get(players.size()-1).keyDown();
+    }
     //and non-CODED keys affect player 1.
-    if(key != CODED) { players.get(0).keyDown(); }
+    if (key != CODED) { 
+      players.get(0).keyDown();
+    }
   }
-  if(!showHighscores) {
+  if (!showHighscores) {
     //In start menu ENTER starts singplayer mode.
-    if(keyCode == ENTER && !gameStarted) { spawner.startGame(1); }
+    if (keyCode == ENTER && !gameStarted) { 
+      spawner.startGame(1);
+    }
   }
-  else { highscores.updateName(); }  //Update the highscore name whenever there is a key input during highscore screen.
+  else { 
+    highscores.updateName();
+  }  //Update the highscore name whenever there is a key input during highscore screen.
 }
 void mousePressed() {
   mouseClicked = true;  //Register mousePressed as a click (for the buttons).

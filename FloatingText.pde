@@ -1,6 +1,6 @@
-//  This class draws a text at a requested position and moves it upwards while enlarging the text and decreasing alpha.
-//
-//
+/*  
+ This class draws a text at a requested position and moves it upwards while enlarging the text and decreasing alpha.
+ */
 
 class FloatingText {
   PVector textPos;
@@ -11,7 +11,7 @@ class FloatingText {
   int duration = 3000;
   float speed = dynamicValue(20);
   float size;
-  
+
   FloatingText(PVector _textPos) {
     textAlign(CENTER, CENTER);
     textPos = _textPos;
@@ -20,7 +20,7 @@ class FloatingText {
     startTime = millis();
     size = size;
   }
-  
+
   void update() {
     //Move up.
     textPos.y -= timeFix(speed, lastMove);
@@ -29,16 +29,16 @@ class FloatingText {
     lastMove = millis();
     displayText();
     //Remove after time period.
-    if(millis() >= startTime + duration) {
+    if (millis() >= startTime + duration) {
       menUI.floatingTexts.remove(this);
     }
   }
-  
+
   void displayText() {
     textSize(size);
     fill(255, 255, 255, 255 - (startY - textPos.y)*8);
     //Check if text contains numbers.
-    if(score > 0) {
+    if (score > 0) {
       //If so add a + sign in front.
       textToDisplay = "+"+score;
       fill(0, 255, 0, 255 - (startY - textPos.y)*8);
@@ -46,3 +46,4 @@ class FloatingText {
     text(textToDisplay, textPos.x, textPos.y);
   }
 }
+
